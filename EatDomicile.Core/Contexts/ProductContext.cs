@@ -26,8 +26,8 @@ namespace EatDomicile.Core.Contexts
             
         }
 
-        public DbSet<Pizza> Pizzas { get; set; } = null!;
-        public DbSet<Pasta> Pastas { get; set; } = null!;
+        public DbSet<Pizza> Pizzas => this.Set<Pizza>();
+        public DbSet<Pasta> Pastas => this.Set<Pasta>();
 
     }
 }
