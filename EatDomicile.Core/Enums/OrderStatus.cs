@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EatDomicile.Core.Enums;
 
-internal enum OrderStatus
+public enum OrderStatus
 {
     Validee,
     EnCuisine,

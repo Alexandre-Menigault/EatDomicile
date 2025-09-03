@@ -19,7 +19,7 @@ namespace EatDomicile.Core.Contexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
                 
-            modelBuilder.Entity<Products>()
+            modelBuilder.Entity<Product>()
                 .UseTptMappingStrategy();
 
             modelBuilder.Entity<Food>()
