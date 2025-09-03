@@ -31,11 +31,13 @@ public class IngredientDTO
 
     public static Ingredient ToEntity(IngredientDTO dto)
     {
+        
         return new Ingredient
         {
             Id = dto.Id,
             Name = dto.Name,
-            Kcal = dto.Kcal
+            Kcal = dto.Kcal,
+            
         };
     }
 }

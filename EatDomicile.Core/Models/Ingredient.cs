@@ -23,7 +23,7 @@ public class Ingredient
     [Required]
     [Column("Kcal")]
     public int Kcal { get; set; }
-    
-    public List<Burger> Burgers { get; set; } = new();
+
+    public Burger? Burger { get; set; } = null;
 
 }
