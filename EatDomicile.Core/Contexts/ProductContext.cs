@@ -19,15 +19,21 @@ namespace EatDomicile.Core.Contexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Produit>()
+                .Property(p => p.Name)
+                .HasPrecision(10, 4);
+                
+            modelBuilder.Entity<Produit>()
                 .UseTptMappingStrategy();
 
             modelBuilder.Entity<Food>()
                 .UseTptMappingStrategy();
+
             
         }
 
         public DbSet<Pizza> Pizzas => this.Set<Pizza>();
         public DbSet<Pasta> Pastas => this.Set<Pasta>();
+        public DbSet<Burger> Burgers => this.Set<Burger>();
 
     }
 }

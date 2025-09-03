@@ -7,13 +7,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 
 
-Pasta p = new Pasta()
-{
-    KCal = 100,
-    Name = "Spaghetti",
-    Type = PastaType.Spaghetti,
-    Vegetarien = true 
-};
+// Pasta p = new Pasta()
+// {
+//     KCal = 100,
+//     Name = "Spaghetti",
+//     Price = 10,
+//     Type = PastaType.Spaghetti,
+//     Vegetarien = true 
+// };
 
 // Dough dough = new Dough()
 // {

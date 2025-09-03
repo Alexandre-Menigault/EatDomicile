@@ -6,7 +6,7 @@ public class PizzaDTO : FoodDTO
 {
     public DoughDTO Dough { get; set; }
     
-    public PizzaDTO(string name, bool vegetarien, DoughDTO dough): base(name, vegetarien)
+    public PizzaDTO(string name, decimal price, bool vegetarien, DoughDTO dough): base(name, price, vegetarien)
     {
         this.Dough = dough;
     }
@@ -15,6 +15,7 @@ public class PizzaDTO : FoodDTO
     {
         return new PizzaDTO(
             pizza.Name,
+            pizza.Price,
             pizza.Vegetarien,
             DoughDTO.FromEntity(pizza.Dough) 
         );
@@ -25,6 +26,7 @@ public class PizzaDTO : FoodDTO
         return new Pizza()
         {
             Name = pizzaDTO.Name,
+            Price = pizzaDTO.Price,
             Vegetarien = pizzaDTO.Vegetarien,
             Dough = DoughDTO.ToEntity(pizzaDTO.Dough)
         };

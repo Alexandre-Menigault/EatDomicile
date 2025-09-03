@@ -8,7 +8,7 @@ public class PastaDTO: FoodDTO, IKCal
     public PastaType Type { get; set; }
     public int KCal { get; set; }
     
-    public PastaDTO(string name, bool vegetarien, PastaType type, int kcal): base(name, vegetarien)
+    public PastaDTO(string name, decimal price, bool vegetarien, PastaType type, int kcal): base(name, price, vegetarien)
     {
         this.Type = type;
         this.KCal = kcal;
@@ -18,6 +18,7 @@ public class PastaDTO: FoodDTO, IKCal
     {
         return new PastaDTO(
             pasta.Name, 
+            pasta.Price,
             pasta.Vegetarien, 
             pasta.Type, 
             pasta.KCal
@@ -29,6 +30,7 @@ public class PastaDTO: FoodDTO, IKCal
         return new Pasta()
         {
             Name = pastaDTO.Name,
+            Price = pastaDTO.Price,
             Vegetarien = pastaDTO.Vegetarien,
             Type = pastaDTO.Type,
             KCal = pastaDTO.KCal

@@ -20,5 +20,10 @@ namespace EatDomicile.Core.Models
         [StringLength(50)]
         [Column("Name")]
         public required string Name { get; set; }
+        
+        [Required]
+        [Column("Price")]
+        public required decimal Price { get; set; }
+        
     }
 }

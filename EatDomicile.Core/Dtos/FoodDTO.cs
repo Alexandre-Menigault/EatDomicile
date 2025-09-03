@@ -7,7 +7,7 @@ public class FoodDTO : ProductDTO
     
     public bool Vegetarien { get; set; }
     
-    public FoodDTO(string name, bool vegetarien): base(name)
+    public FoodDTO(string name, decimal price, bool vegetarien): base(name, price)
     {
         this.Vegetarien = vegetarien;
     }
