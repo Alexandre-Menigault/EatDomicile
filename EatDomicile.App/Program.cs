@@ -1,19 +1,34 @@
 ﻿// See https://aka.ms/new-console-template for more information
+
+using EatDomicile.Core.Contexts;
+using EatDomicile.Core.Enums;
+using EatDomicile.Core.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 
 
-HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
+Pasta p = new Pasta()
+{
+    KCal = 100,
+    Name = "Spaghetti",
+    Type = PastaType.Spaghetti,
+    Vegetarien = true 
+};
 
-builder.Configuration.Sources.Clear();
-
-IHostEnvironment env = builder.Environment;
-
-builder.Configuration
-    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-
-using IHost host = builder.Build();
-
-// Application code should start here.
-
-await host.RunAsync();
+// Dough dough = new Dough()
+// {
+//     Name = "Fine"
+// };
+//
+// Pizza piz = new Pizza()
+// {
+//     Name = "Reine",
+//     Vegetarien = false, 
+//     Dough = dough
+// };
+//
+// var productsContext = new ProductContext();
+//
+// productsContext.Pastas.Add(p);
+// productsContext.Pizzas.Add(piz);
+// productsContext.SaveChanges();

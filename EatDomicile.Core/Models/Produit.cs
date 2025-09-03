@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace EatDomicile.Core.Models
 {
@@ -17,6 +18,7 @@ namespace EatDomicile.Core.Models
 
         [Required]
         [StringLength(50)]
+        [Column("Name")]
         public required string Name { get; set; }
     }
 }
