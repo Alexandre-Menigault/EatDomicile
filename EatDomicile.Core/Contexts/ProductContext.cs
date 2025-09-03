@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EatDomicile.Core.Enums;
 
 namespace EatDomicile.Core.Contexts
 {
@@ -22,6 +23,7 @@ namespace EatDomicile.Core.Contexts
 
             modelBuilder.Entity<Food>()
                 .UseTptMappingStrategy();
+            
         }
 
         public DbSet<Pizza> Pizzas { get; set; } = null!;
