@@ -9,13 +9,8 @@ using System.Threading.Tasks;
 namespace EatDomicile.Core.Models
 {
     [Table("Pizzas")]
-    public class Pizza
+    public class Pizza : Food
     {
-        [Key]
-        [Required]
-        [ForeignKey("Id")]
-        public required Food Food { get; set; }
-
         [Required]
         [StringLength(50)]
         public required Dough Dough { get; set; }

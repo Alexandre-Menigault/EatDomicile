@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EatDomicile.Core.Contexts
 {
-    public class ProductConetxt: DbContext
+    public class ProductContext: DbContext
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -17,7 +17,11 @@ namespace EatDomicile.Core.Contexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
+            modelBuilder.Entity<Produit>()
+                .UseTptMappingStrategy();
+
+            modelBuilder.Entity<Food>()
+                .UseTptMappingStrategy();
         }
 
         public DbSet<Pizza> Pizzas { get; set; } = null!;

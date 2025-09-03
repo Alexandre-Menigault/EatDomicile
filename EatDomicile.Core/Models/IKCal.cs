@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace EatDomicile.Core.Models
 {
-    public class AbstractKCal
+    public interface IKCal
     {
-        [Column("Kcal")]
         public int KCal { get; set; }
     }
 }

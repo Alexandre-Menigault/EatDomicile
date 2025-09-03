@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EatDomicile.Core.Migrations
 {
-    [DbContext(typeof(ProductConetxt))]
+    [DbContext(typeof(ProductContext))]
     partial class ProductConetxtModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
@@ -39,7 +39,7 @@ namespace EatDomicile.Core.Migrations
                     b.ToTable("Doughs");
                 });
 
-            modelBuilder.Entity("EatDomicile.Core.Models.Food", b =>
+            modelBuilder.Entity("EatDomicile.Core.Models.Produit", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -47,18 +47,26 @@ namespace EatDomicile.Core.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.HasKey("Id");
+
+                    b.ToTable("Products");
+
+                    b.UseTptMappingStrategy();
+                });
+
+            modelBuilder.Entity("EatDomicile.Core.Models.Food", b =>
+                {
+                    b.HasBaseType("EatDomicile.Core.Models.Produit");
+
                     b.Property<bool>("Vegetarien")
                         .HasColumnType("bit");
-
-                    b.HasKey("Id");
 
                     b.ToTable("Foods");
                 });
 
             modelBuilder.Entity("EatDomicile.Core.Models.Pasta", b =>
                 {
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
+                    b.HasBaseType("EatDomicile.Core.Models.Food");
 
                     b.Property<int>("KCal")
                         .HasColumnType("int")
@@ -68,35 +76,37 @@ namespace EatDomicile.Core.Migrations
                         .HasColumnType("int")
                         .HasColumnName("Type");
 
-                    b.HasKey("Id");
-
                     b.ToTable("Pastas");
                 });
 
             modelBuilder.Entity("EatDomicile.Core.Models.Pizza", b =>
                 {
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
+                    b.HasBaseType("EatDomicile.Core.Models.Food");
 
                     b.Property<int>("DoughId")
                         .HasColumnType("int");
-
-                    b.HasKey("Id");
 
                     b.HasIndex("DoughId");
 
                     b.ToTable("Pizzas");
                 });
 
-            modelBuilder.Entity("EatDomicile.Core.Models.Pasta", b =>
+            modelBuilder.Entity("EatDomicile.Core.Models.Food", b =>
                 {
-                    b.HasOne("EatDomicile.Core.Models.Food", "Food")
-                        .WithMany()
-                        .HasForeignKey("Id")
+                    b.HasOne("EatDomicile.Core.Models.Produit", null)
+                        .WithOne()
+                        .HasForeignKey("EatDomicile.Core.Models.Food", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
 
-                    b.Navigation("Food");
+            modelBuilder.Entity("EatDomicile.Core.Models.Pasta", b =>
+                {
+                    b.HasOne("EatDomicile.Core.Models.Food", null)
+                        .WithOne()
+                        .HasForeignKey("EatDomicile.Core.Models.Pasta", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("EatDomicile.Core.Models.Pizza", b =>
@@ -107,15 +117,13 @@ namespace EatDomicile.Core.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EatDomicile.Core.Models.Food", "Food")
-                        .WithMany()
-                        .HasForeignKey("Id")
+                    b.HasOne("EatDomicile.Core.Models.Food", null)
+                        .WithOne()
+                        .HasForeignKey("EatDomicile.Core.Models.Pizza", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Dough");
-
-                    b.Navigation("Food");
                 });
 #pragma warning restore 612, 618
         }

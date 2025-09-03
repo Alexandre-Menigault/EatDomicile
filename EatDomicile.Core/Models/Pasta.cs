@@ -4,15 +4,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EatDomicile.Core.Models
 {
-    public class Pasta : AbstractKCal
+    [Table("Pastas")]
+    public class Pasta : Food, IKCal
     {
-        [Key]
-        [Required]
-        [ForeignKey("Id")]
-        public required Food Food { get; set; }
-
         [Required]
         [Column("Type")]
         public required PastaType Type{ get; set; }
+
+        [Required]
+        [Column("Kcal")]
+        public int KCal { get ; set ; }
     }
 }
