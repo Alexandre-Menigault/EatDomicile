@@ -32,7 +32,8 @@ namespace EatDomicile.Core.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("Name");
 
                     b.HasKey("Id");
 
@@ -50,8 +51,13 @@ namespace EatDomicile.Core.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
+                        .HasPrecision(10, 4)
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("Name");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("Price");
 
                     b.HasKey("Id");
 
@@ -68,6 +74,13 @@ namespace EatDomicile.Core.Migrations
                         .HasColumnType("bit");
 
                     b.ToTable("Foods");
+                });
+
+            modelBuilder.Entity("EatDomicile.Core.Models.Burger", b =>
+                {
+                    b.HasBaseType("EatDomicile.Core.Models.Food");
+
+                    b.ToTable("Burgers");
                 });
 
             modelBuilder.Entity("EatDomicile.Core.Models.Pasta", b =>
@@ -102,6 +115,15 @@ namespace EatDomicile.Core.Migrations
                     b.HasOne("EatDomicile.Core.Models.Produit", null)
                         .WithOne()
                         .HasForeignKey("EatDomicile.Core.Models.Food", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("EatDomicile.Core.Models.Burger", b =>
+                {
+                    b.HasOne("EatDomicile.Core.Models.Food", null)
+                        .WithOne()
+                        .HasForeignKey("EatDomicile.Core.Models.Burger", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

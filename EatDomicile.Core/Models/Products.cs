@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 namespace EatDomicile.Core.Models
 {
     [Table("Products")]
-    public abstract class Produit
+    public abstract class Products
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -22,7 +22,7 @@ namespace EatDomicile.Core.Models
         public required string Name { get; set; }
         
         [Required]
-        [Column("Price")]
+        [Column("Price", TypeName = "decimal(10,2)")]
         public required decimal Price { get; set; }
         
     }

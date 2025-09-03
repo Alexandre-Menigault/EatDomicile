@@ -18,11 +18,8 @@ namespace EatDomicile.Core.Contexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Produit>()
-                .Property(p => p.Name)
-                .HasPrecision(10, 4);
                 
-            modelBuilder.Entity<Produit>()
+            modelBuilder.Entity<Products>()
                 .UseTptMappingStrategy();
 
             modelBuilder.Entity<Food>()

@@ -6,6 +6,7 @@ using EatDomicile.Core.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 
+Console.WriteLine("Hello, World!");
 
 // Pasta p = new Pasta()
 // {
