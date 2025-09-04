@@ -12,25 +12,26 @@ public class DrinkDTO : ProductDTO, IKCal
         this.Fizzy = fizzy;
         this.KCal = kcal;
     }
-    
+
     public static DrinkDTO FromEntity(Drink drink)
     {
         return new DrinkDTO(
-            drink.Name, 
+            drink.Name,
             drink.Price,
-            drink.Fizzy, 
+            drink.Fizzy,
             drink.KCal
         );
     }
-    
-    public static Drink ToEntity(DrinkDTO drinkDTO)
+
+    public static Drink ToEntity(DrinkDTO drink)
     {
         return new Drink()
         {
-            Name = drinkDTO.Name,
-            Price = drinkDTO.Price,
-            Fizzy = drinkDTO.Fizzy,
-            KCal = drinkDTO.KCal
+            Id = drink.Id,
+            Name = drink.Name,
+            Price = drink.Price,
+            Fizzy = drink.Fizzy,
+            KCal = drink.KCal,
         };
     }
 }
