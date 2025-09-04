@@ -14,7 +14,8 @@ namespace EatDomicile.Core.Models
         [Required]
         [StringLength(50)]
         public required Dough Dough { get; set; }
-
+        [Required]
+        public required List<Ingredient> Ingredients { get; set; } = new();
 
     }
 }

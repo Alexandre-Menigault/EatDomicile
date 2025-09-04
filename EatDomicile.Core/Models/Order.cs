@@ -20,6 +20,11 @@ public class Order
 
     [Required]
     public List<Product> Products { get; set; } = new();
-    // TODO: ajouter l'utilisateur et l'adresse de livraison
+    
+    [Required]
+    public required User User { get; set; }
+    [Required]
+    [Column("DeliveryAddressId")]
+    public required Address DeliveryAddress { get; set; }
 
 }

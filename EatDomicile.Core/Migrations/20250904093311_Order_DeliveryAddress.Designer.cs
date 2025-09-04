@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EatDomicile.Core.Migrations
 {
     [DbContext(typeof(ProductContext))]
-    [Migration("20250903134743_Orders_Drink")]
-    partial class Orders_Drink
+    [Migration("20250904093311_Order_DeliveryAddress")]
+    partial class Order_DeliveryAddress
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,47 @@ namespace EatDomicile.Core.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("EatDomicile.Core.Models.Address", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("City");
+
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("Country");
+
+                    b.Property<string>("State")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("State");
+
+                    b.Property<string>("Street")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)")
+                        .HasColumnName("Street");
+
+                    b.Property<int>("ZipCode")
+                        .HasColumnType("int")
+                        .HasColumnName("ZipCode");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Addresses");
+                });
 
             modelBuilder.Entity("EatDomicile.Core.Models.Dough", b =>
                 {
@@ -44,6 +85,39 @@ namespace EatDomicile.Core.Migrations
                     b.ToTable("Doughs");
                 });
 
+            modelBuilder.Entity("EatDomicile.Core.Models.Ingredient", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("BurgerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Kcal")
+                        .HasColumnType("int")
+                        .HasColumnName("Kcal");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("Name");
+
+                    b.Property<int?>("PizzaId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BurgerId");
+
+                    b.HasIndex("PizzaId");
+
+                    b.ToTable("Ingredients");
+                });
+
             modelBuilder.Entity("EatDomicile.Core.Models.Order", b =>
                 {
                     b.Property<int>("Id")
@@ -51,6 +125,9 @@ namespace EatDomicile.Core.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("DeliveryAddressId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("DeliveryDate")
                         .HasColumnType("datetime2");
@@ -61,7 +138,14 @@ namespace EatDomicile.Core.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("DeliveryAddressId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Orders");
                 });
@@ -89,6 +173,48 @@ namespace EatDomicile.Core.Migrations
                     b.ToTable("Products");
 
                     b.UseTptMappingStrategy();
+                });
+
+            modelBuilder.Entity("EatDomicile.Core.Models.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AddressId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("Email");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("FirstName");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("LastName");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)")
+                        .HasColumnName("Phone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AddressId");
+
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("OrderProduct", b =>
@@ -163,6 +289,51 @@ namespace EatDomicile.Core.Migrations
                     b.ToTable("Pizzas");
                 });
 
+            modelBuilder.Entity("EatDomicile.Core.Models.Ingredient", b =>
+                {
+                    b.HasOne("EatDomicile.Core.Models.Burger", "Burger")
+                        .WithMany("Ingredients")
+                        .HasForeignKey("BurgerId");
+
+                    b.HasOne("EatDomicile.Core.Models.Pizza", "Pizza")
+                        .WithMany("Ingredients")
+                        .HasForeignKey("PizzaId");
+
+                    b.Navigation("Burger");
+
+                    b.Navigation("Pizza");
+                });
+
+            modelBuilder.Entity("EatDomicile.Core.Models.Order", b =>
+                {
+                    b.HasOne("EatDomicile.Core.Models.Address", "DeliveryAddress")
+                        .WithMany()
+                        .HasForeignKey("DeliveryAddressId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EatDomicile.Core.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DeliveryAddress");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("EatDomicile.Core.Models.User", b =>
+                {
+                    b.HasOne("EatDomicile.Core.Models.Address", "Address")
+                        .WithMany("Users")
+                        .HasForeignKey("AddressId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Address");
+                });
+
             modelBuilder.Entity("OrderProduct", b =>
                 {
                     b.HasOne("EatDomicile.Core.Models.Order", null)
@@ -229,6 +400,21 @@ namespace EatDomicile.Core.Migrations
                         .IsRequired();
 
                     b.Navigation("Dough");
+                });
+
+            modelBuilder.Entity("EatDomicile.Core.Models.Address", b =>
+                {
+                    b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("EatDomicile.Core.Models.Burger", b =>
+                {
+                    b.Navigation("Ingredients");
+                });
+
+            modelBuilder.Entity("EatDomicile.Core.Models.Pizza", b =>
+                {
+                    b.Navigation("Ingredients");
                 });
 #pragma warning restore 612, 618
         }
