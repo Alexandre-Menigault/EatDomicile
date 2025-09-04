@@ -13,13 +13,13 @@ namespace EatDomicile.Core.Contexts
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=PEDRO;Database=EatDomicile;Trusted_Connection=True;TrustServerCertificate=True;");
+            optionsBuilder.UseSqlServer("Server=localhost;Database=EatDomicile;Trusted_Connection=True;TrustServerCertificate=True;");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
                 
-            modelBuilder.Entity<Products>()
+            modelBuilder.Entity<Product>()
                 .UseTptMappingStrategy();
 
             modelBuilder.Entity<Food>()

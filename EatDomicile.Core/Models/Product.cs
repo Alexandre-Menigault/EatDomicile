@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 namespace EatDomicile.Core.Models
 {
     [Table("Products")]
-    public abstract class Products
+    public abstract class Product
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
