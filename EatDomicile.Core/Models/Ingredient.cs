@@ -25,5 +25,6 @@ public class Ingredient
     public int Kcal { get; set; }
 
     public Burger? Burger { get; set; } = null;
+    public Pizza? Pizza { get; set; } = null;
 
 }

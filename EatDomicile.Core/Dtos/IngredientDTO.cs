@@ -13,11 +13,17 @@ public class IngredientDTO
     public string Name { get; set; }
     public int Kcal { get; set; }
 
-    public IngredientDTO(int id, string name, int kcal)
+    public BurgerDTO? Burger { get; set; } = null;
+    
+    public PizzaDTO? Pizza { get; set; } = null;
+
+    public IngredientDTO(int id, string name, int kcal, BurgerDTO? burger = null, PizzaDTO? pizza = null)
     {
         this.Id = id;
         this.Name = name;
         this.Kcal = kcal;
+        this.Burger = burger;
+        this.Pizza = pizza;
     }
 
     public static IngredientDTO FromEntity(Ingredient ingredient)
@@ -25,7 +31,9 @@ public class IngredientDTO
         return new IngredientDTO(
             ingredient.Id,
             ingredient.Name,
-            ingredient.Kcal
+            ingredient.Kcal,
+            ingredient.Burger == null ? null : BurgerDTO.FromEntity(ingredient.Burger),
+            ingredient.Pizza == null ? null : PizzaDTO.FromEntity(ingredient.Pizza)
         );
     }
 
@@ -37,7 +45,8 @@ public class IngredientDTO
             Id = dto.Id,
             Name = dto.Name,
             Kcal = dto.Kcal,
-            
+            Burger = dto.Burger == null ? null : BurgerDTO.ToEntity(dto.Burger),
+            Pizza = dto.Pizza == null ? null : PizzaDTO.ToEntity(dto.Pizza)
         };
     }
 }

@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace EatDomicile.Core.Models
 {
     [Table("Foods")]
-    public abstract class Food: Products
+    public abstract class Food: Product
     {
         [Required]
         [DefaultValue(false)]
