@@ -25,5 +25,7 @@ namespace EatDomicile.Core.Models
         [Column("Price", TypeName = "decimal(10,2)")]
         public required decimal Price { get; set; }
         
+        public List<Order> Orders { get; set; } = new();
+        
     }
 }
