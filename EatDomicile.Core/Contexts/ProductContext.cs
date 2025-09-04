@@ -33,5 +33,10 @@ namespace EatDomicile.Core.Contexts
         public DbSet<Burger> Burgers => this.Set<Burger>();
         public DbSet<Drink> Drinks => this.Set<Drink>();
 
+        public DbSet<User> Users => this.Set<User>();
+        public DbSet<Address> Addresses => this.Set<Address>();
+       
+        public DbSet<Ingredient> Ingredients => this.Set<Ingredient>();
+
     }
 }
