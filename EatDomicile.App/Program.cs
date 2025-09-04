@@ -5,8 +5,19 @@ using EatDomicile.Core.Enums;
 using EatDomicile.Core.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using EatDomicile.Core.Service;
+using EatDomicile.Core.Services;
+
 
 Console.WriteLine("Hello, World!");
+
+var service = new IngredientService();
+var ing = service.AddIngredient(new Ingredient { Name = "Tomato", Kcal = 20 });
+Console.WriteLine($"Ingredient {ing.Name} ajouté !");
+
+
+
+
 
 // Pasta p = new Pasta()
 // {
