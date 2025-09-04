@@ -20,8 +20,8 @@ public class BurgerDTO : FoodDTO
             burger.Vegetarien
             
         )
-        { Ingredients = burger.Ingredients.Select(IngredientDTO.FromEntity).ToList()
-
+        { 
+            Ingredients = IngredientDTO.FromEntities(burger.Ingredients)
         }  ;
     }
     
@@ -32,7 +32,7 @@ public class BurgerDTO : FoodDTO
             Name = burgerDTO.Name,
             Price = burgerDTO.Price,
             Vegetarien = burgerDTO.Vegetarien,
-            Ingredients = burgerDTO.Ingredients.Select(IngredientDTO.ToEntity).ToList()
+            Ingredients = IngredientDTO.ToEntities(burgerDTO.Ingredients)
         };
     }
     

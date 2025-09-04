@@ -7,7 +7,7 @@ using EatDomicile.Core.Models;
 
 namespace EatDomicile.Core.Dtos;
 
-internal class AddressDTO
+public class AddressDTO
 {
     public int Id { get; set; } 
     public  string Street { get; set; }

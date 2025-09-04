@@ -49,4 +49,18 @@ public class IngredientDTO
             Pizza = dto.Pizza == null ? null : PizzaDTO.ToEntity(dto.Pizza)
         };
     }
+    
+    public static List<IngredientDTO> FromEntities(List<Ingredient> ingredients)
+    {
+        return ingredients
+            .Select(IngredientDTO.FromEntity)
+            .ToList();
+    }
+    
+    public static List<Ingredient> ToEntities(List<IngredientDTO> ingredients)
+    {
+        return ingredients
+            .Select(IngredientDTO.ToEntity)
+            .ToList();
+    }
 }

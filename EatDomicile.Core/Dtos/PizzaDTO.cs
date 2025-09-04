@@ -5,6 +5,7 @@ namespace EatDomicile.Core.Dtos;
 public class PizzaDTO : FoodDTO
 {
     public DoughDTO Dough { get; set; }
+    public List<IngredientDTO> Ingredients { get; set; } = new();
     
     public PizzaDTO(string name, decimal price, bool vegetarien, DoughDTO dough): base(name, price, vegetarien)
     {
@@ -17,8 +18,11 @@ public class PizzaDTO : FoodDTO
             pizza.Name,
             pizza.Price,
             pizza.Vegetarien,
-            DoughDTO.FromEntity(pizza.Dough) 
-        );
+            DoughDTO.FromEntity(pizza.Dough)
+        )
+        {
+            Ingredients = IngredientDTO.FromEntities(pizza.Ingredients)
+        };
     } 
     
     public static Pizza ToEntity(PizzaDTO pizzaDTO)
@@ -28,7 +32,8 @@ public class PizzaDTO : FoodDTO
             Name = pizzaDTO.Name,
             Price = pizzaDTO.Price,
             Vegetarien = pizzaDTO.Vegetarien,
-            Dough = DoughDTO.ToEntity(pizzaDTO.Dough)
+            Dough = DoughDTO.ToEntity(pizzaDTO.Dough),
+            Ingredients = IngredientDTO.ToEntities(pizzaDTO.Ingredients)
         };
     }
 }
