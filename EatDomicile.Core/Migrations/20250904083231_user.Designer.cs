@@ -3,6 +3,7 @@ using EatDomicile.Core.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EatDomicile.Core.Migrations
 {
     [DbContext(typeof(ProductContext))]
-    partial class ProductContextModelSnapshot : ModelSnapshot
+    [Migration("20250904083231_user")]
+    partial class user
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -102,19 +105,14 @@ namespace EatDomicile.Core.Migrations
                         .HasColumnType("nvarchar(100)")
                         .HasColumnName("Name");
 
-                    b.Property<int?>("PizzaId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("BurgerId");
 
-                    b.HasIndex("PizzaId");
-
                     b.ToTable("Ingredients");
                 });
 
-            modelBuilder.Entity("EatDomicile.Core.Models.Product", b =>
+            modelBuilder.Entity("EatDomicile.Core.Models.Products", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -139,18 +137,6 @@ namespace EatDomicile.Core.Migrations
                     b.UseTptMappingStrategy();
                 });
 
-            modelBuilder.Entity("EatDomicile.Core.Models.Drink", b =>
-                {
-                    b.HasBaseType("EatDomicile.Core.Models.Product");
-
-                    b.Property<bool>("Fizzy")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("KCal")
-                        .HasColumnType("int");
-
-                    b.ToTable("Drinks");
-                  });
             modelBuilder.Entity("EatDomicile.Core.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -195,7 +181,7 @@ namespace EatDomicile.Core.Migrations
 
             modelBuilder.Entity("EatDomicile.Core.Models.Food", b =>
                 {
-                    b.HasBaseType("EatDomicile.Core.Models.Product");
+                    b.HasBaseType("EatDomicile.Core.Models.Products");
 
                     b.Property<bool>("Vegetarien")
                         .HasColumnType("bit");
@@ -208,6 +194,19 @@ namespace EatDomicile.Core.Migrations
                     b.HasBaseType("EatDomicile.Core.Models.Food");
 
                     b.ToTable("Burgers");
+                });
+
+            modelBuilder.Entity("EatDomicile.Core.Models.Drink", b =>
+                {
+                    b.HasBaseType("EatDomicile.Core.Models.Food");
+
+                    b.Property<bool>("Fizzy")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("KCal")
+                        .HasColumnType("int");
+
+                    b.ToTable("Drinks");
                 });
 
             modelBuilder.Entity("EatDomicile.Core.Models.Pasta", b =>
@@ -243,13 +242,7 @@ namespace EatDomicile.Core.Migrations
                         .WithMany("Ingredients")
                         .HasForeignKey("BurgerId");
 
-                    b.HasOne("EatDomicile.Core.Models.Pizza", "Pizza")
-                        .WithMany()
-                        .HasForeignKey("PizzaId");
-
                     b.Navigation("Burger");
-
-                    b.Navigation("Pizza");
                 });
 
             modelBuilder.Entity("EatDomicile.Core.Models.User", b =>
@@ -265,16 +258,7 @@ namespace EatDomicile.Core.Migrations
 
             modelBuilder.Entity("EatDomicile.Core.Models.Food", b =>
                 {
-                    b.HasOne("EatDomicile.Core.Models.Product", null)
-                        .WithOne()
-                        .HasForeignKey("EatDomicile.Core.Models.Drink", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("EatDomicile.Core.Models.Food", b =>
-                {
-                    b.HasOne("EatDomicile.Core.Models.Product", null)
+                    b.HasOne("EatDomicile.Core.Models.Products", null)
                         .WithOne()
                         .HasForeignKey("EatDomicile.Core.Models.Food", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -286,6 +270,15 @@ namespace EatDomicile.Core.Migrations
                     b.HasOne("EatDomicile.Core.Models.Food", null)
                         .WithOne()
                         .HasForeignKey("EatDomicile.Core.Models.Burger", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("EatDomicile.Core.Models.Drink", b =>
+                {
+                    b.HasOne("EatDomicile.Core.Models.Food", null)
+                        .WithOne()
+                        .HasForeignKey("EatDomicile.Core.Models.Drink", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
