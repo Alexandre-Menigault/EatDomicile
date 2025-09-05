@@ -1,5 +1,6 @@
 ﻿using EatDomicile.Core.Contexts;
 using EatDomicile.Core.Models;
+using EatDomicile.Core.Dtos;
 using System;
 
 
@@ -9,7 +10,8 @@ public class IngredientService
 {
 
 
-    public IngredientService (){
+    public IngredientService ()
+    {
         }
     // READ
     public List<Ingredient> GetAllIngredients()
@@ -22,18 +24,20 @@ public class IngredientService
 
 
     // CREATE
-    public Ingredient AddIngredient( Ingredient ingredient)
+    public IngredientDTO AddIngredient( IngredientDTO ingredient)
     {
         using var context = new ProductContext();
-        context.Ingredients.Add(ingredient);
+        var IngredientEntity = IngredientDTO.ToEntity(ingredient);
+        context.Ingredients.Add(IngredientEntity);
         context.SaveChanges();
-        return ingredient;
+        return IngredientDTO.FromEntity(IngredientEntity);
     }
 
     // UPDATE
     public Ingredient UpdateIngredient(Ingredient ingredient)
     {
         using var context = new ProductContext();
+        var existingIngredient = context.Ingredients.Find(ingredient.Id);
         context.Ingredients.Update(ingredient);
         context.SaveChanges();
         return ingredient;
