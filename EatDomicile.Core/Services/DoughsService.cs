@@ -29,9 +29,10 @@ public class DoughsService
         return dough;
     }
 
-    public void RemoveDough(Dough dough)
+    public void RemoveDough(Dough doughToRemove)
     {
         using var context = new ProductContext();
+        var dough = context.Doughs.Find(doughToRemove.Id);
         context.Doughs.Remove(dough);
         context.SaveChanges();
     }
