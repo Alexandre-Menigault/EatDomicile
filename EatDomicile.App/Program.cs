@@ -1,43 +1,138 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+using EatDomicile.App;
 using EatDomicile.Core.Contexts;
+using EatDomicile.Core.Dtos;
 using EatDomicile.Core.Enums;
+using EatDomicile.Core.Migrations;
 using EatDomicile.Core.Models;
+using EatDomicile.Core.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using EatDomicile.Core.Services;
 
+// Console.WriteLine("Bienvenue au programme EatDomicile");
 
+// Console.WriteLine("======== Test =========");
 
-Console.WriteLine("Hello, World!");
-
-
-
-
-
-// Pasta p = new Pasta()
+// Address address = new Address()
 // {
-//     KCal = 100,
-//     Name = "Spaghetti",
-//     Price = 10,
-//     Type = PastaType.Spaghetti,
-//     Vegetarien = true 
+//     City = "Orléans",
+//     Country = "France",
+//     State = "Centre Val de Loire",
+//     Street = "1 avenue de Paris",
+//     ZipCode = 45000
+// };
+//
+// User user = new User()
+// {
+//     Address = address,
+//     Email = "me@example.com",
+//     FirstName = "Jeane",
+//     LastName = "Doe",
+//     Phone = "0112233455"
 // };
 
 // Dough dough = new Dough()
 // {
-//     Name = "Fine"
+//     Name = "Thick"
 // };
+
+// List<Ingredient> ingredients =
+// [
+//     new Ingredient()
+//     {
+//         Name = "Steak",
+//         Kcal = 1000,
+//     },
 //
-// Pizza piz = new Pizza()
+//     new Ingredient()
+//     {
+//         Name = "Salade",
+//         Kcal = 2,
+//     },
+// ];
+//
+// Burger burger = new Burger()
 // {
-//     Name = "Reine",
-//     Vegetarien = false, 
-//     Dough = dough
+//     Name = "Végétarienne",
+//     Price = 10,
+//     Vegetarien = false,
+//     Ingredients = ingredients
 // };
 //
-// var productsContext = new ProductContext();
+// Order orderModel = new Order()
+// {
+//     OrderDate = DateTime.Now,
+//     User = user,
+//     DeliveryAddress = address,
+//     Products = [burger]
+// };
+
+// OrderService korderService = new OrderService();
+// orderService.CreateOrder(orderModel);
+
+// var orders = orderService.GetOrdersEnCours();
 //
-// productsContext.Pastas.Add(p);
-// productsContext.Pizzas.Add(piz);
-// productsContext.SaveChanges();
+// Console.WriteLine(orders.AsString());
+//
+// var usersWithOrders = orderService.GetUsersWithOrders();
+//
+// Console.WriteLine(usersWithOrders.AsString());
+
+// var order = orderService.GetOrderById(1);
+
+
+
+// orderService.UpdateOrderEnCuisine(order!.Id);
+// Console.WriteLine(order.AsString());
+//
+//
+// orderService.UpdateOrderEnLivraison(order!.Id);
+// order = orderService.GetOrderById(1);
+// Console.WriteLine(order!.AsString());
+//
+// orderService.UpdateOrderLivree(order!.Id);
+// order = orderService.GetOrderById(1);
+// Console.WriteLine(order!.AsString());
+//
+// orderService.DeleteOrder(order!.Id);
+// order = orderService.GetOrderById(1);
+// if (order is null)
+// {
+//     Console.WriteLine("Order should not be null");   
+// }
+
+// Console.WriteLine("======== Fin Test =========");
+
+Console.WriteLine("Bienvenue au programme EatDomicile");
+
+var input = 0;
+
+do
+{
+    Console.WriteLine("Menu Principal:");
+    Console.WriteLine("1. Admin");
+    Console.WriteLine("2. Client");
+    Console.WriteLine("3. Quitter");
+    
+    input = int.Parse(Console.ReadLine()!);
+
+    switch (input)
+    {
+        case 1:
+            var adminMenu = new MenuAdmin();
+            adminMenu.Run();
+            break;
+        case 2:
+            var userMenu = new MenuUser();
+            userMenu.Run();
+            break;
+        case 3:
+            break;
+        default:
+            Console.WriteLine("Choix invalide");
+            break;
+    }
+    
+} while (input != 3);
+

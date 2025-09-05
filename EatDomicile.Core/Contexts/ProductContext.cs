@@ -38,6 +38,8 @@ namespace EatDomicile.Core.Contexts
         public DbSet<Address> Addresses => this.Set<Address>();
        
         public DbSet<Ingredient> Ingredients => this.Set<Ingredient>();
+        public DbSet<Order> Orders => this.Set<Order>();
+        public DbSet<Food> Foods => this.Set<Food>();
 
     }
 }

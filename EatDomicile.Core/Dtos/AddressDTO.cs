@@ -15,7 +15,12 @@ public class AddressDTO
     public  string State { get; set; }
     public int ZipCode { get; set; }
     public  string Country { get; set; }
-
+    
+    
+    public AddressDTO()
+    {
+        
+    }
 
     public AddressDTO(int id, string street, string city, string state, int zipCode, string country)
     {
@@ -53,4 +58,15 @@ public class AddressDTO
         };
            
         }
+}
+
+public static class AddressDTOExtensions
+{
+    public static String AsString(this AddressDTO address)
+    {
+        var sb = new StringBuilder();
+        sb.Append($"<Address> {address.Street} {address.City} {address.State} {address.ZipCode} {address.Country}");
+        
+        return sb.ToString();
+    }
 }

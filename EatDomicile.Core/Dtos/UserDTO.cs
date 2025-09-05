@@ -14,9 +14,15 @@ public class UserDTO
     public  string LastName { get; set; }
     public  string Email { get; set; }
     public  string Phone { get; set; }
-    public  Address Address { get; set; }
+    public  AddressDTO Address { get; set; }
 
-    public UserDTO(int id, string firstName, string lastName, string email, string phone, Address address)
+    
+    public UserDTO()
+    {
+        
+    }
+    
+    public UserDTO(int id, string firstName, string lastName, string email, string phone, AddressDTO address)
     {
         this.Id = id;
         this.FirstName = firstName;
@@ -34,7 +40,7 @@ public class UserDTO
             user.LastName,
             user.Email,
             user.Phone,
-            user.Address
+            AddressDTO.FromEntity(user.Address) 
         );
     }
 
@@ -47,7 +53,29 @@ public class UserDTO
             LastName = dto.LastName,
             Email = dto.Email,
             Phone = dto.Phone,
-            Address = dto.Address
+            Address = AddressDTO.ToEntity(dto.Address) 
         };
+    }
+}
+
+public static class UserDTOExtensions
+{
+    public static String AsString(this UserDTO user)
+    {
+        return $"<User> {user.Id}" +
+               $"\n\t{user.FirstName} {user.LastName}" +
+               $"\n\t{user.Address.AsString()}" +
+               $"\n\t{user.Email}" +
+               $"\n\t{user.Phone}";
+    }
+    
+    public static String AsString(this List<UserDTO> users)
+    {
+        var sb = new StringBuilder();
+        foreach (var user in users)
+        {
+            sb.AppendLine(user.AsString());
+        }
+        return sb.ToString();
     }
 }
