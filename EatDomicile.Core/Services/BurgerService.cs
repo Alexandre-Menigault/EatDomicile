@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using EatDomicile.Core.Contexts;
 using EatDomicile.Core.Models;
 
-namespace EatDomicile.Core.Service;
+namespace EatDomicile.Core.Services;
 
-internal class BurgerService
+public  class BurgerService
 {
     //CREATE
     public Burger AddBurger( Burger burger)
