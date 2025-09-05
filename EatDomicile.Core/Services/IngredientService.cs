@@ -24,13 +24,12 @@ public class IngredientService
 
 
     // CREATE
-    public IngredientDTO AddIngredient( IngredientDTO ingredient)
+    public IngredientDTO AddIngredient( Ingredient ingredient)
     {
         using var context = new ProductContext();
-        var IngredientEntity = IngredientDTO.ToEntity(ingredient);
-        context.Ingredients.Add(IngredientEntity);
+        context.Ingredients.Add(ingredient);
         context.SaveChanges();
-        return IngredientDTO.FromEntity(IngredientEntity);
+        return IngredientDTO.FromEntity(ingredient);
     }
 
     // UPDATE

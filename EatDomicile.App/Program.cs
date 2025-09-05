@@ -104,16 +104,16 @@ using Microsoft.Extensions.Hosting;
 
 // Console.WriteLine("======== Fin Test =========");
 
-Console.WriteLine("Bienvenue au programme EatDomicile");
+Console.WriteLine(" \n--- Bienvenue au programme EatDomicile ---");
 
 var input = 0;
 
 do
 {
-    Console.WriteLine("Menu Principal:");
-    Console.WriteLine("1. Admin");
-    Console.WriteLine("2. Client");
-    Console.WriteLine("3. Quitter");
+    Console.WriteLine("\n--- Menu Principal: ---");
+    Console.WriteLine(" 1. Admin");
+    Console.WriteLine(" 2. Client ");
+    Console.WriteLine(" 3. Quitter");
     
     input = int.Parse(Console.ReadLine()!);
 
@@ -130,7 +130,7 @@ do
         case 3:
             break;
         default:
-            Console.WriteLine("Choix invalide");
+            Console.WriteLine(" Choix invalide ");
             break;
     }
     
