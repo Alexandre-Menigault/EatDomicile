@@ -14,17 +14,16 @@ public class Order
     public DateTime OrderDate { get; set; }
     
     public DateTime? DeliveryDate { get; set; }
-    
-    [Required]
-    public OrderStatus Status { get; set; }
+
+    [Required] public OrderStatus Status { get; set; } = OrderStatus.Validee;
 
     [Required]
-    public List<Product> Products { get; set; } = new();
+    public List<Product>? Products { get; set; } = new();
     
     [Required]
-    public required User User { get; set; }
+    public User? User { get; set; }
     [Required]
     [Column("DeliveryAddressId")]
-    public required Address DeliveryAddress { get; set; }
+    public Address? DeliveryAddress { get; set; }
 
 }
