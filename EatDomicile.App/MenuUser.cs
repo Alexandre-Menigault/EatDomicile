@@ -18,12 +18,12 @@ public class MenuUser
         var input = 0;
         do
         {
-            Console.WriteLine("Menu User");
-            Console.WriteLine("Que voulez-vous faire ?");
-            Console.WriteLine("1. S'inscrire");
-            Console.WriteLine("2. Se connecter (Non Implémenté)");
-            Console.WriteLine("3. Commander (Non Implémenté)");
-            Console.WriteLine("9. Quitter (Non Implémenté)");
+            Console.WriteLine("\n--- Menu User ---");
+            Console.WriteLine(" Que voulez-vous faire ? ");
+            Console.WriteLine(" 1. S'inscrire ");
+            Console.WriteLine(" 2. Se connecter (Non Implémenté) ");
+            Console.WriteLine(" 3. Commander (Non Implémenté) ");
+            Console.WriteLine(" 9. Quitter (Non Implémenté) ");
             
             input = int.Parse(Console.ReadLine()!);
             
@@ -37,7 +37,7 @@ public class MenuUser
                 case 3:
                     break;
                 default:
-                    Console.WriteLine("Choix invalide");
+                    Console.WriteLine("\n--- Choix invalide ---");
                     break;
             }
             
@@ -53,15 +53,15 @@ public class MenuUser
         try
         {
             
-            user.FirstName = ConsoleUtils.ReadLineString("Quel est votre nom ? ");
-            user.LastName = ConsoleUtils.ReadLineString("Quel est votre prénom");
-            user.Email = ConsoleUtils.ReadLineString("Quel est votre email ? ");
-            user.Phone = ConsoleUtils.ReadLineString("Quel est votre numéro de téléphone ? ");
-            address.Street = ConsoleUtils.ReadLineString("Quel est votre adresse ? ");
-            address.City = ConsoleUtils.ReadLineString("Quel est votre ville ? ");
-            address.State = ConsoleUtils.ReadLineString("Quel est votre département ?");
-            address.ZipCode = ConsoleUtils.ReadLineInt("Quel est votre code postal ? ");
-            address.Country = ConsoleUtils.ReadLineString("Quel est votre pays ? ");
+            user.FirstName = ConsoleUtils.ReadLineString(" Quel est votre nom ? ");
+            user.LastName = ConsoleUtils.ReadLineString(" Quel est votre prénom ");
+            user.Email = ConsoleUtils.ReadLineString(" Quel est votre email ? ");
+            user.Phone = ConsoleUtils.ReadLineString(" Quel est votre numéro de téléphone ? ");
+            address.Street = ConsoleUtils.ReadLineString(" Quel est votre adresse ? ");
+            address.City = ConsoleUtils.ReadLineString(" Quel est votre ville ? ");
+            address.State = ConsoleUtils.ReadLineString(" Quel est votre département ? ");
+            address.ZipCode = ConsoleUtils.ReadLineInt(" Quel est votre code postal ? ");
+            address.Country = ConsoleUtils.ReadLineString(" Quel est votre pays ? ");
             user.Address = address;
 
 
@@ -69,14 +69,14 @@ public class MenuUser
         catch (Exception e)
         {
             Console.WriteLine(e.Message);
-            Console.WriteLine("Retour au menu");
+            Console.WriteLine("\n--- Retour au menu ---");
         }
         
         
         var userService = new UserService();
 
         var userAdded = userService.AddUser(user);
-        Console.WriteLine("User ajouté");
+        Console.WriteLine("\n--- User ajouté ---");
         Console.WriteLine(userAdded.AsString());
     }
 }
