@@ -13,7 +13,7 @@ namespace EatDomicile.Core.Contexts
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=localhost;Database=EatDomicile;Trusted_Connection=True;TrustServerCertificate=True;");
+            optionsBuilder.UseSqlServer("Server=PEDRO;Database=EatDomicile;Trusted_Connection=True;TrustServerCertificate=True;");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -32,6 +32,7 @@ namespace EatDomicile.Core.Contexts
         public DbSet<Pasta> Pastas => this.Set<Pasta>();
         public DbSet<Burger> Burgers => this.Set<Burger>();
         public DbSet<Drink> Drinks => this.Set<Drink>();
+        public DbSet<Dough> Doughs => this.Set<Dough>();
 
         public DbSet<User> Users => this.Set<User>();
         public DbSet<Address> Addresses => this.Set<Address>();
