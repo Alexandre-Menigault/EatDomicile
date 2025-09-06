@@ -62,8 +62,7 @@ public static class UserDTOExtensions
 {
     public static String AsString(this UserDTO user)
     {
-        return $"<User> {user.Id}" +
-               $"\n\t{user.FirstName} {user.LastName}" +
+        return $"<User> {user.FirstName} {user.LastName}" +
                $"\n\t{user.Address.AsString()}" +
                $"\n\t{user.Email}" +
                $"\n\t{user.Phone}";

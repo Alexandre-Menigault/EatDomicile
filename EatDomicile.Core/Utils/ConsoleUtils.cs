@@ -8,7 +8,17 @@ public static class ConsoleUtils
     public static int ReadLineInt(string str)
     {
         Console.WriteLine(str);
-        return int.Parse(Console.ReadLine()!);
+        var input = Console.ReadLine()!;
+        try
+        {
+            var returnValue = int.Parse(input);
+            return returnValue;
+        }
+        catch (Exception e)
+        {
+            throw new Exception($"Impossible de convertir la valeur {input} en entier!");
+        }
+        
 
     }
 

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EatDomicile.Core.Enums;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace EatDomicile.Core.Contexts
 {
@@ -13,7 +14,19 @@ namespace EatDomicile.Core.Contexts
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=PEDRO;Database=EatDomicile;Trusted_Connection=True;TrustServerCertificate=True;");
+#if DEBUG
+            optionsBuilder
+                .LogTo(
+                    Console.WriteLine,
+                    (eventId, level) => eventId == RelationalEventId.CommandExecuting,
+                    DbContextLoggerOptions.None
+                )
+                .UseSqlServer("Server=localhost;Database=EatDomicile;Trusted_Connection=True;TrustServerCertificate=True;");
+
+#else
+            optionsBuilder
+                .UseSqlServer("Server=localhost;Database=EatDomicile;Trusted_Connection=True;TrustServerCertificate=True;");
+#endif
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -53,4 +53,15 @@ public class IngredientService
             context.SaveChanges();
         }
     }
+
+    public List<IngredientDTO> GetAllIngerdientsAllergene()
+    {
+        using var context = new ProductContext();
+        var ingredientList = context.Ingredients
+            .Where(i => i.Allergene)
+            .Select(IngredientDTO.FromEntity)
+            .ToList();
+        
+        return ingredientList;
+    }
 }

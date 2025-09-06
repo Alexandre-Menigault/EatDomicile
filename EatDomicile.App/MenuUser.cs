@@ -63,7 +63,12 @@ public class MenuUser
             address.ZipCode = ConsoleUtils.ReadLineInt(" Quel est votre code postal ? ");
             address.Country = ConsoleUtils.ReadLineString(" Quel est votre pays ? ");
             user.Address = address;
+            
+            var userService = new UserService();
 
+            var userAdded = userService.AddUser(user);
+            Console.WriteLine("\n--- User ajouté ---");
+            Console.WriteLine(userAdded.AsString());
 
         }
         catch (Exception e)
@@ -73,10 +78,6 @@ public class MenuUser
         }
         
         
-        var userService = new UserService();
-
-        var userAdded = userService.AddUser(user);
-        Console.WriteLine("\n--- User ajouté ---");
-        Console.WriteLine(userAdded.AsString());
+        
     }
 }

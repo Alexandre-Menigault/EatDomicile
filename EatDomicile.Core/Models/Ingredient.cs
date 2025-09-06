@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -23,6 +24,11 @@ public class Ingredient
     [Required]
     [Column("Kcal")]
     public int Kcal { get; set; }
+
+    [Required]
+    [Column("Allergene")]
+    [DefaultValue(false)]
+    public bool Allergene { get; set; } = false;
 
     public Burger? Burger { get; set; } = null;
     public Pizza? Pizza { get; set; } = null;
