@@ -1,5 +1,4 @@
-﻿using Bogus.Extensions;
-using EatDomicile.Core.Contexts;
+﻿using EatDomicile.Core.Contexts;
 using EatDomicile.Core.Dtos;
 using EatDomicile.Core.Enums;
 using EatDomicile.Core.Models;
@@ -115,5 +114,18 @@ public class OrderService
             .Select(UserDTO.FromEntity)
             .ToList();
     }
+    
+    public List<OrderDTO> GetVegetarianOrders()
+    {
+        using var context = new ProductContext();
+        return context.Orders
+            .Include(o => o.User)
+            .Include(o => o.DeliveryAddress)
+            .Include(o => o.Products)
+            .Where(o => o.Products!.OfType<Food>().All(f => f.Vegetarien))
+            .Select(OrderDTO.FromEntity)
+            .ToList();
+    }
+    
     
 }

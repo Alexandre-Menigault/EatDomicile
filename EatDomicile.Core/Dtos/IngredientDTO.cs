@@ -13,15 +13,18 @@ public class IngredientDTO
     public string Name { get; set; }
     public int Kcal { get; set; }
 
+    public bool Allergene { get; set; } = false;
+
     public BurgerDTO? Burger { get; set; } = null;
     
     public PizzaDTO? Pizza { get; set; } = null;
 
-    public IngredientDTO(int id, string name, int kcal, BurgerDTO? burger = null, PizzaDTO? pizza = null)
+    public IngredientDTO(int id, string name, int kcal, bool allergene, BurgerDTO? burger = null, PizzaDTO? pizza = null)
     {
         this.Id = id;
         this.Name = name;
         this.Kcal = kcal;
+        this.Allergene = allergene;
         this.Burger = burger;
         this.Pizza = pizza;
     }
@@ -32,6 +35,7 @@ public class IngredientDTO
             ingredient.Id,
             ingredient.Name,
             ingredient.Kcal,
+            ingredient.Allergene,
             ingredient.Burger == null ? null : BurgerDTO.FromEntity(ingredient.Burger),
             ingredient.Pizza == null ? null : PizzaDTO.FromEntity(ingredient.Pizza)
         );
@@ -45,6 +49,7 @@ public class IngredientDTO
             Id = dto.Id,
             Name = dto.Name,
             Kcal = dto.Kcal,
+            Allergene = dto.Allergene,
             Burger = dto.Burger == null ? null : BurgerDTO.ToEntity(dto.Burger),
             Pizza = dto.Pizza == null ? null : PizzaDTO.ToEntity(dto.Pizza)
         };
@@ -62,5 +67,23 @@ public class IngredientDTO
         return ingredients
             .Select(IngredientDTO.ToEntity)
             .ToList();
+    }
+}
+
+public static class IngredientExtensions
+{
+    public static String AsString(this IngredientDTO ingredient)
+    {
+        return $"<Ingredient> {ingredient.Name} {ingredient.Kcal} Kcal, Allergene = {(ingredient.Allergene ? "Oui" : "Non")}";
+    }
+
+    public static String AsString(this List<IngredientDTO> ingredients)
+    {
+        var sb = new StringBuilder();
+        foreach (var ingredient in ingredients)
+        {
+            sb.AppendLine(ingredient.AsString());
+        }
+        return sb.ToString();
     }
 }
