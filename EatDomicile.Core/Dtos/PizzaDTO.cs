@@ -1,4 +1,5 @@
 ﻿using EatDomicile.Core.Models;
+using System.Text;
 
 namespace EatDomicile.Core.Dtos;
 
@@ -35,5 +36,20 @@ public class PizzaDTO : FoodDTO
             Dough = DoughDTO.ToEntity(pizzaDTO.Dough),
             Ingredients = IngredientDTO.ToEntities(pizzaDTO.Ingredients)
         };
+    }
+}
+
+public static class PizzaExtentions 
+{
+    public static String AsString(this PizzaDTO pizza)
+    {
+        var sb = new StringBuilder();
+        sb.AppendLine($"<Pizza> {pizza.Name} ({pizza.Price}€) - Dough: {pizza.Dough.Name}");
+        sb.AppendLine("Ingredients:");
+        foreach (var ingredient in pizza.Ingredients)
+        {
+            sb.AppendLine($"\t- {ingredient.Name} ({ingredient.Kcal} Kcal, Allergene: {(ingredient.Allergene ? "Oui" : "Non")})");
+        }
+        return sb.ToString();
     }
 }

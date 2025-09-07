@@ -14,19 +14,22 @@ public class OrderDTO
     public OrderStatus Status { get; set; }
 
     public List<ProductDTO>? Products { get; set; }
+    public List<int> ProductIds { get; set; } = new();
 
-    public UserDTO? User { get; set; }
-    public AddressDTO? DeliveryAddress { get; set; }
+    // public UserDTO? User { get; set; }
+    public int UserId { get; set; }
+    //public AddressDTO? DeliveryAddress { get; set; }
+    public int DeliveryAddressId { get; set; }
     
-    public OrderDTO(int id, DateTime orderDate, DateTime? deliveryDate, OrderStatus status, List<ProductDTO>? products, UserDTO? user, AddressDTO? deliveryAddress)
+    public OrderDTO(int id, DateTime orderDate, DateTime? deliveryDate, OrderStatus status, List<ProductDTO>? products, int userId, int deliveryAddressId)
     {
         this.Id = id;
         this.OrderDate = orderDate;
         this.DeliveryDate = deliveryDate;
         this.Status = status;
         this.Products = products;
-        this.User = user;
-        this.DeliveryAddress = deliveryAddress;
+        this.UserId = userId;
+        this.DeliveryAddressId = deliveryAddressId;
     }
 
     public static OrderDTO FromEntity(Order order)
@@ -37,9 +40,12 @@ public class OrderDTO
             order.DeliveryDate,
             order.Status,
             order.Products == null ? null :ProductDTO.FromEntities(order.Products),
-            order.User == null ? null : UserDTO.FromEntity(order.User),
-            order.DeliveryAddress == null ? null : AddressDTO.FromEntity(order.DeliveryAddress)
-        );
+            order.UserId, //== null ? null : UserDTO.FromEntity(order.User),
+            order.DeliveryAddressId
+        )
+        {
+            ProductIds = order.Products?.Select(p => p.Id).ToList() ?? new List<int>()
+        };
     }
 
     public static Order ToEntity(OrderDTO order)
@@ -50,9 +56,9 @@ public class OrderDTO
             OrderDate = order.OrderDate,
             DeliveryDate = order.DeliveryDate,
             Status = order.Status,
-            Products = order.Products == null ? null :ProductDTO.ToEntities(order.Products),
-            User = order.User == null ? null : UserDTO.ToEntity(order.User),
-            DeliveryAddress = order.DeliveryAddress == null ? null : AddressDTO.ToEntity(order.DeliveryAddress)
+            Products = null, //= order.Products == null ? null :ProductDTO.ToEntities(order.Products),
+            UserId = order.UserId, // = order.User == null ? null : UserDTO.ToEntity(order.User),
+            DeliveryAddressId = order.DeliveryAddressId
         };
     }
     
@@ -64,8 +70,9 @@ public static class OrderExtentions
     {
         var sb = new StringBuilder();
         sb.AppendLine($"<Order> {order.Id}");
-        sb.AppendLine($"\tUser = {order.User!.FirstName} {order.User.LastName}");
-        sb.AppendLine($"\tAddress = {order.DeliveryAddress!.AsString()}");
+        sb.AppendLine($"\tUserId = {order.UserId}");
+        // sb.AppendLine($"\tUser = {order.User!.FirstName} {order.User.LastName}");
+        sb.AppendLine($"\tAddressId = {order.DeliveryAddressId}");
         sb.AppendLine($"\tProducts = {string.Join(", ", order.Products!.Select(p => p.Name))}");
         sb.AppendLine($"\tStatus = {order.Status}");
         sb.AppendLine($"\tDeliveryDate = {order.DeliveryDate}");

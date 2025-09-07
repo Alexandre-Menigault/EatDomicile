@@ -12,9 +12,35 @@ public class OrderService
     {
     }
 
-    public OrderDTO CreateOrder(Order order)
+    public OrderDTO CreateOrder(OrderDTO orderDTO)
     {
+        if(orderDTO.Products?.Count == 0)
+            throw new ArgumentException("Order must contain at least one product.");
         using var context = new ProductContext();
+        var productIds = (orderDTO.ProductIds?.Count > 0
+                    ? orderDTO.ProductIds
+                    : orderDTO.Products?.Select(p => p.Id).ToList()
+            )!
+            .Where(id => id > 0)
+            .Distinct()
+            .ToList();
+
+        var products = productIds.Select(id => new Product() { Id = id, Name = null!, Price = 0}).ToList();
+        foreach (var p in products)
+        {
+            context.Attach(p);
+        }
+
+        var order = new Order
+        {
+            OrderDate = orderDTO.OrderDate,
+            DeliveryDate = orderDTO.DeliveryDate,
+            Status = orderDTO.Status,
+            UserId = orderDTO.UserId,
+            DeliveryAddressId = orderDTO.DeliveryAddressId,
+            Products = products
+        };
+
         context.Orders.Add(order);
         context.SaveChanges();
         Console.WriteLine($"Order created with {order.Id}");
@@ -25,9 +51,9 @@ public class OrderService
     {
         using var context = new ProductContext();
         return context.Orders
-            .Include(o => o.User)
+            //.Include(o => o.User)
             .Include(o => o.Products)
-            .Include(o => o.DeliveryAddress)
+            //.Include(o => o.DeliveryAddress)
             .Select(OrderDTO.FromEntity).ToList();
     }
     
@@ -36,9 +62,9 @@ public class OrderService
         using var context = new ProductContext();
         var order = context.Orders
             .Where(o => o.Id == id)
-            .Include(o => o.User)
+            //.Include(o => o.User)
             .Include(o => o.Products)
-            .Include(o => o.DeliveryAddress)
+            //.Include(o => o.DeliveryAddress)
             .FirstOrDefault();
                 
         return order is null ? null : OrderDTO.FromEntity(order);
@@ -97,21 +123,20 @@ public class OrderService
         using var context = new ProductContext();
         return context.Orders
             .Where(o => o.Status != OrderStatus.Livree)
-            .Include(o => o.User)
+            //.Include(o => o.User)
             .Include(o => o.Products)
-            .Include(o => o.DeliveryAddress)
+            //.Include(o => o.DeliveryAddress)
             .Select(OrderDTO.FromEntity).ToList();
     }
     
-    public List<UserDTO> GetUsersWithOrders()
+    public List<int> GetUsersWithOrders()
     {
         using var context = new ProductContext();
         return context.Orders
-            .Include(o => o.User)
-            .Include(o => o.User.Address)
-            .Select(o => o.User)
+            // .Include(o => o.User)
+            // .Include(o => o.User.Address)
+            .Select(o => o.UserId)
             .Distinct()
-            .Select(UserDTO.FromEntity)
             .ToList();
     }
     
@@ -119,8 +144,8 @@ public class OrderService
     {
         using var context = new ProductContext();
         return context.Orders
-            .Include(o => o.User)
-            .Include(o => o.DeliveryAddress)
+            // .Include(o => o.User)
+            //.Include(o => o.DeliveryAddress)
             .Include(o => o.Products)
             .Where(o => o.Products!.OfType<Food>().All(f => f.Vegetarien))
             .Select(OrderDTO.FromEntity)
