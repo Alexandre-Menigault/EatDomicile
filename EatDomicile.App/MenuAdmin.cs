@@ -73,7 +73,7 @@ public class MenuAdmin
         var orderService = new OrderService();
         var users = orderService.GetUsersWithOrders();
         
-        Console.WriteLine(users.AsString());
+        Console.WriteLine(users);
     }
     
     private void ListeCommandesVegetariennes()
