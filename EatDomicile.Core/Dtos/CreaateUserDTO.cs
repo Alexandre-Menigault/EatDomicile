@@ -7,68 +7,65 @@ using EatDomicile.Core.Models;
 
 namespace EatDomicile.Core.Dtos;
 
-public class UserDTO
+public class CreateUserDTO
 {
-    public int Id { get; set; }
     public  string FirstName { get; set; }
     public  string LastName { get; set; }
     public  string Email { get; set; }
     public  string Phone { get; set; }
-    public  AddressDTO Address { get; set; }
+    public int AddressId { get; set; }
 
     
-    public UserDTO()
+    public CreateUserDTO()
     {
         
     }
     
-    public UserDTO(int id, string firstName, string lastName, string email, string phone, AddressDTO? address)
+    public CreateUserDTO(int id, string firstName, string lastName, string email, string phone, int addressId)
     {
-        this.Id = id;
         this.FirstName = firstName;
         this.LastName = lastName;
         this.Email = email;
         this.Phone = phone;
-        this.Address = address!;
+        this.AddressId = addressId;
     }
 
-    public static UserDTO FromEntity(User user)
+    public static CreateUserDTO FromEntity(User user)
     {
-        return new UserDTO(
+        return new CreateUserDTO(
             user.Id,
             user.FirstName,
             user.LastName,
             user.Email,
             user.Phone,
-            user.Address is not null ? AddressDTO.FromEntity(user.Address) : new AddressDTO() 
+            user.AddressId
         );
     }
 
-    public static User ToEntity(UserDTO dto)
+    public static User ToEntity(CreateUserDTO dto)
     {
         return new User
         {
-            Id = dto.Id,
             FirstName = dto.FirstName,
             LastName = dto.LastName,
             Email = dto.Email,
             Phone = dto.Phone,
-            Address = AddressDTO.ToEntity(dto.Address) 
+            AddressId = dto.AddressId
         };
     }
 }
 
-public static class UserDTOExtensions
+public static class CreateUserDTOUserDTOExtensions
 {
-    public static String AsString(this UserDTO user)
+    public static String AsString(this CreateUserDTO user)
     {
         return $"<User> {user.FirstName} {user.LastName}" +
-               $"\n\t{user.Address.AsString()}" +
+               $"\n\t{user.AddressId}" +
                $"\n\t{user.Email}" +
                $"\n\t{user.Phone}";
     }
     
-    public static String AsString(this List<UserDTO> users)
+    public static String AsString(this List<CreateUserDTO> users)
     {
         var sb = new StringBuilder();
         foreach (var user in users)

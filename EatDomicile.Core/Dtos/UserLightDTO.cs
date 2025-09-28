@@ -9,7 +9,6 @@ namespace EatDomicile.Core.Dtos;
 
 public class UserLightDTO
 {
-    public int Id { get; set; }
     public  string FirstName { get; set; }
     public  string LastName { get; set; }
     public  string Email { get; set; }
@@ -24,7 +23,6 @@ public class UserLightDTO
     
     public UserLightDTO(int id, string firstName, string lastName, string email, string phone, AddressDTO address)
     {
-        this.Id = id;
         this.FirstName = firstName;
         this.LastName = lastName;
         this.Email = email;

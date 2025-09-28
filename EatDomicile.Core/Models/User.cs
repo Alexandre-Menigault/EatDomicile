@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace EatDomicile.Core.Models;
 
@@ -33,7 +34,10 @@ public class User
     [MaxLength(15)]
     public required string Phone { get; set; }
 
-    [Required]
-    [Column("AddressId")]
-    public required Address Address { get; set; }
+    [ForeignKey("Address")]
+    public int AddressId { get; set; }
+
+    [Required] 
+    [DeleteBehavior(DeleteBehavior.ClientSetNull)]
+    public Address Address { get; set; } = null!;
 }
