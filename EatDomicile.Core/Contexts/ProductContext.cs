@@ -12,21 +12,13 @@ namespace EatDomicile.Core.Contexts
 {
     public class ProductContext: DbContext
     {
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public ProductContext()
         {
-#if DEBUG
-            optionsBuilder
-                .LogTo(
-                    Console.WriteLine,
-                    (eventId, level) => eventId == RelationalEventId.CommandExecuting,
-                    DbContextLoggerOptions.None
-                )
-                .UseSqlServer("Server=localhost;Database=EatDomicile;Trusted_Connection=True;TrustServerCertificate=True;");
-
-#else
-            optionsBuilder
-                .UseSqlServer("Server=localhost;Database=EatDomicile;Trusted_Connection=True;TrustServerCertificate=True;");
-#endif
+            
+        }
+        public ProductContext(DbContextOptions<ProductContext> options): base(options)
+        {
+            
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -42,6 +34,7 @@ namespace EatDomicile.Core.Contexts
         }
 
         public DbSet<Pizza> Pizzas => this.Set<Pizza>();
+
         public DbSet<Pasta> Pastas => this.Set<Pasta>();
         public DbSet<Burger> Burgers => this.Set<Burger>();
         public DbSet<Drink> Drinks => this.Set<Drink>();

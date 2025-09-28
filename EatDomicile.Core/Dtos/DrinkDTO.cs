@@ -1,4 +1,5 @@
-﻿using EatDomicile.Core.Models;
+﻿using EatDomicile.Core.Abstractions;
+using EatDomicile.Core.Models;
 
 namespace EatDomicile.Core.Dtos;
 

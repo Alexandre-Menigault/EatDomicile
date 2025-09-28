@@ -10,10 +10,13 @@ namespace EatDomicile.App;
 
 public class MenuUser
 {
-    private UserDTO _userDto { get; set; }
+    private readonly UserService _userService;
+    private readonly OrderService _orderService;
 
-    public MenuUser()
+    public MenuUser(UserService userService, OrderService orderService)
     {
+        _userService = userService;
+        _orderService = orderService;
     }
 
     public void Run()
@@ -65,9 +68,8 @@ public class MenuUser
             address.Country = ConsoleUtils.ReadLineString(" Quel est votre pays ? ");
             user.Address = address;
 
-            var userService = new UserService();
 
-            var userAdded = userService.AddUser(user);
+            var userAdded = _userService.AddUser(user);
             Console.WriteLine("\n--- User ajouté ---");
             Console.WriteLine(userAdded.AsString());
         }
@@ -118,7 +120,7 @@ public class MenuUser
 
             var orderDTO = OrderDTO.FromEntity(order);
 
-            var create = new OrderService().CreateOrder(orderDTO);
+            var create = _orderService.CreateOrder(orderDTO);
             Console.WriteLine($"Commande{create.Id} créée !");
         // }catch (Exception e)
         // {

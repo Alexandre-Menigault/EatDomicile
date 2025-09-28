@@ -8,15 +8,18 @@ namespace EatDomicile.Core.Services;
 
 public class OrderService
 {
-    public OrderService()
+    private readonly ProductContext _context;
+
+
+    public OrderService(ProductContext context)
     {
+        _context = context;
     }
 
     public OrderDTO CreateOrder(OrderDTO orderDTO)
     {
         if(orderDTO.Products?.Count == 0)
             throw new ArgumentException("Order must contain at least one product.");
-        using var context = new ProductContext();
         var productIds = (orderDTO.ProductIds?.Count > 0
                     ? orderDTO.ProductIds
                     : orderDTO.Products?.Select(p => p.Id).ToList()
@@ -28,7 +31,7 @@ public class OrderService
         var products = productIds.Select(id => new Product() { Id = id, Name = null!, Price = 0}).ToList();
         foreach (var p in products)
         {
-            context.Attach(p);
+            _context.Attach(p);
         }
 
         var order = new Order
@@ -41,16 +44,15 @@ public class OrderService
             Products = products
         };
 
-        context.Orders.Add(order);
-        context.SaveChanges();
+        _context.Orders.Add(order);
+        _context.SaveChanges();
         Console.WriteLine($"Order created with {order.Id}");
         return OrderDTO.FromEntity(order);
     }
 
     public List<OrderDTO> GetAllOrders()
     {
-        using var context = new ProductContext();
-        return context.Orders
+        return _context.Orders
             //.Include(o => o.User)
             .Include(o => o.Products)
             //.Include(o => o.DeliveryAddress)
@@ -59,8 +61,7 @@ public class OrderService
     
     public OrderDTO? GetOrderById(int id)
     {
-        using var context = new ProductContext();
-        var order = context.Orders
+        var order = _context.Orders
             .Where(o => o.Id == id)
             //.Include(o => o.User)
             .Include(o => o.Products)
@@ -72,56 +73,51 @@ public class OrderService
 
     public OrderDTO UpdateOrderEnCuisine(int orderId)
     {
-        using var context = new ProductContext();
-        var order = context.Orders.Find(orderId);
+        var order = _context.Orders.Find(orderId);
         if (order is not null)
         {
             order.Status = OrderStatus.EnCuisine;
-            context.SaveChanges();
+            _context.SaveChanges();
         }
         return OrderDTO.FromEntity(order);
     }
 
     public OrderDTO UpdateOrderEnLivraison(int orderId)
     {
-        using var context = new ProductContext();
-        var order = context.Orders.Find(orderId);
+        var order = _context.Orders.Find(orderId);
         if (order is not null)
         {
             order.Status = OrderStatus.EnLivraison;
-            context.SaveChanges();
+            _context.SaveChanges();
         }
         return OrderDTO.FromEntity(order);
     }
     
     public OrderDTO UpdateOrderLivree(int orderId)
     {
-        using var context = new ProductContext();
-        var order = context.Orders.Find(orderId);
+        var order = _context.Orders.Find(orderId);
         if (order is not null)
         {
             order.Status = OrderStatus.Livree;
             order.DeliveryDate = DateTime.Now;
-            context.SaveChanges();
+            _context.SaveChanges();
         }
         return OrderDTO.FromEntity(order);
     }
 
     public void DeleteOrder(int orderId)
     {
-        using var context = new ProductContext();
-        var order = context.Orders.Find(orderId);
+        var order = _context.Orders.Find(orderId);
         if (order is not null)
         {
-            context.Orders.Remove(order);
-            context.SaveChanges();
+            _context.Orders.Remove(order);
+            _context.SaveChanges();
         }
     }
 
     public List<OrderDTO> GetOrdersEnCours()
     {
-        using var context = new ProductContext();
-        return context.Orders
+        return _context.Orders
             .Where(o => o.Status != OrderStatus.Livree)
             //.Include(o => o.User)
             .Include(o => o.Products)
@@ -131,8 +127,7 @@ public class OrderService
     
     public List<int> GetUsersWithOrders()
     {
-        using var context = new ProductContext();
-        return context.Orders
+        return _context.Orders
             // .Include(o => o.User)
             // .Include(o => o.User.Address)
             .Select(o => o.UserId)
@@ -142,8 +137,7 @@ public class OrderService
     
     public List<OrderDTO> GetVegetarianOrders()
     {
-        using var context = new ProductContext();
-        return context.Orders
+        return _context.Orders
             // .Include(o => o.User)
             //.Include(o => o.DeliveryAddress)
             .Include(o => o.Products)

@@ -8,16 +8,18 @@ namespace EatDomicile.Core.Services;
 
 public class IngredientService
 {
+    private readonly ProductContext _context;
 
 
-    public IngredientService ()
+    public IngredientService(ProductContext context)
     {
-        }
+        _context = context;
+    }
+    
     // READ
     public List<Ingredient> GetAllIngredients()
     {
-        using var context = new ProductContext();
-        var IngredientList = context.Ingredients.ToList();
+        var IngredientList = _context.Ingredients.ToList();
         return IngredientList;
     }
 
@@ -26,38 +28,34 @@ public class IngredientService
     // CREATE
     public IngredientDTO AddIngredient( Ingredient ingredient)
     {
-        using var context = new ProductContext();
-        context.Ingredients.Add(ingredient);
-        context.SaveChanges();
+        _context.Ingredients.Add(ingredient);
+        _context.SaveChanges();
         return IngredientDTO.FromEntity(ingredient);
     }
 
     // UPDATE
     public Ingredient UpdateIngredient(Ingredient ingredient)
     {
-        using var context = new ProductContext();
-        var existingIngredient = context.Ingredients.Find(ingredient.Id);
-        context.Ingredients.Update(ingredient);
-        context.SaveChanges();
+        var existingIngredient = _context.Ingredients.Find(ingredient.Id);
+        _context.Ingredients.Update(ingredient);
+        _context.SaveChanges();
         return ingredient;
     }
 
     // DELETE
     public void DeleteIngredient(int id)
     {
-        using var context = new ProductContext();
-        var ingredient = context.Ingredients.Find(id);
+        var ingredient = _context.Ingredients.Find(id);
         if (ingredient != null)
         {
-            context.Ingredients.Remove(ingredient);
-            context.SaveChanges();
+            _context.Ingredients.Remove(ingredient);
+            _context.SaveChanges();
         }
     }
 
     public List<IngredientDTO> GetAllIngerdientsAllergene()
     {
-        using var context = new ProductContext();
-        var ingredientList = context.Ingredients
+        var ingredientList = _context.Ingredients
             .Where(i => i.Allergene)
             .Select(IngredientDTO.FromEntity)
             .ToList();

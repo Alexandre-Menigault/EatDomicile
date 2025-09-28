@@ -7,9 +7,15 @@ namespace EatDomicile.App;
 
 public class MenuAdmin
 {
-    public MenuAdmin()
+    private readonly UserService _userService;
+    private readonly OrderService _orderService;
+    private readonly IngredientService _ingredientService;
+
+    public MenuAdmin(UserService userService, OrderService orderService, IngredientService ingredientService)
     {
-        
+        _userService = userService;
+        _orderService = orderService;
+        _ingredientService = ingredientService;
     }
 
     public void Run()
@@ -37,7 +43,7 @@ public class MenuAdmin
                     ListeCommandesEnCours();
                     break;
                 case 3 : 
-                    var produitMenu = new MenuProduit();
+                    var produitMenu = new MenuProduit(_ingredientService);
                     produitMenu.Run();
                     break;
                case 4:
@@ -60,8 +66,7 @@ public class MenuAdmin
     private void ListeUtilisateurs()
     {
         Console.WriteLine("\n--- Liste des utilisateurs ---");
-        var userService = new UserService();
-        var users = userService.GetAllUsers();
+        var users = _userService.GetAllUsers();
 
         Console.WriteLine(users.AsString());
     }
@@ -70,8 +75,7 @@ public class MenuAdmin
     {
         Console.WriteLine("\n--- Liste des utilisateurs qui ont commandé au moins une fois ---");
 
-        var orderService = new OrderService();
-        var users = orderService.GetUsersWithOrders();
+        var users = _orderService.GetUsersWithOrders();
         
         Console.WriteLine(users);
     }
@@ -79,24 +83,21 @@ public class MenuAdmin
     private void ListeCommandesVegetariennes()
     {
         Console.WriteLine("\n--- Liste des commandes uniquement végétariennes ---");
-        var orderService = new OrderService();
-        var orders = orderService.GetVegetarianOrders();
+        var orders = _orderService.GetVegetarianOrders();
         Console.WriteLine(orders.AsString());
     }
     
     private void ListeCommandesEnCours()
     {
         Console.WriteLine("\n--- Liste des commandes en cours ---");
-        var orderService = new OrderService();
-        var orders = orderService.GetOrdersEnCours();
+        var orders = _orderService.GetOrdersEnCours();
         Console.WriteLine(orders.AsString());
     }
 
     private void ListeIngredientsAllergene()
     {
         Console.WriteLine("\n--- Liste des ingrédients allergènes");
-        var ingredientServce = new IngredientService();
-        var ingredents = ingredientServce.GetAllIngerdientsAllergene();
+        var ingredents = _ingredientService.GetAllIngerdientsAllergene();
         
         Console.WriteLine(ingredents.AsString());
         
