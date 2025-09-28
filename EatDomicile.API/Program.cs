@@ -1,5 +1,7 @@
 using EatDomicile.Core.Contexts;
+using EatDomicile.Core.Services;
 using Microsoft.EntityFrameworkCore;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +14,8 @@ builder.Services.AddDbContext<ProductContext>(options =>
         throw new Exception("Connection string is null");
     options.UseSqlServer(connexionString);
 });
+
+builder.Services.AddTransient<UserService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -26,6 +30,10 @@ scope.ServiceProvider.GetRequiredService<ProductContext>().Database.EnsureCreate
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference(options =>
+    {
+        options.Theme = ScalarTheme.Purple;
+    });
 }
 
 app.UseHttpsRedirection();
