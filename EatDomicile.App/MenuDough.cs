@@ -12,11 +12,11 @@ namespace EatDomicile.App
 {
     public class MenuDough
     {
+        private readonly DoughsService _doughsService;
 
-        private DoughDTO _DoughDto { get; set; }
-        public MenuDough()
+        public MenuDough(DoughsService doughsService)
         {
-
+            _doughsService = doughsService;
         }
 
         public void Run()
@@ -75,9 +75,8 @@ namespace EatDomicile.App
             }
 
 
-            var DoughService = new DoughsService();
 
-            var DoughAdded = DoughService.AddDough(DoughDTO.ToEntity(Dough));
+            var DoughAdded = _doughsService.AddDough(DoughDTO.ToEntity(Dough));
             Console.WriteLine("Dough ajouté");
             Console.WriteLine(DoughAdded.AsString());
         }
@@ -85,8 +84,7 @@ namespace EatDomicile.App
         private void ListerTouts()
         {
             Console.WriteLine("Liste des Doughs");
-            var doughService = new DoughsService();
-            var doughs = doughService.GetAllDoughs();
+            var doughs = _doughsService.GetAllDoughs();
 
             Console.WriteLine(doughs.AsString());
         }
@@ -96,9 +94,8 @@ namespace EatDomicile.App
             ListerTouts();
             var Id = ConsoleUtils.ReadLineString("Quel Id ? ");
             
-            var doughService = new DoughsService();
-            Dough doughToDelete = doughService.GetDough(int.Parse(Id));
-            doughService.RemoveDough(doughToDelete);
+            Dough doughToDelete = _doughsService.GetDough(int.Parse(Id));
+            _doughsService.RemoveDough(doughToDelete);
             Console.WriteLine("Dough supprimé ");
 
         }

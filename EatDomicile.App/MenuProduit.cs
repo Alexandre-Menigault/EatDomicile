@@ -6,6 +6,13 @@ namespace EatDomicile.App;
 
 public class MenuProduit
 {
+    private readonly IngredientService _ingredientService;
+
+    public MenuProduit(IngredientService ingredientService)
+    {
+        _ingredientService = ingredientService;
+    }
+    
     public void Run()
     {
         var input = 0;
@@ -33,8 +40,7 @@ public class MenuProduit
     private void ListeIngredients()
     {
         Console.WriteLine("\n---Liste des ingrédients ---");
-        var ingredientService = new IngredientService();
-        var ingredients = ingredientService.GetAllIngredients();
+        var ingredients = _ingredientService.GetAllIngredients();
         foreach (var ingredient in ingredients)
         {
             Console.WriteLine($"Id: {ingredient.Id}, Nom: {ingredient.Name}, Kcal: {ingredient.Kcal}");
@@ -45,7 +51,6 @@ public class MenuProduit
     {
         Console.WriteLine("\n--- Ajouter un ingrédient ---");
 
-        var service = new IngredientService();
 
         
         Console.Write(" Nom de l'ingrédient : ");
@@ -63,7 +68,7 @@ public class MenuProduit
         };
 
      
-        var saved = service.AddIngredient(ingredient);
+        var saved = _ingredientService.AddIngredient(ingredient);
 
         
         Console.WriteLine($"\n--- Ingrédient ajouté : #{saved.Id} - {saved.Name} ({saved.Kcal} kcal) ---");

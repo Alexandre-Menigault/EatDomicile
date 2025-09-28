@@ -10,13 +10,20 @@ namespace EatDomicile.Core.Services;
 
 public class DrinkService
 {
+    private readonly ProductContext _context;
+
+
+    public DrinkService(ProductContext context)
+    {
+        _context = context;
+    }
+    
     //CREATE
 
     public Drink AddDrink( Drink drink)
-    {   
-        using var context = new ProductContext();        
-        context.Drinks.Add(drink);
-        context.SaveChanges();
+    {
+        _context.Drinks.Add(drink);
+        _context.SaveChanges();
         return drink;
     }
 
@@ -24,8 +31,7 @@ public class DrinkService
 
     public List<Drink> GetAllDrinks()
     {
-        using var context = new ProductContext();
-        var drinkList = context.Drinks.ToList();
+        var drinkList = _context.Drinks.ToList();
         return drinkList;
     }
 
@@ -33,9 +39,8 @@ public class DrinkService
 
     public Drink UpdateDrink(Drink drink)
     {
-        using var context = new ProductContext();
-        context.Drinks.Update(drink);
-        context.SaveChanges();
+        _context.Drinks.Update(drink);
+        _context.SaveChanges();
         return drink;
     }
 
@@ -43,12 +48,11 @@ public class DrinkService
 
     public void DeleteDrink(int id)
     {
-        using var context = new ProductContext();
-        var drink = context.Drinks.Find(id);
+        var drink = _context.Drinks.Find(id);
         if (drink != null)
         {
-            context.Drinks.Remove(drink);
-            context.SaveChanges();
+            _context.Drinks.Remove(drink);
+            _context.SaveChanges();
         }
     }
 }

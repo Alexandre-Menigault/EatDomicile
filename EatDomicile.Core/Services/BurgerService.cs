@@ -10,41 +10,45 @@ namespace EatDomicile.Core.Services;
 
 public  class BurgerService
 {
+    private readonly ProductContext _context;
+
+
+    public BurgerService(ProductContext productContext)
+    {
+        _context = productContext;
+    }
+    
     //CREATE
     public Burger AddBurger( Burger burger)
     {   
-        using var context = new ProductContext();        
-        context.Burgers.Add(burger);
-        context.SaveChanges();
+        _context.Burgers.Add(burger);
+        _context.SaveChanges();
         return burger;
     }
 
     //READ
     public List<Burger> GetAllBurgers()
     {
-        using var context = new ProductContext();
-        var burgerList = context.Burgers.ToList();
+        var burgerList = _context.Burgers.ToList();
         return burgerList;
     }
 
     //UPDATE
     public Burger UpdateBurger(Burger burger)
     {
-        using var context = new ProductContext();
-        context.Burgers.Update(burger);
-        context.SaveChanges();
+        _context.Burgers.Update(burger);
+        _context.SaveChanges();
         return burger;
     }
 
     //DELETE
     public void DeleteBurger(int id)
     {
-        using var context = new ProductContext();
-        var burger = context.Burgers.Find(id);
+        var burger = _context.Burgers.Find(id);
         if (burger != null)
         {
-            context.Burgers.Remove(burger);
-            context.SaveChanges();
+            _context.Burgers.Remove(burger);
+            _context.SaveChanges();
         }
     }
 

@@ -7,19 +7,20 @@ namespace EatDomicile.Core.Services;
 
 public class UserService
 {
-    public UserService()
+    private readonly ProductContext _context;
+
+    public UserService(ProductContext context)
     {
-        
+        _context = context;
     }
 
     public UserDTO AddUser(UserDTO dto)
     {
-        using var context = new ProductContext();
 
         User user = UserDTO.ToEntity(dto);
         
-        context.Users.Add(user);
-        context.SaveChanges();
+        _context.Users.Add(user);
+        _context.SaveChanges();
         Console.WriteLine($"User created with {user.Id}");
         return UserDTO.FromEntity(user);
     }
@@ -27,8 +28,7 @@ public class UserService
     
     public List<UserDTO> GetAllUsers()
     {
-        using var context = new ProductContext();
-        return context.Users
+        return _context.Users
             .Include(u => u.Address)
             .Select(UserDTO.FromEntity)
             .ToList();

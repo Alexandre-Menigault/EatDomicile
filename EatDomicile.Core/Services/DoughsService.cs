@@ -8,48 +8,46 @@ namespace EatDomicile.Core.Services;
 
 public class DoughsService
 {
-     public DoughsService()
-    {
+    private readonly ProductContext _context;
 
+
+    public DoughsService(ProductContext context)
+    {
+        _context = context;
     }
     // Read all
 
     public List<Dough> GetAllDoughs()
     {
-        using var context = new ProductContext();
-        var doughsList = context.Doughs.ToList();
+        var doughsList = _context.Doughs.ToList();
         return doughsList;
      }
 
     public Dough AddDough(Dough dough)
     {
-        using var context = new ProductContext();
-        context.Doughs.Add(dough);
-        context.SaveChanges();
+        _context.Doughs.Add(dough);
+        _context.SaveChanges();
         return dough;
     }
 
     public void RemoveDough(Dough doughToRemove)
     {
-        using var context = new ProductContext();
-        var dough = context.Doughs.Find(doughToRemove.Id);
-        context.Doughs.Remove(dough);
-        context.SaveChanges();
+        var dough = _context.Doughs.Find(doughToRemove.Id);
+        _context.Doughs.Remove(dough);
+        _context.SaveChanges();
     }
 
     public Dough GetDough(int id)
     {
-        using var context = new ProductContext();
-        var Dough = context.Doughs.Find(id);
+        var Dough = _context.Doughs.Find(id);
         return Dough;
     }
 
     public Dough UpdateDough(Dough newDough)
     {
-        using var context = new ProductContext();
-        var dough = context.Doughs.Find(newDough.Id);
+        var dough = _context.Doughs.Find(newDough.Id);
         dough.Name = newDough.Name;
-        context.SaveChanges();
+        _context.SaveChanges();
         return dough;
     }
 

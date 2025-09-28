@@ -1,4 +1,4 @@
-﻿namespace EatDomicile.Core.Models
+﻿namespace EatDomicile.Core.Abstractions
 {
     public interface IKCal
     {
