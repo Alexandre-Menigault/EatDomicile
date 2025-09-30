@@ -1,20 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Text;
-using System.Threading.Tasks;
-using EatDomicile.Core.Models;
 
-namespace EatDomicile.Core.Dtos;
+namespace EatDomicile.Core.Dtos.Address;
 
 public class AddressDTO
 {
     public int Id { get; set; } 
-    public  string Street { get; set; }
-    public string City { get; set; }
-    public  string State { get; set; }
+    [MaxLength(200)]
+    public string Street { get; set; } = String.Empty;
+    [MaxLength(100)]
+    public string City { get; set; } = String.Empty;
+    [MaxLength(100)]
+    public string State { get; set; } = String.Empty;
     public int ZipCode { get; set; }
-    public  string Country { get; set; }
+    [MaxLength(100)]
+    public string Country { get; set; } = String.Empty;
     
     
     public AddressDTO()
@@ -32,7 +32,7 @@ public class AddressDTO
         this.Country = country;
     }
 
-    public static AddressDTO FromEntity(Address address)
+    public static AddressDTO FromEntity(Models.Address address)
     {
         return new AddressDTO(
             address.Id,
@@ -44,10 +44,10 @@ public class AddressDTO
             );
         }
 
-    public static Address ToEntity(AddressDTO dto)
+    public static Models.Address ToEntity(AddressDTO dto)
         
         {
-        return new Address
+        return new Models.Address
         {
             Id = dto.Id,
             Street = dto.Street,

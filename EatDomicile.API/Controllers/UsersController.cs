@@ -46,7 +46,7 @@ public class UsersController : Controller
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(User))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
-    public IResult Create([FromBody] CreateUserDTO createUserDTO)
+    public async Task<IResult> Create<T>([FromBody] CreateUserDTO createUserDTO)
     {
         if (!ModelState.IsValid)
         {
@@ -56,8 +56,9 @@ public class UsersController : Controller
 
         try
         {
-            var userDto = _userService.CreateUser(createUserDTO);
-            return Results.Created($"api/users/{userDto.Id}", userDto);
+            var userDto = await _userService.CreateUser(createUserDTO);
+            var location = Url.Action("GetById", new {id = userDto.Id});
+            return Results.Created(location, userDto);
         }
         catch (EntityNotFoundException<Address> e)
         {
@@ -75,7 +76,7 @@ public class UsersController : Controller
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
-    public IResult Update(int id, [FromBody] UserLightDTO userLightDTO)
+    public async Task<IResult> Update(int id, [FromBody] UserLightDTO userLightDTO)
     {
         if (!ModelState.IsValid)
         {
@@ -85,7 +86,7 @@ public class UsersController : Controller
 
         try
         {
-            _userService.UpdateUser(id, userLightDTO);
+            await _userService.UpdateUser(id, userLightDTO);
             return Results.NoContent();
         }
         catch (EntityNotFoundException<User> e)
@@ -114,10 +115,9 @@ public class UsersController : Controller
             _userService.DeleteUser(id);
             return Results.NoContent();
         }
-        catch (Exception e)
+        catch (EntityNotFoundException<User> e)
         {
-
-            return Results.NotFound();
+            return Results.NotFound(e.Message);
         }
     }
 }
