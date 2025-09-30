@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,8 +10,12 @@ namespace EatDomicile.Core.Dtos;
 
 public class UserLightDTO
 {
+    
+    [MaxLength(50)]
     public  string FirstName { get; set; }
+    [MaxLength(50)]
     public  string LastName { get; set; }
+    [MaxLength(100)]
     public  string Email { get; set; }
     public  string Phone { get; set; }
     public  int AddressId { get; set; }
@@ -21,7 +26,7 @@ public class UserLightDTO
         
     }
     
-    public UserLightDTO(int id, string firstName, string lastName, string email, string phone, AddressDTO address)
+    public UserLightDTO(string firstName, string lastName, string email, string phone, AddressDTO address)
     {
         this.FirstName = firstName;
         this.LastName = lastName;
@@ -33,7 +38,6 @@ public class UserLightDTO
     public static UserLightDTO FromEntity(User user)
     {
         return new UserLightDTO(
-            user.Id,
             user.FirstName,
             user.LastName,
             user.Email,

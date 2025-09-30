@@ -1,4 +1,6 @@
+using EatDomicile.API.Errors;
 using EatDomicile.Core.Dtos;
+using EatDomicile.Core.Exceptions;
 using EatDomicile.Core.Models;
 using EatDomicile.Core.Services;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -43,19 +45,62 @@ public class UsersController : Controller
     // POST
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(User))]
-    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BadRequestResult))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
     public IResult Create([FromBody] CreateUserDTO createUserDTO)
     {
         if (!ModelState.IsValid)
         {
-            return Results.BadRequest("Impossible to create a new user, the body in invalid format");
+            var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToArray();
+            return Results.BadRequest(new ModelStateInvalidError("Impossible to update the user, the body in invalid format", errors));
         }
-        var userDto = _userService.CreateUser(createUserDTO);
-        return Results.Created($"api/users/{userDto.Id}", userDto);
+
+        try
+        {
+            var userDto = _userService.CreateUser(createUserDTO);
+            return Results.Created($"api/users/{userDto.Id}", userDto);
+        }
+        catch (EntityNotFoundException<Address> e)
+        {
+            return Results.BadRequest(e.Message);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 
-    // TODO: Implementer le PUT avec un éventuel DTO dédié
     //PUT
+    [HttpPut("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
+    public IResult Update(int id, [FromBody] UserLightDTO userLightDTO)
+    {
+        if (!ModelState.IsValid)
+        {
+            var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToArray();
+            return Results.BadRequest(new ModelStateInvalidError("Impossible to update the user, the body in invalid format", errors));
+        }
+
+        try
+        {
+            _userService.UpdateUser(id, userLightDTO);
+            return Results.NoContent();
+        }
+        catch (EntityNotFoundException<User> e)
+        {
+            return Results.NotFound(e.Message);
+        }
+        catch (EntityNotFoundException<Address> e)
+        {
+            return Results.BadRequest(e.Message);
+        }
+        catch
+        {
+            return Results.InternalServerError();
+        }
+    }
     
     // DELETE
     [HttpDelete("{id}")]
