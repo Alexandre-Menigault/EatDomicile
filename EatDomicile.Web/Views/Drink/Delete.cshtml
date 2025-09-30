@@ -1,0 +1,28 @@
+﻿@model EatDomicile.Web.ViewModels.DrinkViewModel
+@{
+    ViewData["Title"] = "Supprimer une boisson";
+}
+
+<h4>Supprimer une boisson</h4>
+
+<p class="alert alert-danger">
+    Êtes-vous sûr de vouloir supprimer la boisson
+    <strong>@Model.Name</strong> ?
+</p>
+
+<dl class="row">
+    <dt class="col-sm-3">@Html.DisplayNameFor(m => m.Price)</dt>
+    <dd class="col-sm-9">@Html.DisplayFor(m => m.Price)</dd>
+
+    <dt class="col-sm-3">@Html.DisplayNameFor(m => m.Fizzy)</dt>
+    <dd class="col-sm-9">@Html.DisplayFor(m => m.Fizzy)</dd>
+
+    <dt class="col-sm-3">@Html.DisplayNameFor(m => m.KCal)</dt>
+    <dd class="col-sm-9">@Html.DisplayFor(m => m.KCal)</dd>
+</dl>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Supprimer</button>
+    <a asp-action="Index" class="btn btn-secondary">Annuler</a>
+</form>
