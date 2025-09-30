@@ -1,0 +1,43 @@
+﻿@model EatDomicile.Web.ViewModels.OrderViewModel
+@{
+    ViewData["Title"] = "Détails commande";
+}
+
+<h4>Détails commande</h4>
+
+<div class="card mt-3">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">@Html.DisplayNameFor(m => m.OrderDate)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(m => m.OrderDate)</dd>
+
+            <dt class="col-sm-3">@Html.DisplayNameFor(m => m.DeliveryDate)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(m => m.DeliveryDate)</dd>
+
+            <dt class="col-sm-3">@Html.DisplayNameFor(m => m.Status)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(m => m.Status)</dd>
+
+            <dt class="col-sm-3">@Html.DisplayNameFor(m => m.UserId)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(m => m.UserId)</dd>
+
+            <dt class="col-sm-3">@Html.DisplayNameFor(m => m.DeliveryAddressId)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(m => m.DeliveryAddressId)</dd>
+        </dl>
+    </div>
+</div>
+
+@if (Model.Products != null && Model.Products.Any())
+{
+    <h5 class="mt-4">Produits associés</h5>
+    <ul class="list-group">
+        @foreach (var p in Model.Products)
+        {
+            <li class="list-group-item">@p</li>
+        }
+    </ul>
+}
+
+<div class="mt-4">
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Modifier</a>
+    <a asp-action="Index" class="btn btn-secondary">Retour</a>
+</div>

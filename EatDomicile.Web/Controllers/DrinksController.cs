@@ -5,29 +5,32 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebApplication1.Controllers
 {
-    public class UserController : Controller
+    public class DrinksController : Controller
     {
-        private readonly UsersService _usersService;
+        private readonly DrinksService _drinksService;
 
-        public UserController(UsersService usersService)
+        public DrinksController(DrinksService drinksService)
         {
-            this._usersService = usersService;
+            this._drinksService = drinksService;
         }
 
-        // GET: UserController
+        // GET: DrinkController
         public async Task<ActionResult> Index()
         {
-            var usersDtos = await _usersService.GetUsers();
-            var users = usersDtos.Select(u => new UserViewModel()
+
+
+            var drinksDtos = await _drinksService.GetDrinks();
+
+            var drinks = drinksDtos.Select(d => new DrinkViewModel
             {
-                Id = u.Id,
-                FirstName = u.FirstName,
-                LastName = u.LastName,
-                Email = u.Email,
-                Phone = u.Phone,
-                AddressId = u.Id
+                Id = d.Id,
+                Name = d.Name,
+                Price = d.Price,
+                Fizzy = d.Fizzy,
+                KCal = d.KCal
             });
-            return View(users);
+
+            return View(drinks);
         }
 
         // GET: UserController/Details/5

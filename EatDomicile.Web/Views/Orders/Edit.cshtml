@@ -1,0 +1,34 @@
+﻿@model EatDomicile.Web.ViewModels.OrderViewModel
+@{
+    ViewData["Title"] = "Modifier une commande";
+}
+
+<h4>Modifier une commande</h4>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="mb-3">
+        <label asp-for="OrderDate" class="form-label"></label>
+        <input asp-for="OrderDate" type="date" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="DeliveryDate" class="form-label"></label>
+        <input asp-for="DeliveryDate" type="date" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Status" class="form-label"></label>
+        <input asp-for="Status" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="UserId" class="form-label"></label>
+        <input asp-for="UserId" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="DeliveryAddressId" class="form-label"></label>
+        <input asp-for="DeliveryAddressId" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-warning">Enregistrer</button>
+    <a asp-action="Index" class="btn btn-secondary">Retour</a>
+</form>

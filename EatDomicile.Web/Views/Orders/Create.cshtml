@@ -1,0 +1,41 @@
+﻿@model EatDomicile.Web.ViewModels.OrderViewModel
+@{
+    ViewData["Title"] = "Créer une commande";
+}
+
+<h4>Créer une commande</h4>
+
+<form asp-action="Create" method="post">
+    <div class="mb-3">
+        <label asp-for="OrderDate" class="form-label"></label>
+        <input asp-for="OrderDate" type="date" class="form-control" />
+        <span asp-validation-for="OrderDate" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="DeliveryDate" class="form-label"></label>
+        <input asp-for="DeliveryDate" type="date" class="form-control" />
+        <span asp-validation-for="DeliveryDate" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Status" class="form-label"></label>
+        <input asp-for="Status" class="form-control" />
+        <span asp-validation-for="Status" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="UserId" class="form-label"></label>
+        <input asp-for="UserId" class="form-control" />
+        <span asp-validation-for="UserId" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="DeliveryAddressId" class="form-label"></label>
+        <input asp-for="DeliveryAddressId" class="form-control" />
+        <span asp-validation-for="DeliveryAddressId" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Créer</button>
+    <a asp-action="Index" class="btn btn-secondary">Retour</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

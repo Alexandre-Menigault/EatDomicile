@@ -7,6 +7,9 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient();
 
 builder.Services.AddTransient<UsersService>();
+builder.Services.AddScoped<IngredientsService>();
+builder.Services.AddTransient<DrinksService>();
+builder.Services.AddScoped<OrdersService>();
 
 var app = builder.Build();
 
