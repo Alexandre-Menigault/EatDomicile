@@ -1,5 +1,6 @@
 ﻿using EatDomicile.Core.Models;
 using System.Text;
+using EatDomicile.Core.Dtos.Ingredient;
 
 namespace EatDomicile.Core.Dtos;
 
