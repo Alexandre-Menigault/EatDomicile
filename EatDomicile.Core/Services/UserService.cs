@@ -2,19 +2,20 @@
 using EatDomicile.Core.Dtos;
 using EatDomicile.Core.Models;
 using EatDomicile.Core.Exceptions;
+using EatDomicile.Core.Services.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 
 namespace EatDomicile.Core.Services;
 
-public class UserService
+public class UserService : IUserService
 {
     private readonly ILogger<UserService> _logger;
     private readonly ProductContext _context;
-    private readonly AddressService _addressService;
+    private readonly IAddressService _addressService;
 
-    public UserService(ILogger<UserService> logger, ProductContext context, AddressService addressService)
+    public UserService(ILogger<UserService> logger, ProductContext context, IAddressService addressService)
     {
         _logger = logger;
         _context = context;
@@ -32,10 +33,10 @@ public class UserService
         return UserDTO.FromEntity(user);
     }
 
-    public UserDTO CreateUser(CreateUserDTO createUserDto)
+    public async Task<UserDTO> CreateUser(CreateUserDTO createUserDto)
     {
         var user = CreateUserDTO.ToEntity(createUserDto);
-        if (!_addressService.AddressExists(createUserDto.AddressId))
+        if (!await _addressService.AddressExists(createUserDto.AddressId))
         {
             _logger.LogInformation($"Address not found with id: {user.AddressId}");
             throw new EntityNotFoundException<Address>(createUserDto.AddressId);
@@ -63,7 +64,7 @@ public class UserService
             .FirstOrDefault(u => u.Id == id);
     }
 
-    public void UpdateUser(int id, UserLightDTO user)
+    public async Task UpdateUser(int id, UserLightDTO user)
     {
         var userEntity = _context.Users.Find(id);
         if (userEntity is null)
@@ -80,7 +81,7 @@ public class UserService
         {
             // Check if address exists in database before updating the user address
             // Crashes otherwise
-            if (_addressService.AddressExists(id))
+            if (await _addressService.AddressExists(id))
             {
                 userEntity.AddressId = user.AddressId == userEntity.AddressId ? user.AddressId : userEntity.AddressId;
             }
@@ -98,7 +99,7 @@ public class UserService
     {
         var user = _context.Users.Find(id);
         if (user is null)
-            throw new Exception($"User {id} not found");
+            throw new EntityNotFoundException<User>(id);
         _context.Users.Remove(user);
         _context.SaveChanges();
     }
