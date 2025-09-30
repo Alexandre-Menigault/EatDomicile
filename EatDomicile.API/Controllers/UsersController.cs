@@ -53,6 +53,9 @@ public class UsersController : Controller
         var userDto = _userService.CreateUser(createUserDTO);
         return Results.Created($"api/users/{userDto.Id}", userDto);
     }
+
+    // TODO: Implementer le PUT avec un éventuel DTO dédié
+    //PUT
     
     // DELETE
     [HttpDelete("{id}")]
