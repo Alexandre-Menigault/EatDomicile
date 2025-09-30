@@ -10,5 +10,6 @@ public static class ServiceCollectionExtentions
     {
         services.AddTransient<IAddressService, AddressService>();
         services.AddTransient<IUserService, UserService>();
+        services.AddTransient<IDrinkService, DrinkService>();
     }
 }

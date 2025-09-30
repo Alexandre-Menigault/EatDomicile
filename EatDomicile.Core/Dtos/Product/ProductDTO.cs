@@ -1,12 +1,15 @@
-﻿using EatDomicile.Core.Models;
-
-namespace EatDomicile.Core.Dtos;
+﻿namespace EatDomicile.Core.Dtos.Product;
 
 public class ProductDTO
 {
     public int Id { get; set; }
     public String Name { get; set; }
     public decimal Price { get; set; }
+
+    public ProductDTO()
+    {
+        
+    }
     
     public ProductDTO(string name, decimal price)
     {
@@ -14,7 +17,7 @@ public class ProductDTO
         Price = price;
     }
     
-    public static ProductDTO FromEntity(Product product)
+    public static ProductDTO FromEntity(Models.Product product)
     {
         return new ProductDTO(
             product.Name,
@@ -22,23 +25,23 @@ public class ProductDTO
         );
     }
 
-    public static Product ToEntity(ProductDTO productDTO)
+    public static Models.Product ToEntity(ProductDTO productDTO)
     {
-        return new Product()
+        return new Models.Product()
         {
             Name = productDTO.Name,
             Price = productDTO.Price
         };
     }
 
-    public static List<ProductDTO> FromEntities(List<Product> products)
+    public static List<ProductDTO> FromEntities(List<Models.Product> products)
     {
         return products
             .Select(ProductDTO.FromEntity)
             .ToList();
     }
 
-    public static List<Product> ToEntities(List<ProductDTO> products)
+    public static List<Models.Product> ToEntities(List<ProductDTO> products)
     {
         return products
             .Select(ProductDTO.ToEntity)
