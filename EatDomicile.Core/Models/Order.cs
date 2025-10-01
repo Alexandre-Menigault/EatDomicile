@@ -20,19 +20,19 @@ public class Order
     [Required]
     public List<Product>? Products { get; set; } = new();
     
-    // [Required]
-    // public User? User { get; set; }
     
+    
+    [Required]
     [ForeignKey("User")]
     [Column("UserId")]
     public int UserId { get; set; }
+    public User? User { get; set; }
     
-    // [Required]
-    // public Address? DeliveryAddress { get; set; }
     
     [Required]
     [ForeignKey("DeliveryAddress")]
     [Column("DeliveryAddressId")]
     public int DeliveryAddressId { get; set; }
+    public Address? DeliveryAddress { get; set; }
 
 }
