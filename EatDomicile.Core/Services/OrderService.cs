@@ -60,20 +60,20 @@ public class OrderService : IOrderService
                 .ToListAsync();
     }
     
-    public Task<OrderDTO> GetOrderById(int id)
+    public async Task<OrderDTO> GetOrderById(int id)
     {
-        var order = 
-            this.QueryOrders()
-                .Select(o => o.ToDto())
-                .AsEnumerable()
-                .FirstOrDefault(o => o.Id == id);
+        var orderQ = 
+            await this.QueryOrders()
+                .FirstOrDefaultAsync(o => o.Id == id);
 
-        if (order is null)
+        if (orderQ is null)
         {
             throw new EntityNotFoundException<Order>(id);
         }
 
-        return Task.FromResult(order);
+        var order = orderQ.ToDto();
+
+        return order;
     }
 
     public async Task UpdateOrderAddress(int orderId, int addressId)
@@ -191,10 +191,9 @@ public class OrderService : IOrderService
     {
         return _context.Orders
             .Include(o => o.User)
-                .ThenInclude(u => u!.Address)
+            .ThenInclude(u => u!.Address)
             .Include(o => o.Products)
-            .Include(o => o.DeliveryAddress)
-            .AsQueryable();
+            .Include(o => o.DeliveryAddress);
     }
     
 }
