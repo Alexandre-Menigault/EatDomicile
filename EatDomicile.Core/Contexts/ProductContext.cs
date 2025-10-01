@@ -29,7 +29,8 @@ namespace EatDomicile.Core.Contexts
 
             modelBuilder.Entity<Food>()
                 .UseTptMappingStrategy();
-
+            
+            ProductContextSeeder.Seed(modelBuilder);
             
         }
 
@@ -37,7 +38,7 @@ namespace EatDomicile.Core.Contexts
 
         public DbSet<Pasta> Pastas => this.Set<Pasta>();
         public DbSet<Burger> Burgers => this.Set<Burger>();
-        public DbSet<Drink> Drinks => this.Set<Drink>();
+        public DbSet<Drink> Drinks => this.Set<Drink>(); 
         public DbSet<Dough> Doughs => this.Set<Dough>();
 
         public DbSet<User> Users => this.Set<User>();
