@@ -30,7 +30,9 @@ public class Ingredient
     [DefaultValue(false)]
     public bool Allergene { get; set; } = false;
 
+    public int? BurgerId { get; set; }
     public Burger? Burger { get; set; } = null;
+    public int? PizzaId { get; set; }
     public Pizza? Pizza { get; set; } = null;
 
 }
