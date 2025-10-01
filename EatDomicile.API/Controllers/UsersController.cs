@@ -4,6 +4,7 @@ using EatDomicile.Core.Dtos.User;
 using EatDomicile.Core.Exceptions;
 using EatDomicile.Core.Models;
 using EatDomicile.Core.Services;
+using EatDomicile.Core.Services.Abstractions;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,9 +14,9 @@ namespace EatDomicile.API.Controllers;
 [Route("api/[controller]")]
 public class UsersController : Controller
 {
-    private readonly UserService _userService;
+    private readonly IUserService _userService;
 
-    public UsersController(UserService userService)
+    public UsersController(IUserService userService)
     {
         _userService = userService;
     }
