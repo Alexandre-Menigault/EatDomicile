@@ -15,7 +15,7 @@ public sealed class DrinksController : Controller
         this._drinksService = drinksService;
     }
 
-    // GET: DrinkController
+
     public async Task<ActionResult> Index()
     {
 

@@ -6,20 +6,70 @@
 <h4>Supprimer une commande</h4>
 
 <p class="alert alert-danger">
-    Êtes-vous sûr de vouloir supprimer la commande
-    <strong>@Model.Id</strong> ?
+    Êtes-vous sûr de vouloir supprimer la commande <strong>#@Model.Id</strong> ?
 </p>
 
-<dl class="row">
-    <dt class="col-sm-3">@Html.DisplayNameFor(m => m.OrderDate)</dt>
-    <dd class="col-sm-9">@Html.DisplayFor(m => m.OrderDate)</dd>
+<div class="card mt-3">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Date de commande</dt>
+            <dd class="col-sm-9">@Model.OrderDate.ToString("dd/MM/yyyy")</dd>
 
-    <dt class="col-sm-3">@Html.DisplayNameFor(m => m.Status)</dt>
-    <dd class="col-sm-9">@Html.DisplayFor(m => m.Status)</dd>
-</dl>
+            <dt class="col-sm-3">Date de livraison</dt>
+            <dd class="col-sm-9">@Model.DeliveryDate?.ToString("dd/MM/yyyy")</dd>
 
-<form asp-action="Delete" method="post">
+            <dt class="col-sm-3">Statut</dt>
+            <dd class="col-sm-9">
+                @if (Model.Status == "Livrée")
+                {
+                    <span class="badge bg-success">@Model.Status</span>
+                }
+                else if (Model.Status == "En préparation")
+                {
+                    <span class="badge bg-warning text-dark">@Model.Status</span>
+                }
+                else
+                {
+                    <span class="badge bg-secondary">@Model.Status</span>
+                }
+            </dd>
+
+            <dt class="col-sm-3">Utilisateur</dt>
+            <dd class="col-sm-9">@Model.UserName</dd>
+
+            <dt class="col-sm-3">Adresse de livraison</dt>
+            <dd class="col-sm-9">@Model.DeliveryAddress</dd>
+        </dl>
+
+        @if (Model.Products != null && Model.Products.Any())
+        {
+            <h5 class="mt-4">Produits associés</h5>
+            <div class="row">
+                <div class="col-md-6">
+                    <strong>Ingrédients :</strong>
+                    <ul class="list-group mb-3">
+                        @foreach (var p in Model.Products.Where(p => p.StartsWith("Ingredient:")))
+                        {
+                            <li class="list-group-item">@p.Replace("Ingredient:", "")</li>
+                        }
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <strong>Boissons :</strong>
+                    <ul class="list-group mb-3">
+                        @foreach (var p in Model.Products.Where(p => p.StartsWith("Drink:")))
+                        {
+                            <li class="list-group-item">@p.Replace("Drink:", "")</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<form asp-action="DeleteConfirmed" method="post" class="mt-4">
     <input type="hidden" asp-for="Id" />
-    <button type="submit" class="btn btn-danger">Supprimer</button>
+    <button type="submit" class="btn btn-danger">Confirmer la suppression</button>
     <a asp-action="Index" class="btn btn-secondary">Annuler</a>
 </form>

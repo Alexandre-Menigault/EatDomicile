@@ -6,6 +6,8 @@ public class OrderViewModel
 {
     public int Id { get; set; }
 
+    public string UserName { get; set; } = string.Empty;
+
     [Required]
     [Display(Name = "Date de commande")]
     public DateTime OrderDate { get; set; }
@@ -24,9 +26,15 @@ public class OrderViewModel
 
     [Required]
     [Display(Name = "Adresse de livraison")]
-    public int DeliveryAddressId { get; set; }
+    public string DeliveryAddress { get; set; } = string.Empty;
 
 
-    public List<string> Products { get; set; } = new();
+    [Display(Name = "Produits")]
+    public List<int> SelectedProducts { get; set; } = new();
+
+    [Display(Name = "Boissons")]
+    public List<int> SelectedDrinks { get; set; } = new();
+
+    public List<string>? Products { get; set; }
 
 }

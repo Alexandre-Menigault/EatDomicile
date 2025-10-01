@@ -23,7 +23,7 @@ public class UserViewModel
     [Display(Name = "Téléphone")]
     public string Phone { get; set; } = string.Empty;
 
-    [Display(Name = "Adresse (Id)")]
-    public int AddressId { get; set; }
+    [Display(Name = "Adresse")]
+    public string Address { get; set; } = string.Empty;
 
 }

@@ -20,7 +20,7 @@ public class OrdersDto
 
     public int UserId { get; set; }
 
-    public int DeliveryAddressId { get; set; }
+    public string DeliveryAddress { get; set; } = string.Empty;
 
     public List<string> Products { get; set; } = new();
 }

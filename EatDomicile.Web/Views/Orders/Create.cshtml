@@ -6,36 +6,123 @@
 <h4>Créer une commande</h4>
 
 <form asp-action="Create" method="post">
-    <div class="mb-3">
-        <label asp-for="OrderDate" class="form-label"></label>
-        <input asp-for="OrderDate" type="date" class="form-control" />
-        <span asp-validation-for="OrderDate" class="text-danger"></span>
-    </div>
-    <div class="mb-3">
-        <label asp-for="DeliveryDate" class="form-label"></label>
-        <input asp-for="DeliveryDate" type="date" class="form-control" />
-        <span asp-validation-for="DeliveryDate" class="text-danger"></span>
-    </div>
-    <div class="mb-3">
-        <label asp-for="Status" class="form-label"></label>
-        <input asp-for="Status" class="form-control" />
-        <span asp-validation-for="Status" class="text-danger"></span>
-    </div>
+
+   
     <div class="mb-3">
         <label asp-for="UserId" class="form-label"></label>
-        <input asp-for="UserId" class="form-control" />
+        <select asp-for="UserId" class="form-control" asp-items="ViewBag.Users">
+            <option value="">-- Sélectionnez un utilisateur --</option>
+        </select>
         <span asp-validation-for="UserId" class="text-danger"></span>
     </div>
+
+   
     <div class="mb-3">
-        <label asp-for="DeliveryAddressId" class="form-label"></label>
-        <input asp-for="DeliveryAddressId" class="form-control" />
-        <span asp-validation-for="DeliveryAddressId" class="text-danger"></span>
+        <label asp-for="DeliveryAddress" class="form-label"></label>
+        <input asp-for="DeliveryAddress" class="form-control" placeholder="Ex: 12 rue Victor Hugo, Tours" />
+        <span asp-validation-for="DeliveryAddress" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-primary">Créer</button>
-    <a asp-action="Index" class="btn btn-secondary">Retour</a>
+    
+    <div class="mb-3">
+        <label class="form-label">Ingrédients</label>
+        <select id="productSelect" class="form-control">
+            <option value="">-- Sélectionnez un ingrédient --</option>
+            @foreach (var product in (IEnumerable<SelectListItem>)ViewBag.Products)
+            {
+                <option value="@product.Value">@product.Text</option>
+            }
+        </select>
+    </div>
+
+    <h5>Ingrédients sélectionnés :</h5>
+    <ul id="selectedProductsList" class="list-group mb-3"></ul>
+    <input type="hidden" asp-for="SelectedProducts" id="SelectedProducts" />
+
+    
+    <div class="mb-3">
+        <label class="form-label">Boissons</label>
+        <select id="drinkSelect" class="form-control">
+            <option value="">-- Sélectionnez une boisson --</option>
+            @foreach (var drink in (IEnumerable<SelectListItem>)ViewBag.Drinks)
+            {
+                <option value="@drink.Value">@drink.Text</option>
+            }
+        </select>
+    </div>
+
+    <h5>Boissons sélectionnées :</h5>
+    <ul id="selectedDrinksList" class="list-group mb-3"></ul>
+    <input type="hidden" asp-for="SelectedDrinks" id="SelectedDrinks" />
+
+
+    <div class="mt-3">
+        <button type="submit" class="btn btn-success">Créer</button>
+        <a asp-action="Index" class="btn btn-secondary">Retour</a>
+    </div>
 </form>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+      
+        const productSelect = document.getElementById("productSelect");
+        const selectedProductsList = document.getElementById("selectedProductsList");
+        const hiddenProducts = document.getElementById("SelectedProducts");
+        let selectedProducts = [];
+
+        productSelect.addEventListener("change", function () {
+            const value = this.value;
+            const text = this.options[this.selectedIndex].text;
+            if (value && !selectedProducts.includes(value)) {
+                selectedProducts.push(value);
+                const li = document.createElement("li");
+                li.className = "list-group-item d-flex justify-content-between align-items-center";
+                li.dataset.value = value;
+                li.innerHTML = `${text}<button type="button" class="btn btn-sm btn-danger remove-product">X</button>`;
+                selectedProductsList.appendChild(li);
+                hiddenProducts.value = selectedProducts.join(",");
+            }
+        });
+
+        selectedProductsList.addEventListener("click", function (e) {
+            if (e.target.classList.contains("remove-product")) {
+                const li = e.target.closest("li");
+                const value = li.dataset.value;
+                selectedProducts = selectedProducts.filter(p => p !== value);
+                li.remove();
+                hiddenProducts.value = selectedProducts.join(",");
+            }
+        });
+
+        
+        const drinkSelect = document.getElementById("drinkSelect");
+        const selectedDrinksList = document.getElementById("selectedDrinksList");
+        const hiddenDrinks = document.getElementById("SelectedDrinks");
+        let selectedDrinks = [];
+
+        drinkSelect.addEventListener("change", function () {
+            const value = this.value;
+            const text = this.options[this.selectedIndex].text;
+            if (value && !selectedDrinks.includes(value)) {
+                selectedDrinks.push(value);
+                const li = document.createElement("li");
+                li.className = "list-group-item d-flex justify-content-between align-items-center";
+                li.dataset.value = value;
+                li.innerHTML = `${text}<button type="button" class="btn btn-sm btn-danger remove-drink">X</button>`;
+                selectedDrinksList.appendChild(li);
+                hiddenDrinks.value = selectedDrinks.join(",");
+            }
+        });
+
+        selectedDrinksList.addEventListener("click", function (e) {
+            if (e.target.classList.contains("remove-drink")) {
+                const li = e.target.closest("li");
+                const value = li.dataset.value;
+                selectedDrinks = selectedDrinks.filter(d => d !== value);
+                li.remove();
+                hiddenDrinks.value = selectedDrinks.join(",");
+            }
+        });
+    </script>
 }
