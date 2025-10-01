@@ -1,20 +1,23 @@
-﻿using EatDomicile.Core.Models;
-using System.Text;
+﻿using System.Text;
 using EatDomicile.Core.Dtos.Ingredient;
 
-namespace EatDomicile.Core.Dtos;
+namespace EatDomicile.Core.Dtos.Burger;
 
 public class BurgerDTO : FoodDTO
 {
 
     public List<IngredientDTO> Ingredients { get; set; } = new();
+    public BurgerDTO()
+    {
+        
+    }
     public BurgerDTO(string name, decimal price, bool vegetarien) : base(name, price, vegetarien)
     {
         
     }
 
 
-    public static BurgerDTO FromEntity(Burger burger)
+    public static BurgerDTO FromEntity(Models.Burger burger)
     {
         return new BurgerDTO(
             burger.Name,
@@ -27,9 +30,9 @@ public class BurgerDTO : FoodDTO
         }  ;
     }
     
-    public static Burger ToEntity(BurgerDTO burgerDTO)
+    public static Models.Burger ToEntity(BurgerDTO burgerDTO)
     {
-        return new Burger()
+        return new Models.Burger()
         {
             Name = burgerDTO.Name,
             Price = burgerDTO.Price,
@@ -38,20 +41,4 @@ public class BurgerDTO : FoodDTO
         };
     }
     
-}
-
-
-public static class BurgerExtentions 
-{
-    public static String AsString(this BurgerDTO burger)
-    {
-        var sb = new StringBuilder();
-        sb.AppendLine($"<Burger> {burger.Name} ({burger.Price}€)");
-        sb.AppendLine("Ingredients:");
-        foreach (var ingredient in burger.Ingredients)
-        {
-            sb.AppendLine($"\t- {ingredient.Name} ({ingredient.Kcal} Kcal, Allergene: {(ingredient.Allergene ? "Oui" : "Non")})");
-        }
-        return sb.ToString();
-    }
 }

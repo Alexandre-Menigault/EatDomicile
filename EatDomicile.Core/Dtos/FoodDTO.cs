@@ -7,6 +7,11 @@ public class FoodDTO : ProductDTO
 {
     
     public bool Vegetarien { get; set; }
+
+    public FoodDTO()
+    {
+        
+    }
     
     public FoodDTO(string name, decimal price, bool vegetarien): base(name, price)
     {
