@@ -24,8 +24,8 @@ builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
-var scope = app.Services.CreateScope();
-scope.ServiceProvider.GetRequiredService<ProductContext>().Database.EnsureCreated();
+//var scope = app.Services.CreateScope();
+//scope.ServiceProvider.GetRequiredService<ProductContext>().Database.EnsureCreated();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

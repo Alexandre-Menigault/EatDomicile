@@ -1,6 +1,4 @@
-﻿using EatDomicile.Web.Services.Dtos;
-
-namespace EatDomicile.Web.Services;
+﻿namespace EatDomicile.Web.Services.Dtos;
 
 public class BurgerDTO : FoodDTO
 {

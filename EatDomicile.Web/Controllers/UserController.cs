@@ -17,7 +17,7 @@ namespace WebApplication1.Controllers
         // GET: UserController
         public async Task<ActionResult> Index()
         {
-            var usersDtos = await _usersService.GetUsers();
+            var usersDtos = await _usersService.GetUsersAsync();
             var users = usersDtos.Select(u => new UserViewModel()
             {
                 Id = u.Id,
