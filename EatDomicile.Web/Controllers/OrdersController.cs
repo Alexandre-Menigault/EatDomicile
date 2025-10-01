@@ -18,8 +18,20 @@ namespace WebApplication1.Controllers
         public async Task<ActionResult> Index()
         {
 
+            var ordersDtos = await _ordersService.GetOrders();
 
-            return View();
+            var orders = ordersDtos.Select(o => new OrderViewModel
+            {
+                Id = o.Id,
+                OrderDate = o.OrderDate,
+                DeliveryDate = o.DeliveryDate,
+                Status = o.Status,
+                UserId = o.UserId,
+                DeliveryAddressId = o.DeliveryAddressId,
+
+            });
+
+            return View(orders);
         }
 
         // GET: UserController/Details/5

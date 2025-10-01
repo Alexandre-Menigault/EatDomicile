@@ -17,8 +17,17 @@ namespace WebApplication1.Controllers
         // GET: IngredientController
         public async Task<ActionResult> Index()
         {
+            var ingredientsDtos = await _ingredientsService.GetIngredients();
 
-            return View();
+            var ingredients = ingredientsDtos.Select(i => new IngredientViewModel
+            {
+                Id = i.Id,
+                Name = i.Name,
+                Kcal = i.Kcal,
+                Allergene = i.Allergene
+            }).ToList();
+
+            return View(ingredients);
         }
 
         // GET: UserController/Details/5
