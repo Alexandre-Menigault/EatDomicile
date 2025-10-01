@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Text;
-using System.Threading.Tasks;
 using EatDomicile.Core.Dtos.Address;
-using EatDomicile.Core.Models;
 
-namespace EatDomicile.Core.Dtos;
+namespace EatDomicile.Core.Dtos.User;
 
 public class UserLightDTO
 {
@@ -36,7 +31,7 @@ public class UserLightDTO
         this.AddressId = address.Id;
     }
 
-    public static UserLightDTO FromEntity(User user)
+    public static UserLightDTO FromEntity(Models.User user)
     {
         return new UserLightDTO(
             user.FirstName,

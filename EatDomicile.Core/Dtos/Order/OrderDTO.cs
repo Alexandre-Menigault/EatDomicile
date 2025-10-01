@@ -1,9 +1,10 @@
 ﻿using System.Text;
+using EatDomicile.Core.Dtos.Address;
 using EatDomicile.Core.Dtos.Product;
+using EatDomicile.Core.Dtos.User;
 using EatDomicile.Core.Enums;
-using EatDomicile.Core.Models;
 
-namespace EatDomicile.Core.Dtos;
+namespace EatDomicile.Core.Dtos.Order;
 
 public class OrderDTO
 {
@@ -17,10 +18,15 @@ public class OrderDTO
     public List<ProductDTO>? Products { get; set; }
     public List<int> ProductIds { get; set; } = new();
 
-    // public UserDTO? User { get; set; }
     public int UserId { get; set; }
-    //public AddressDTO? DeliveryAddress { get; set; }
+    public UserDTO? User { get; set; }
     public int DeliveryAddressId { get; set; }
+    public AddressDTO? DeliveryAddress { get; set; }
+
+    public OrderDTO()
+    {
+        
+    }
     
     public OrderDTO(int id, DateTime orderDate, DateTime? deliveryDate, OrderStatus status, List<ProductDTO>? products, int userId, int deliveryAddressId)
     {
@@ -33,7 +39,7 @@ public class OrderDTO
         this.DeliveryAddressId = deliveryAddressId;
     }
 
-    public static OrderDTO FromEntity(Order order)
+    public static OrderDTO FromEntity(Models.Order order)
     {
         return new OrderDTO(
             order.Id,
@@ -49,9 +55,9 @@ public class OrderDTO
         };
     }
 
-    public static Order ToEntity(OrderDTO order)
+    public static Models.Order ToEntity(OrderDTO order)
     {
-        return new Order()
+        return new Models.Order()
         {
             Id = order.Id,
             OrderDate = order.OrderDate,
@@ -64,34 +70,3 @@ public class OrderDTO
     }
     
 }
-
-public static class OrderExtentions
-{
-    public static String AsString(this OrderDTO order)
-    {
-        var sb = new StringBuilder();
-        sb.AppendLine($"<Order> {order.Id}");
-        sb.AppendLine($"\tUserId = {order.UserId}");
-        // sb.AppendLine($"\tUser = {order.User!.FirstName} {order.User.LastName}");
-        sb.AppendLine($"\tAddressId = {order.DeliveryAddressId}");
-        sb.AppendLine($"\tProducts = {string.Join(", ", order.Products!.Select(p => p.Name))}");
-        sb.AppendLine($"\tStatus = {order.Status}");
-        sb.AppendLine($"\tDeliveryDate = {order.DeliveryDate}");
-        sb.AppendLine($"\tOrderDate = {order.OrderDate}");
-        sb.Append("");
-        return sb.ToString();
-    }
-    public static String AsString(this List<OrderDTO> orders)
-    {
-        var sb = new StringBuilder();
-        foreach (var order in orders)
-        {
-            sb.AppendLine(order.AsString());
-        }
-
-        return sb.ToString();
-
-    }
-}
-
-

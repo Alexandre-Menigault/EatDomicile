@@ -13,5 +13,6 @@ public static class ServiceCollectionExtentions
         services.AddTransient<IDrinkService, DrinkService>();
         services.AddTransient<IIngredientService, IngredientService>();
         services.AddTransient<IBurgerService, BurgerService>();
+        services.AddTransient<IOrderService, OrderService>();
     }
 }

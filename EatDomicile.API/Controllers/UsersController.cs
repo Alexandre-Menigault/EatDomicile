@@ -1,5 +1,6 @@
 using EatDomicile.API.Errors;
 using EatDomicile.Core.Dtos;
+using EatDomicile.Core.Dtos.User;
 using EatDomicile.Core.Exceptions;
 using EatDomicile.Core.Models;
 using EatDomicile.Core.Services;
@@ -21,7 +22,7 @@ public class UsersController : Controller
     
     // GET
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<User>))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<UserDTO>))]
     public IResult Index()
     {
         var users = _userService.GetAllUsers();
@@ -30,7 +31,7 @@ public class UsersController : Controller
     }
 
     [HttpGet("{id}")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(User))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDTO))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(NotFoundResult))]
     public IResult GetById(int id)
     {
@@ -44,9 +45,9 @@ public class UsersController : Controller
     
     // POST
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(User))]
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(UserDTO))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
-    public async Task<IResult> Create<T>([FromBody] CreateUserDTO createUserDTO)
+    public async Task<IResult> Create([FromBody] CreateUserDTO createUserDTO)
     {
         if (!ModelState.IsValid)
         {

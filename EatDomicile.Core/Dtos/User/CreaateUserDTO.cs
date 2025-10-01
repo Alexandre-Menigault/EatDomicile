@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EatDomicile.Core.Models;
+﻿using System.Text;
 
-namespace EatDomicile.Core.Dtos;
+namespace EatDomicile.Core.Dtos.User;
 
 public class CreateUserDTO
 {
@@ -30,7 +25,7 @@ public class CreateUserDTO
         this.AddressId = addressId;
     }
 
-    public static CreateUserDTO FromEntity(User user)
+    public static CreateUserDTO FromEntity(Models.User user)
     {
         return new CreateUserDTO(
             user.Id,
@@ -42,9 +37,9 @@ public class CreateUserDTO
         );
     }
 
-    public static User ToEntity(CreateUserDTO dto)
+    public static Models.User ToEntity(CreateUserDTO dto)
     {
-        return new User
+        return new Models.User
         {
             FirstName = dto.FirstName,
             LastName = dto.LastName,
