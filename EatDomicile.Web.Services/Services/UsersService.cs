@@ -50,8 +50,8 @@ public class UsersService: IApiUserService
 
     public async Task<IEnumerable<UserDTO>> GetUsersAsync()
     {
-        var books = await this._httpClient.GetFromJsonAsync<IEnumerable<UserDTO>>(string.Empty);
-        return books ?? [];
+        var users = await this._httpClient.GetFromJsonAsync<IEnumerable<UserDTO>>(string.Empty);
+        return users ?? [];
     }
 
     public async Task UpdateUserAsync(int Id, UserDTO UserDTO)
