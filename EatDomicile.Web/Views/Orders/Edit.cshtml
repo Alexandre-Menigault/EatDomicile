@@ -1,0 +1,140 @@
+﻿@model EatDomicile.Web.ViewModels.OrderViewModel
+@{
+    ViewData["Title"] = "Modifier une commande";
+}
+
+<h4>Modifier une commande</h4>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+
+    
+    <div class="mb-3">
+        <label asp-for="OrderDate" class="form-label"></label>
+        <input asp-for="OrderDate" type="date" class="form-control" readonly />
+    </div>
+    <div class="mb-3">
+        <label asp-for="DeliveryDate" class="form-label"></label>
+        <input asp-for="DeliveryDate" type="date" class="form-control" />
+    </div>
+
+   
+    <div class="mb-3">
+        <label asp-for="Status" class="form-label"></label>
+        <select asp-for="Status" class="form-control">
+            <option value="En préparation" selected="@(Model.Status == "En préparation")">En préparation</option>
+            <option value="Livrée" selected="@(Model.Status == "Livrée")">Livrée</option>
+            <option value="Annulée" selected="@(Model.Status == "Annulée")">Annulée</option>
+        </select>
+    </div>
+
+    
+    <div class="mb-3">
+        <label asp-for="UserId" class="form-label"></label>
+        <select asp-for="UserId" class="form-control" asp-items="ViewBag.Users">
+            <option value="">-- Sélectionnez un utilisateur --</option>
+        </select>
+    </div>
+
+    
+    <div class="mb-3">
+        <label asp-for="DeliveryAddress" class="form-label"></label>
+        <input asp-for="DeliveryAddress" class="form-control" />
+    </div>
+
+    
+    <div class="mb-3">
+        <label class="form-label">Ajouter des ingrédients</label>
+        <select id="productSelect" class="form-control">
+            <option value="">-- Sélectionnez un ingrédient --</option>
+            @foreach (var product in (IEnumerable<SelectListItem>)ViewBag.Products)
+            {
+                <option value="Ingredient:@product.Value">@product.Text</option>
+            }
+        </select>
+    </div>
+
+    
+    <div class="mb-3">
+        <label class="form-label">Ajouter des boissons</label>
+        <select id="drinkSelect" class="form-control">
+            <option value="">-- Sélectionnez une boisson --</option>
+            @foreach (var drink in (IEnumerable<SelectListItem>)ViewBag.Drinks)
+            {
+                <option value="Drink:@drink.Value">@drink.Text</option>
+            }
+        </select>
+    </div>
+
+   
+    <h5>Produits de la commande</h5>
+    <ul id="selectedProductsList" class="list-group mb-3">
+        @foreach (var p in Model.Products ?? new List<string>())
+        {
+            <li class="list-group-item d-flex justify-content-between align-items-center" data-value="@p">
+                @p.Replace("Ingredient:", "").Replace("Drink:", "")
+                <button type="button" class="btn btn-sm btn-danger remove-product">X</button>
+            </li>
+        }
+    </ul>
+
+    <input type="hidden" asp-for="SelectedProducts" id="SelectedProducts"
+           value="@string.Join(",", Model.Products ?? new List<string>())" />
+
+ 
+    <button type="submit" class="btn btn-warning">Enregistrer</button>
+    <a asp-action="Index" class="btn btn-secondary">Retour</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        const productSelect = document.getElementById("productSelect");
+        const drinkSelect = document.getElementById("drinkSelect");
+        const selectedProductsList = document.getElementById("selectedProductsList");
+        const hiddenInput = document.getElementById("SelectedProducts");
+
+        let selectedProducts = hiddenInput.value ? hiddenInput.value.split(",") : [];
+
+        function addProduct(value, text) {
+            if (value && !selectedProducts.includes(value)) {
+                selectedProducts.push(value);
+
+                const li = document.createElement("li");
+                li.className = "list-group-item d-flex justify-content-between align-items-center";
+                li.dataset.value = value;
+                li.innerHTML = `
+                    ${text}
+                    <button type="button" class="btn btn-sm btn-danger remove-product">X</button>
+                `;
+                selectedProductsList.appendChild(li);
+
+                hiddenInput.value = selectedProducts.join(",");
+            }
+        }
+
+        productSelect.addEventListener("change", function () {
+            const value = this.value;
+            const text = this.options[this.selectedIndex].text;
+            addProduct(value, text);
+        });
+
+        drinkSelect.addEventListener("change", function () {
+            const value = this.value;
+            const text = this.options[this.selectedIndex].text;
+            addProduct(value, text);
+        });
+
+        selectedProductsList.addEventListener("click", function (e) {
+            if (e.target.classList.contains("remove-product")) {
+                const li = e.target.closest("li");
+                const value = li.dataset.value;
+
+                selectedProducts = selectedProducts.filter(p => p !== value);
+                li.remove();
+
+                hiddenInput.value = selectedProducts.join(",");
+            }
+        });
+    </script>
+}

@@ -1,8 +1,71 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Accueil - EatDomicile";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container py-5">
+
+    <!-- Titre principal -->
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold">Bienvenue sur <span class="text-primary">EatDomicile</span></h1>
+        <p class="lead text-muted">
+            Gérez vos ingrédients, boissons, utilisateurs et commandes en toute simplicité.
+        </p>
+    </div>
+
+    <!-- Cartes de navigation -->
+    <div class="row g-4">
+        <div class="col-md-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Ingrédients</h5>
+                    <p class="card-text text-muted">Ajoutez, modifiez et consultez vos ingrédients.</p>
+                    <a asp-controller="Ingredients" asp-action="Index" class="btn btn-primary">Accéder</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Boissons</h5>
+                    <p class="card-text text-muted">Gérez vos boissons disponibles.</p>
+                    <a asp-controller="Drinks" asp-action="Index" class="btn btn-primary">Accéder</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Utilisateurs</h5>
+                    <p class="card-text text-muted">Consultez et administrez vos utilisateurs.</p>
+                    <a asp-controller="Users" asp-action="Index" class="btn btn-primary">Accéder</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Commandes</h5>
+                    <p class="card-text text-muted">Suivez et gérez vos commandes.</p>
+                    <a asp-controller="Orders" asp-action="Index" class="btn btn-primary">Accéder</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section stats -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <h4 class="card-title">Statistiques</h4>
+                    <p class="card-text text-muted">Consultez un résumé des commandes et utilisateurs actifs.</p>
+                    <a asp-controller="Stats" asp-action="Index" class="btn btn-outline-primary">Voir les stats</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>

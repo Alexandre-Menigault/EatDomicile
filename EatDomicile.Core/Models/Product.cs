@@ -19,11 +19,11 @@ namespace EatDomicile.Core.Models
         [Required]
         [StringLength(50)]
         [Column("Name")]
-        public string Name { get; set; }
+        public required string Name { get; set; }
         
         [Required]
         [Column("Price", TypeName = "decimal(10,2)")]
-        public decimal Price { get; set; }
+        public required decimal Price { get; set; }
         
         public List<Order> Orders { get; set; } = new();
         

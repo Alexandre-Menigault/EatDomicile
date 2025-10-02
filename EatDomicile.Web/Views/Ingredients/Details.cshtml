@@ -1,0 +1,26 @@
+﻿@model EatDomicile.Web.ViewModels.IngredientViewModel
+@{
+    ViewData["Title"] = "Détails ingrédient";
+}
+
+<h4>Détails ingrédient</h4>
+
+<div class="card mt-3">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">@Html.DisplayNameFor(m => m.Name)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(m => m.Name)</dd>
+
+            <dt class="col-sm-3">@Html.DisplayNameFor(m => m.Kcal)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(m => m.Kcal)</dd>
+
+            <dt class="col-sm-3">@Html.DisplayNameFor(m => m.Allergene)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(m => m.Allergene)</dd>
+        </dl>
+    </div>
+</div>
+
+<div class="mt-4">
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Modifier</a>
+    <a asp-action="Index" class="btn btn-secondary">Retour</a>
+</div>

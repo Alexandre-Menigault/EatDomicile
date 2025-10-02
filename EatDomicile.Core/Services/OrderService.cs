@@ -1,15 +1,12 @@
 ﻿using EatDomicile.Core.Contexts;
 using EatDomicile.Core.Dtos;
-using EatDomicile.Core.Dtos.Order;
 using EatDomicile.Core.Enums;
-using EatDomicile.Core.Exceptions;
 using EatDomicile.Core.Models;
-using EatDomicile.Core.Services.Abstractions;
 using Microsoft.EntityFrameworkCore;
 
 namespace EatDomicile.Core.Services;
 
-public class OrderService : IOrderService
+public class OrderService
 {
     private readonly ProductContext _context;
 
@@ -19,151 +16,113 @@ public class OrderService : IOrderService
         _context = context;
     }
 
-    public async Task<OrderDTO> CreateOrder(CreateOrderDto orderDto)
+    public OrderDTO CreateOrder(OrderDTO orderDTO)
     {
-        if (!orderDto.ProductIds.Any())
-        {
-            throw new EntityCollectionPropertyIsEmptyException<CreateOrderDto>(nameof(orderDto.ProductIds));
-        }
-        
-        var order = orderDto.ToEntity();
-        var products = await _context.Products.Where(p => orderDto.ProductIds.Contains(p.Id)).ToListAsync();
-        if (products.Count != orderDto.ProductIds.Count())
-        {
-            throw new EntityNotFoundException<Product>(orderDto.ProductIds.Except(products.Select(p => p.Id)).First());
-        }
-        
-        var userExists = await _context.Users.AnyAsync(u => u.Id == orderDto.UserId);
-        var addressExists = await _context.Addresses.AnyAsync(a => a.Id == orderDto.DeliveryAddressId);
+        if(orderDTO.Products?.Count == 0)
+            throw new ArgumentException("Order must contain at least one product.");
+        var productIds = (orderDTO.ProductIds?.Count > 0
+                    ? orderDTO.ProductIds
+                    : orderDTO.Products?.Select(p => p.Id).ToList()
+            )!
+            .Where(id => id > 0)
+            .Distinct()
+            .ToList();
 
-        if (!userExists)
+        var products = productIds.Select(id => new Product() { Id = id, Name = null!, Price = 0}).ToList();
+        foreach (var p in products)
         {
-            throw new EntityNotFoundException<User>(orderDto.UserId);
+            _context.Attach(p);
         }
 
-        if (!addressExists)
+        var order = new Order
         {
-            throw new EntityNotFoundException<Address>(orderDto.DeliveryAddressId);
-        }
-        
-        order.Products = products;
-        await _context.Orders.AddAsync(order);
-        await _context.SaveChangesAsync();
-        return order.ToDto();
+            OrderDate = orderDTO.OrderDate,
+            DeliveryDate = orderDTO.DeliveryDate,
+            Status = orderDTO.Status,
+            UserId = orderDTO.UserId,
+            DeliveryAddressId = orderDTO.DeliveryAddressId,
+            Products = products
+        };
+
+        _context.Orders.Add(order);
+        _context.SaveChanges();
+        Console.WriteLine($"Order created with {order.Id}");
+        return OrderDTO.FromEntity(order);
     }
 
-    public async Task<List<OrderDTO>> GetAllOrders()
+    public List<OrderDTO> GetAllOrders()
     {
-        return await 
-            this.QueryOrders()
-                .Select(o => o.ToDto())
-                .ToListAsync();
+        return _context.Orders
+            //.Include(o => o.User)
+            .Include(o => o.Products)
+            //.Include(o => o.DeliveryAddress)
+            .Select(OrderDTO.FromEntity).ToList();
     }
     
-    public async Task<OrderDTO> GetOrderById(int id)
+    public OrderDTO? GetOrderById(int id)
     {
-        var orderQ = 
-            await this.QueryOrders()
-                .FirstOrDefaultAsync(o => o.Id == id);
-
-        if (orderQ is null)
-        {
-            throw new EntityNotFoundException<Order>(id);
-        }
-
-        var order = orderQ.ToDto();
-
-        return order;
+        var order = _context.Orders
+            .Where(o => o.Id == id)
+            //.Include(o => o.User)
+            .Include(o => o.Products)
+            //.Include(o => o.DeliveryAddress)
+            .FirstOrDefault();
+                
+        return order is null ? null : OrderDTO.FromEntity(order);
     }
 
-    public async Task UpdateOrderAddress(int orderId, int addressId)
+    public OrderDTO UpdateOrderEnCuisine(int orderId)
     {
-        var  order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId);
-        if(order is null) throw new EntityNotFoundException<Order>(orderId);
-
-        // Prevent to change address if order is not validee or en cours
-        if (order.Status != OrderStatus.Validee && order.Status != OrderStatus.EnCuisine)
+        var order = _context.Orders.Find(orderId);
+        if (order is not null)
         {
-            throw new OrderStatusException([OrderStatus.EnAttenteLivreur, OrderStatus.EnLivraison, OrderStatus.Livree]);
+            order.Status = OrderStatus.EnCuisine;
+            _context.SaveChanges();
         }
-         
-        var addressExists = await _context.Addresses.AnyAsync(a => a.Id == addressId);
-        if (!addressExists)
-        {
-            throw new EntityNotFoundException<Address>(addressId);
-        }
-        
-        order.DeliveryAddressId = addressId;
-        await _context.SaveChangesAsync();
-        
+        return OrderDTO.FromEntity(order);
     }
 
-
-    public async Task UpdateOrderStatus(int orderId, OrderStatus status)
+    public OrderDTO UpdateOrderEnLivraison(int orderId)
     {
-        var order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId);
-        if(order is null) throw new EntityNotFoundException<Order>(orderId);
-
-        OrderStatus newStatus;
-
-        switch (status)
+        var order = _context.Orders.Find(orderId);
+        if (order is not null)
         {
-            case OrderStatus.Validee:
-                throw new OrderStatusException([]);
-                break;
-            case OrderStatus.EnCuisine:
-                if (order.Status != OrderStatus.Validee)
-                {
-                    throw new OrderStatusException([OrderStatus.Validee]);   
-                }
-                newStatus = OrderStatus.EnCuisine;
-                break;
-            case OrderStatus.EnAttenteLivreur:
-                if (order.Status != OrderStatus.EnCuisine)
-                {
-                    throw new OrderStatusException([OrderStatus.EnCuisine]);
-                }
-                newStatus = OrderStatus.EnAttenteLivreur;
-                break;
-            case OrderStatus.EnLivraison:
-                if (order.Status != OrderStatus.EnAttenteLivreur)
-                {
-                    throw new OrderStatusException([OrderStatus.EnAttenteLivreur]);
-                }
-                newStatus = OrderStatus.EnLivraison;
-                break;
-            case OrderStatus.Livree:
-                if (order.Status != OrderStatus.EnLivraison)
-                {
-                    throw new OrderStatusException([OrderStatus.EnLivraison]);
-                }
-                newStatus = OrderStatus.Livree;
-                order.DeliveryDate = DateTime.Now;
-                break;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(status), status, null);
+            order.Status = OrderStatus.EnLivraison;
+            _context.SaveChanges();
         }
-
-        order.Status = newStatus;
-        await _context.SaveChangesAsync();
+        return OrderDTO.FromEntity(order);
+    }
+    
+    public OrderDTO UpdateOrderLivree(int orderId)
+    {
+        var order = _context.Orders.Find(orderId);
+        if (order is not null)
+        {
+            order.Status = OrderStatus.Livree;
+            order.DeliveryDate = DateTime.Now;
+            _context.SaveChanges();
+        }
+        return OrderDTO.FromEntity(order);
     }
 
-    public async Task DeleteOrder(int id)
+    public void DeleteOrder(int orderId)
     {
-        var order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == id);
-        
-        if(order is null) throw new EntityNotFoundException<Order>(id);
-        _context.Orders.Remove(order);
-        await _context.SaveChangesAsync();
+        var order = _context.Orders.Find(orderId);
+        if (order is not null)
+        {
+            _context.Orders.Remove(order);
+            _context.SaveChanges();
+        }
     }
 
-    public async Task<List<OrderDTO>> GetOrdersEnCours()
+    public List<OrderDTO> GetOrdersEnCours()
     {
-        return await 
-            this.QueryOrders()
-                .Where(o => o.Status != OrderStatus.Livree)
-                .Select(o => o.ToDto())
-                .ToListAsync();
+        return _context.Orders
+            .Where(o => o.Status != OrderStatus.Livree)
+            //.Include(o => o.User)
+            .Include(o => o.Products)
+            //.Include(o => o.DeliveryAddress)
+            .Select(OrderDTO.FromEntity).ToList();
     }
     
     public List<int> GetUsersWithOrders()
@@ -186,14 +145,6 @@ public class OrderService : IOrderService
             .Select(OrderDTO.FromEntity)
             .ToList();
     }
-
-    private IQueryable<Order> QueryOrders()
-    {
-        return _context.Orders
-            .Include(o => o.User)
-            .ThenInclude(u => u!.Address)
-            .Include(o => o.Products)
-            .Include(o => o.DeliveryAddress);
-    }
+    
     
 }

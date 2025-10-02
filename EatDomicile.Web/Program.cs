@@ -1,4 +1,3 @@
-using EatDomicile.Web.Services.Extentions;
 using EatDomicile.Web.Services.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,7 +7,9 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient();
 
 builder.Services.AddTransient<UsersService>();
-builder.AddAPIServices();
+builder.Services.AddScoped<IngredientsService>();
+builder.Services.AddTransient<DrinksService>();
+builder.Services.AddScoped<OrdersService>();
 
 var app = builder.Build();
 

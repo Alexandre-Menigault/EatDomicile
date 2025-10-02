@@ -1,10 +1,6 @@
-using EatDomicile.API.Errors;
 using EatDomicile.Core.Dtos;
-using EatDomicile.Core.Dtos.User;
-using EatDomicile.Core.Exceptions;
 using EatDomicile.Core.Models;
 using EatDomicile.Core.Services;
-using EatDomicile.Core.Services.Abstractions;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,16 +10,16 @@ namespace EatDomicile.API.Controllers;
 [Route("api/[controller]")]
 public class UsersController : Controller
 {
-    private readonly IUserService _userService;
+    private readonly UserService _userService;
 
-    public UsersController(IUserService userService)
+    public UsersController(UserService userService)
     {
         _userService = userService;
     }
     
     // GET
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<UserDTO>))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<User>))]
     public IResult Index()
     {
         var users = _userService.GetAllUsers();
@@ -32,7 +28,7 @@ public class UsersController : Controller
     }
 
     [HttpGet("{id}")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDTO))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(User))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(NotFoundResult))]
     public IResult GetById(int id)
     {
@@ -46,64 +42,20 @@ public class UsersController : Controller
     
     // POST
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(UserDTO))]
-    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
-    public async Task<IResult> Create([FromBody] CreateUserDTO createUserDTO)
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(User))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BadRequestResult))]
+    public IResult Create([FromBody] CreateUserDTO createUserDTO)
     {
         if (!ModelState.IsValid)
         {
-            var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToArray();
-            return Results.BadRequest(new ModelStateInvalidError("Impossible to update the user, the body in invalid format", errors));
+            return Results.BadRequest("Impossible to create a new user, the body in invalid format");
         }
-
-        try
-        {
-            var userDto = await _userService.CreateUser(createUserDTO);
-            var location = Url.Action("GetById", new {id = userDto.Id});
-            return Results.Created(location, userDto);
-        }
-        catch (EntityNotFoundException<Address> e)
-        {
-            return Results.BadRequest(e.Message);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
+        var userDto = _userService.CreateUser(createUserDTO);
+        return Results.Created($"api/users/{userDto.Id}", userDto);
     }
 
+    // TODO: Implementer le PUT avec un éventuel DTO dédié
     //PUT
-    [HttpPut("{id}")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
-    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
-    public async Task<IResult> Update(int id, [FromBody] UserLightDTO userLightDTO)
-    {
-        if (!ModelState.IsValid)
-        {
-            var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToArray();
-            return Results.BadRequest(new ModelStateInvalidError("Impossible to update the user, the body in invalid format", errors));
-        }
-
-        try
-        {
-            await _userService.UpdateUser(id, userLightDTO);
-            return Results.NoContent();
-        }
-        catch (EntityNotFoundException<User> e)
-        {
-            return Results.NotFound(e.Message);
-        }
-        catch (EntityNotFoundException<Address> e)
-        {
-            return Results.BadRequest(e.Message);
-        }
-        catch
-        {
-            return Results.InternalServerError();
-        }
-    }
     
     // DELETE
     [HttpDelete("{id}")]
@@ -117,9 +69,10 @@ public class UsersController : Controller
             _userService.DeleteUser(id);
             return Results.NoContent();
         }
-        catch (EntityNotFoundException<User> e)
+        catch (Exception e)
         {
-            return Results.NotFound(e.Message);
+
+            return Results.NotFound();
         }
     }
 }

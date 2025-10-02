@@ -2,92 +2,63 @@
 using EatDomicile.Core.Models;
 using EatDomicile.Core.Dtos;
 using System;
-using EatDomicile.Core.Dtos.Ingredient;
-using EatDomicile.Core.Exceptions;
-using EatDomicile.Core.Services.Abstractions;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
 
 
 namespace EatDomicile.Core.Services;
 
-public class IngredientService : IIngredientService
+public class IngredientService
 {
-    private readonly ILogger<IngredientService> _logger;
     private readonly ProductContext _context;
 
 
-    public IngredientService(ILogger<IngredientService> logger, ProductContext context)
+    public IngredientService(ProductContext context)
     {
-        _logger = logger;
         _context = context;
     }
     
     // READ
-    public async Task<IEnumerable<IngredientDTO>> GetAllIngredients()
+    public List<Ingredient> GetAllIngredients()
     {
-        var ingredientList = await _context.Ingredients.Select(i => i.ToDto()).ToListAsync();
-        return ingredientList;
+        var IngredientList = _context.Ingredients.ToList();
+        return IngredientList;
     }
 
-    public async Task<IngredientDTO> GetIngredientById(int id)
-    {
-        var ingredient = await _context.Ingredients.FirstOrDefaultAsync(i => i.Id == id);
-        if (ingredient is null)
-        {
-            _logger.LogInformation($"Ingredient not found with id: {id}");
-            throw new EntityNotFoundException<Ingredient>(id);
-        }
-        return ingredient.ToDto();
-        
-    }
-    
+
+
     // CREATE
-    public async Task<IngredientDTO> AddIngredient( CreateIngredientDto ingredientDto)
+    public IngredientDTO AddIngredient( Ingredient ingredient)
     {
-        var ingredient = ingredientDto.ToEntity();
         _context.Ingredients.Add(ingredient);
-        await _context.SaveChangesAsync();
+        _context.SaveChanges();
         return IngredientDTO.FromEntity(ingredient);
     }
 
     // UPDATE
-    public async Task UpdateIngredient(int id, CreateIngredientDto ingredientDto)
+    public Ingredient UpdateIngredient(Ingredient ingredient)
     {
-        var ingredient = await _context.Ingredients.FirstOrDefaultAsync(i => i.Id == id);
-        if (ingredient is null)
-        {
-            throw new EntityNotFoundException<Ingredient>(id);
-        }
-        
-        ingredient.Name = ingredientDto.Name.IsNullOrEmpty() ? ingredient.Name : ingredientDto.Name;
-        ingredient.Allergene = ingredientDto.Allergene != ingredient.Allergene ? ingredientDto.Allergene : ingredient.Allergene;
-        ingredient.Kcal = ingredientDto.Kcal != ingredient.Kcal ? ingredientDto.Kcal : ingredient.Kcal;
-        
+        var existingIngredient = _context.Ingredients.Find(ingredient.Id);
         _context.Ingredients.Update(ingredient);
-        await _context.SaveChangesAsync();
+        _context.SaveChanges();
+        return ingredient;
     }
 
     // DELETE
-    public async Task DeleteIngredient(int id)
+    public void DeleteIngredient(int id)
     {
-        var ingredient = await _context.Ingredients.FirstOrDefaultAsync(i => i.Id == id);
+        var ingredient = _context.Ingredients.Find(id);
         if (ingredient != null)
         {
             _context.Ingredients.Remove(ingredient);
-            await _context.SaveChangesAsync();
-            return;
+            _context.SaveChanges();
         }
-        throw new EntityNotFoundException<Ingredient>(id);
     }
 
-    public async Task<IEnumerable<IngredientDTO>> GetAllIngerdientsAllergene()
+    public List<IngredientDTO> GetAllIngerdientsAllergene()
     {
-        var ingredientList = await _context.Ingredients
+        var ingredientList = _context.Ingredients
             .Where(i => i.Allergene)
-            .Select(i => i.ToDto())
-            .ToListAsync();
+            .Select(IngredientDTO.FromEntity)
+            .ToList();
         
         return ingredientList;
     }

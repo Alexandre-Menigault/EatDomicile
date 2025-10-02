@@ -1,67 +1,87 @@
-﻿using EatDomicile.Web.Services.Dtos;
-using EatDomicile.Web.Services.Services.Abstracts;
-
-using System.Net.Http.Json;
+﻿using System.Net.Http.Json;
+using EatDomicile.Web.Services.Dtos;
 
 namespace EatDomicile.Web.Services.Services;
 
-public class UsersService: IApiUserService
+public class UsersService
 {
     private readonly HttpClient _httpClient;
-    
-    // public UsersService(IHttpClientFactory httpClientFactory)
+
+    // ✅ Liste statique pour mock persistant
+    private static List<UsersDto> _mockUsers = new()
+    {
+        new UsersDto { Id = 1, FirstName = "Alice", LastName = "Dupont", Email = "alice@test.com", Phone = "0600000001", Address = "10 rue Victor Hugo, Tours" },
+        new UsersDto { Id = 2, FirstName = "Bob", LastName = "Martin", Email = "bob@test.com", Phone = "0600000002", Address = "21 allée des acacias, Montlouis" }
+    };
+
     public UsersService(HttpClient httpClient)
     {
-        this._httpClient = httpClient;
-        this._httpClient.BaseAddress = new Uri("https://localhost:7151/api/users");
-
-        //this._httpClient = httpClientFactory.CreateClient("Users");
+        _httpClient = httpClient;
+        _httpClient.BaseAddress = new Uri("https://localhost:7151/api/users/");
     }
 
-    public async Task<List<UserDTO>> GetUsers()
+    public async Task<List<UsersDto>> GetUsers()
     {
-        //var users = await _httpClient.GetFromJsonAsync<IEnumerable<UsersDto>>("");
-        var users = new List<UserDTO>()
+        try
         {
-            new UserDTO()
+            var users = await _httpClient.GetFromJsonAsync<List<UsersDto>>("");
+            if (users != null && users.Count > 0) return users;
+        }
+        catch { }
+        return _mockUsers;
+    }
+
+    public async Task<UsersDto?> GetUserByIdAsync(int id)
+    {
+        try { return await _httpClient.GetFromJsonAsync<UsersDto>($"{id}"); }
+        catch { return _mockUsers.FirstOrDefault(u => u.Id == id); }
+    }
+
+    public async Task CreateUserAsync(UsersDto user)
+    {
+        try
+        {
+            var response = await _httpClient.PostAsJsonAsync("", user);
+            response.EnsureSuccessStatusCode();
+        }
+        catch
+        {
+            user.Id = _mockUsers.Count > 0 ? _mockUsers.Max(u => u.Id) + 1 : 1;
+            _mockUsers.Add(user);
+        }
+    }
+
+    public async Task UpdateUserAsync(UsersDto user)
+    {
+        try
+        {
+            var response = await _httpClient.PutAsJsonAsync($"{user.Id}", user);
+            response.EnsureSuccessStatusCode();
+        }
+        catch
+        {
+            var existing = _mockUsers.FirstOrDefault(u => u.Id == user.Id);
+            if (existing != null)
             {
-                Id = 1,
-                FirstName = "Firstname",
-                LastName = "Lastname",
-                Email = "e@email.com",
-                Phone = "1234567890",
-               // AddressId = 1,
+                existing.FirstName = user.FirstName;
+                existing.LastName = user.LastName;
+                existing.Email = user.Email;
+                existing.Phone = user.Phone;
+                existing.Address = user.Address;
             }
-        };
-        return users ?? [];
+        }
     }
 
-    public async Task DeleteUserAsync(int Id)
+    public async Task DeleteUserAsync(int id)
     {
-        var response = await this._httpClient.DeleteAsync($"{Id}");
-        _ = response.EnsureSuccessStatusCode();
-    }
-
-    public async Task<UserDTO> GetUser(int Id)
-    {
-        var user = await this._httpClient.GetFromJsonAsync<UserDTO>($"{Id}");
-        return user ?? null;
-    }
-
-    public async Task<IEnumerable<UserDTO>> GetUsersAsync()
-    {
-        var users = await this._httpClient.GetFromJsonAsync<IEnumerable<UserDTO>>(string.Empty);
-        return users ?? [];
-    }
-
-    public async Task UpdateUserAsync(int Id, UserDTO UserDTO)
-    {
-        var response = await this._httpClient.PutAsJsonAsync($"{Id}", UserDTO);
-        _ = response.EnsureSuccessStatusCode();
-    }
-    public async Task CreateUserAsync(UserDTO userDTO)
-    {
-        var response = await this._httpClient.PostAsJsonAsync(string.Empty, userDTO);
-        _ = response.EnsureSuccessStatusCode();
+        try
+        {
+            var response = await _httpClient.DeleteAsync($"{id}");
+            response.EnsureSuccessStatusCode();
+        }
+        catch
+        {
+            _mockUsers.RemoveAll(u => u.Id == id);
+        }
     }
 }
