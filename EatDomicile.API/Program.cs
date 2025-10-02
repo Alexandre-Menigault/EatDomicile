@@ -1,4 +1,5 @@
 using EatDomicile.Core.Contexts;
+using EatDomicile.Core.Extentions;
 using EatDomicile.Core.Services;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
@@ -15,7 +16,7 @@ builder.Services.AddDbContext<ProductContext>(options =>
     options.UseSqlServer(connexionString);
 });
 
-builder.Services.AddTransient<UserService>();
+builder.Services.AddCoreServices();
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi

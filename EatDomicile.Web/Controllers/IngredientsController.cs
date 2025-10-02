@@ -15,9 +15,10 @@ public sealed class IngredientsController : Controller
     }
 
     // GET: IngredientController
+    // LISTE
     public async Task<ActionResult> Index()
     {
-        var ingredientsDtos = await _ingredientsService.GetIngredients();
+        var ingredientsDtos = await _ingredientsService.GetIngredientsAsync();
 
         var ingredients = ingredientsDtos.Select(i => new IngredientViewModel
         {
@@ -30,10 +31,10 @@ public sealed class IngredientsController : Controller
         return View(ingredients);
     }
 
-    // GET: IngredientController/Details/5
+    // DETAILS
     public async Task<ActionResult> Details(int id)
     {
-        var ingredient = await _ingredientsService.GetIngredientByIdAsync(id);
+        var ingredient = await _ingredientsService.GetIngredient(id);
 
         if (ingredient is null)
         {
@@ -51,10 +52,10 @@ public sealed class IngredientsController : Controller
         return View(ingredientVm);
     }
 
-    // GET: IngredientController/Create
+    // CREATE
+
     public ActionResult Create() => View(new IngredientViewModel());
 
-    // POST: IngredientController/Create
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<ActionResult> Create([Bind("Name,KCal,Allergene")] IngredientViewModel vm)
@@ -63,12 +64,12 @@ public sealed class IngredientsController : Controller
 
         try
         {
-            var dto = new IngredientsDto
-            {
-                Name = vm.Name,
-                Kcal = vm.Kcal,
-                Allergene = vm.Allergene
-            };
+            var dto = new IngredientDTO(
+                id: 0,
+                name: vm.Name,
+                kcal: vm.Kcal,
+                allergene: vm.Allergene
+            );
 
             await _ingredientsService.CreateIngredientAsync(dto);
 
@@ -77,10 +78,10 @@ public sealed class IngredientsController : Controller
         catch { return View(vm); }
     }
 
-    // GET: IngredientController/Edit/5
+    // EDIT
     public async Task<ActionResult> Edit(int id)
     {
-        var ingredient = await _ingredientsService.GetIngredientByIdAsync(id);
+        var ingredient = await _ingredientsService.GetIngredient(id);
         if (ingredient is null) return NotFound();
 
         return View(new IngredientViewModel
@@ -92,7 +93,6 @@ public sealed class IngredientsController : Controller
         });
     }
 
-    // POST: IngredientController/Edit/5
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<ActionResult> Edit(int id, [Bind("Id,Name,KCal,Allergene")] IngredientViewModel vm)
@@ -101,24 +101,24 @@ public sealed class IngredientsController : Controller
 
         try
         {
-            var dto = new IngredientsDto
-            {
-                Id = vm.Id,
-                Name = vm.Name,
-                Kcal = vm.Kcal,
-                Allergene = vm.Allergene
-            };
-            await _ingredientsService.UpdateIngredientAsync(dto);
+            var dto = new IngredientDTO(
+                id: vm.Id,
+                name: vm.Name,
+                kcal: vm.Kcal,
+                allergene: vm.Allergene
+            );
+
+            await _ingredientsService.UpdateIngredientAsync(vm.Id, dto); // ✅ on passe l'id et le dto
 
             return RedirectToAction(nameof(Index));
         }
         catch { return View(vm); }
     }
 
-    // GET: IngredientController/Delete/5
+    // DELETE
     public async Task<ActionResult> Delete(int id)
     {
-        var ingredient = await _ingredientsService.GetIngredientByIdAsync(id);
+        var ingredient = await _ingredientsService.GetIngredient(id);
         if (ingredient is null) return NotFound();
 
         return View(new IngredientViewModel
@@ -130,7 +130,7 @@ public sealed class IngredientsController : Controller
         });
     }
 
-    // POST: IngredientController/Delete/5
+
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<ActionResult> DeleteConfirmed(int id)
@@ -142,4 +142,5 @@ public sealed class IngredientsController : Controller
         }
         catch { return View(nameof(Delete), new { id }); }
     }
+
 }

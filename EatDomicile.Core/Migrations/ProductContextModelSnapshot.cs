@@ -61,6 +61,116 @@ namespace EatDomicile.Core.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Addresses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            City = "Paris",
+                            Country = "France",
+                            State = "Île-de-France",
+                            Street = "123 Rue de la Paix",
+                            ZipCode = 75001
+                        },
+                        new
+                        {
+                            Id = 2,
+                            City = "Lyon",
+                            Country = "France",
+                            State = "Auvergne-Rhône-Alpes",
+                            Street = "456 Avenue des Champs",
+                            ZipCode = 69001
+                        },
+                        new
+                        {
+                            Id = 3,
+                            City = "Marseille",
+                            Country = "France",
+                            State = "Provence-Alpes-Côte d'Azur",
+                            Street = "789 Boulevard Victor Hugo",
+                            ZipCode = 13001
+                        },
+                        new
+                        {
+                            Id = 4,
+                            City = "Toulouse",
+                            Country = "France",
+                            State = "Occitanie",
+                            Street = "12 Rue du Commerce",
+                            ZipCode = 31000
+                        },
+                        new
+                        {
+                            Id = 5,
+                            City = "Nice",
+                            Country = "France",
+                            State = "Provence-Alpes-Côte d'Azur",
+                            Street = "34 Place de la République",
+                            ZipCode = 6000
+                        },
+                        new
+                        {
+                            Id = 6,
+                            City = "Nantes",
+                            Country = "France",
+                            State = "Pays de la Loire",
+                            Street = "56 Rue Saint-Michel",
+                            ZipCode = 44000
+                        },
+                        new
+                        {
+                            Id = 7,
+                            City = "Strasbourg",
+                            Country = "France",
+                            State = "Grand Est",
+                            Street = "78 Avenue Jean Jaurès",
+                            ZipCode = 67000
+                        },
+                        new
+                        {
+                            Id = 8,
+                            City = "Lille",
+                            Country = "France",
+                            State = "Hauts-de-France",
+                            Street = "90 Rue de la Liberté",
+                            ZipCode = 59000
+                        },
+                        new
+                        {
+                            Id = 9,
+                            City = "Bordeaux",
+                            Country = "France",
+                            State = "Nouvelle-Aquitaine",
+                            Street = "11 Boulevard des Allées",
+                            ZipCode = 33000
+                        },
+                        new
+                        {
+                            Id = 10,
+                            City = "Rennes",
+                            Country = "France",
+                            State = "Bretagne",
+                            Street = "22 Rue du Marché",
+                            ZipCode = 35000
+                        },
+                        new
+                        {
+                            Id = 11,
+                            City = "Montpellier",
+                            Country = "France",
+                            State = "Occitanie",
+                            Street = "33 Avenue de la Gare",
+                            ZipCode = 34000
+                        },
+                        new
+                        {
+                            Id = 12,
+                            City = "Grenoble",
+                            Country = "France",
+                            State = "Auvergne-Rhône-Alpes",
+                            Street = "44 Rue des Écoles",
+                            ZipCode = 38000
+                        });
                 });
 
             modelBuilder.Entity("EatDomicile.Core.Models.Dough", b =>
@@ -80,6 +190,58 @@ namespace EatDomicile.Core.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Doughs");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Pâte Fine"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Pâte Épaisse"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Pâte Croustillante"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Pâte Pan"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Pâte aux Céréales"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "Pâte au Fromage"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "Pâte Sans Gluten"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "Pâte à l'Ail"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Name = "Pâte Napolitaine"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Name = "Pâte New Yorkaise"
+                        });
                 });
 
             modelBuilder.Entity("EatDomicile.Core.Models.Ingredient", b =>
@@ -117,6 +279,168 @@ namespace EatDomicile.Core.Migrations
                     b.HasIndex("PizzaId");
 
                     b.ToTable("Ingredients");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Allergene = true,
+                            BurgerId = 21,
+                            Kcal = 280,
+                            Name = "Mozzarella"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Allergene = false,
+                            BurgerId = 22,
+                            Kcal = 18,
+                            Name = "Tomate"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Allergene = false,
+                            BurgerId = 22,
+                            Kcal = 23,
+                            Name = "Basilic"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Allergene = false,
+                            BurgerId = 22,
+                            Kcal = 145,
+                            Name = "Jambon"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Allergene = false,
+                            BurgerId = 23,
+                            Kcal = 22,
+                            Name = "Champignons"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Allergene = false,
+                            BurgerId = 23,
+                            Kcal = 115,
+                            Name = "Olives"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Allergene = false,
+                            BurgerId = 24,
+                            Kcal = 31,
+                            Name = "Poivrons"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Allergene = false,
+                            BurgerId = 25,
+                            Kcal = 40,
+                            Name = "Oignons"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Allergene = false,
+                            BurgerId = 26,
+                            Kcal = 494,
+                            Name = "Pepperoni"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Allergene = true,
+                            BurgerId = 27,
+                            Kcal = 131,
+                            Name = "Anchois"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Allergene = false,
+                            BurgerId = 28,
+                            Kcal = 15,
+                            Name = "Salade"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Allergene = false,
+                            BurgerId = 28,
+                            Kcal = 250,
+                            Name = "Steak Haché"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Allergene = false,
+                            BurgerId = 29,
+                            Kcal = 541,
+                            Name = "Bacon"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Allergene = true,
+                            BurgerId = 29,
+                            Kcal = 403,
+                            Name = "Cheddar"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            Allergene = false,
+                            BurgerId = 21,
+                            Kcal = 11,
+                            Name = "Cornichons"
+                        },
+                        new
+                        {
+                            Id = 16,
+                            Allergene = false,
+                            BurgerId = 22,
+                            Kcal = 172,
+                            Name = "Sauce BBQ"
+                        },
+                        new
+                        {
+                            Id = 17,
+                            Allergene = false,
+                            BurgerId = 30,
+                            Kcal = 112,
+                            Name = "Sauce Ketchup"
+                        },
+                        new
+                        {
+                            Id = 18,
+                            Allergene = true,
+                            BurgerId = 30,
+                            Kcal = 680,
+                            Name = "Sauce Mayonnaise"
+                        },
+                        new
+                        {
+                            Id = 19,
+                            Allergene = false,
+                            BurgerId = 30,
+                            Kcal = 165,
+                            Name = "Poulet"
+                        },
+                        new
+                        {
+                            Id = 20,
+                            Allergene = false,
+                            BurgerId = 25,
+                            Kcal = 25,
+                            Name = "Roquette"
+                        });
                 });
 
             modelBuilder.Entity("EatDomicile.Core.Models.Order", b =>
@@ -146,7 +470,113 @@ namespace EatDomicile.Core.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("DeliveryAddressId");
+
+                    b.HasIndex("UserId");
+
                     b.ToTable("Orders");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            DeliveryAddressId = 1,
+                            DeliveryDate = new DateTime(2025, 9, 15, 13, 15, 0, 0, DateTimeKind.Unspecified),
+                            OrderDate = new DateTime(2025, 9, 15, 12, 30, 0, 0, DateTimeKind.Unspecified),
+                            Status = 4,
+                            UserId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            DeliveryAddressId = 2,
+                            DeliveryDate = new DateTime(2025, 9, 16, 19, 45, 0, 0, DateTimeKind.Unspecified),
+                            OrderDate = new DateTime(2025, 9, 16, 19, 0, 0, 0, DateTimeKind.Unspecified),
+                            Status = 4,
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            DeliveryAddressId = 3,
+                            OrderDate = new DateTime(2025, 9, 17, 13, 15, 0, 0, DateTimeKind.Unspecified),
+                            Status = 3,
+                            UserId = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            DeliveryAddressId = 4,
+                            OrderDate = new DateTime(2025, 9, 18, 20, 30, 0, 0, DateTimeKind.Unspecified),
+                            Status = 2,
+                            UserId = 4
+                        },
+                        new
+                        {
+                            Id = 5,
+                            DeliveryAddressId = 5,
+                            OrderDate = new DateTime(2025, 9, 19, 12, 0, 0, 0, DateTimeKind.Unspecified),
+                            Status = 1,
+                            UserId = 5
+                        },
+                        new
+                        {
+                            Id = 6,
+                            DeliveryAddressId = 6,
+                            OrderDate = new DateTime(2025, 9, 20, 18, 45, 0, 0, DateTimeKind.Unspecified),
+                            Status = 0,
+                            UserId = 6
+                        },
+                        new
+                        {
+                            Id = 7,
+                            DeliveryAddressId = 7,
+                            DeliveryDate = new DateTime(2025, 9, 21, 12, 30, 0, 0, DateTimeKind.Unspecified),
+                            OrderDate = new DateTime(2025, 9, 21, 11, 30, 0, 0, DateTimeKind.Unspecified),
+                            Status = 4,
+                            UserId = 7
+                        },
+                        new
+                        {
+                            Id = 8,
+                            DeliveryAddressId = 8,
+                            OrderDate = new DateTime(2025, 9, 22, 19, 15, 0, 0, DateTimeKind.Unspecified),
+                            Status = 3,
+                            UserId = 8
+                        },
+                        new
+                        {
+                            Id = 9,
+                            DeliveryAddressId = 9,
+                            OrderDate = new DateTime(2025, 9, 23, 13, 0, 0, 0, DateTimeKind.Unspecified),
+                            Status = 1,
+                            UserId = 9
+                        },
+                        new
+                        {
+                            Id = 10,
+                            DeliveryAddressId = 10,
+                            OrderDate = new DateTime(2025, 9, 24, 20, 0, 0, 0, DateTimeKind.Unspecified),
+                            Status = 0,
+                            UserId = 10
+                        },
+                        new
+                        {
+                            Id = 11,
+                            DeliveryAddressId = 11,
+                            OrderDate = new DateTime(2025, 9, 25, 12, 45, 0, 0, DateTimeKind.Unspecified),
+                            Status = 2,
+                            UserId = 1
+                        },
+                        new
+                        {
+                            Id = 12,
+                            DeliveryAddressId = 12,
+                            DeliveryDate = new DateTime(2025, 9, 26, 19, 20, 0, 0, DateTimeKind.Unspecified),
+                            OrderDate = new DateTime(2025, 9, 26, 18, 30, 0, 0, DateTimeKind.Unspecified),
+                            Status = 4,
+                            UserId = 2
+                        });
                 });
 
             modelBuilder.Entity("EatDomicile.Core.Models.Product", b =>
@@ -214,6 +644,98 @@ namespace EatDomicile.Core.Migrations
                     b.HasIndex("AddressId");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AddressId = 1,
+                            Email = "jean.dupont@email.fr",
+                            FirstName = "Jean",
+                            LastName = "Dupont",
+                            Phone = "0612345678"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AddressId = 2,
+                            Email = "marie.martin@email.fr",
+                            FirstName = "Marie",
+                            LastName = "Martin",
+                            Phone = "0623456789"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AddressId = 3,
+                            Email = "pierre.bernard@email.fr",
+                            FirstName = "Pierre",
+                            LastName = "Bernard",
+                            Phone = "0634567890"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            AddressId = 4,
+                            Email = "sophie.dubois@email.fr",
+                            FirstName = "Sophie",
+                            LastName = "Dubois",
+                            Phone = "0645678901"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            AddressId = 5,
+                            Email = "luc.thomas@email.fr",
+                            FirstName = "Luc",
+                            LastName = "Thomas",
+                            Phone = "0656789012"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            AddressId = 6,
+                            Email = "emma.robert@email.fr",
+                            FirstName = "Emma",
+                            LastName = "Robert",
+                            Phone = "0667890123"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            AddressId = 7,
+                            Email = "antoine.petit@email.fr",
+                            FirstName = "Antoine",
+                            LastName = "Petit",
+                            Phone = "0678901234"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            AddressId = 8,
+                            Email = "julie.richard@email.fr",
+                            FirstName = "Julie",
+                            LastName = "Richard",
+                            Phone = "0689012345"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            AddressId = 9,
+                            Email = "nicolas.durand@email.fr",
+                            FirstName = "Nicolas",
+                            LastName = "Durand",
+                            Phone = "0690123456"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            AddressId = 10,
+                            Email = "claire.simon@email.fr",
+                            FirstName = "Claire",
+                            LastName = "Simon",
+                            Phone = "0601234567"
+                        });
                 });
 
             modelBuilder.Entity("OrderProduct", b =>
@@ -229,6 +751,163 @@ namespace EatDomicile.Core.Migrations
                     b.HasIndex("ProductsId");
 
                     b.ToTable("OrderProduct");
+
+                    b.HasData(
+                        new
+                        {
+                            OrdersId = 1,
+                            ProductsId = 1
+                        },
+                        new
+                        {
+                            OrdersId = 1,
+                            ProductsId = 31
+                        },
+                        new
+                        {
+                            OrdersId = 2,
+                            ProductsId = 11
+                        },
+                        new
+                        {
+                            OrdersId = 2,
+                            ProductsId = 12
+                        },
+                        new
+                        {
+                            OrdersId = 2,
+                            ProductsId = 36
+                        },
+                        new
+                        {
+                            OrdersId = 3,
+                            ProductsId = 21
+                        },
+                        new
+                        {
+                            OrdersId = 3,
+                            ProductsId = 22
+                        },
+                        new
+                        {
+                            OrdersId = 3,
+                            ProductsId = 34
+                        },
+                        new
+                        {
+                            OrdersId = 4,
+                            ProductsId = 2
+                        },
+                        new
+                        {
+                            OrdersId = 4,
+                            ProductsId = 35
+                        },
+                        new
+                        {
+                            OrdersId = 5,
+                            ProductsId = 18
+                        },
+                        new
+                        {
+                            OrdersId = 5,
+                            ProductsId = 33
+                        },
+                        new
+                        {
+                            OrdersId = 6,
+                            ProductsId = 5
+                        },
+                        new
+                        {
+                            OrdersId = 6,
+                            ProductsId = 24
+                        },
+                        new
+                        {
+                            OrdersId = 6,
+                            ProductsId = 38
+                        },
+                        new
+                        {
+                            OrdersId = 7,
+                            ProductsId = 23
+                        },
+                        new
+                        {
+                            OrdersId = 7,
+                            ProductsId = 26
+                        },
+                        new
+                        {
+                            OrdersId = 7,
+                            ProductsId = 32
+                        },
+                        new
+                        {
+                            OrdersId = 8,
+                            ProductsId = 4
+                        },
+                        new
+                        {
+                            OrdersId = 8,
+                            ProductsId = 39
+                        },
+                        new
+                        {
+                            OrdersId = 9,
+                            ProductsId = 14
+                        },
+                        new
+                        {
+                            OrdersId = 9,
+                            ProductsId = 13
+                        },
+                        new
+                        {
+                            OrdersId = 9,
+                            ProductsId = 37
+                        },
+                        new
+                        {
+                            OrdersId = 10,
+                            ProductsId = 3
+                        },
+                        new
+                        {
+                            OrdersId = 10,
+                            ProductsId = 40
+                        },
+                        new
+                        {
+                            OrdersId = 11,
+                            ProductsId = 27
+                        },
+                        new
+                        {
+                            OrdersId = 11,
+                            ProductsId = 30
+                        },
+                        new
+                        {
+                            OrdersId = 11,
+                            ProductsId = 34
+                        },
+                        new
+                        {
+                            OrdersId = 12,
+                            ProductsId = 15
+                        },
+                        new
+                        {
+                            OrdersId = 12,
+                            ProductsId = 7
+                        },
+                        new
+                        {
+                            OrdersId = 12,
+                            ProductsId = 35
+                        });
                 });
 
             modelBuilder.Entity("EatDomicile.Core.Models.Drink", b =>
@@ -242,6 +921,88 @@ namespace EatDomicile.Core.Migrations
                         .HasColumnType("int");
 
                     b.ToTable("Drinks");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 31,
+                            Name = "Coca-Cola",
+                            Price = 2.50m,
+                            Fizzy = true,
+                            KCal = 140
+                        },
+                        new
+                        {
+                            Id = 32,
+                            Name = "Coca-Cola Zero",
+                            Price = 2.50m,
+                            Fizzy = true,
+                            KCal = 0
+                        },
+                        new
+                        {
+                            Id = 33,
+                            Name = "Sprite",
+                            Price = 2.50m,
+                            Fizzy = true,
+                            KCal = 139
+                        },
+                        new
+                        {
+                            Id = 34,
+                            Name = "Fanta Orange",
+                            Price = 2.50m,
+                            Fizzy = true,
+                            KCal = 150
+                        },
+                        new
+                        {
+                            Id = 35,
+                            Name = "Ice Tea Pêche",
+                            Price = 2.90m,
+                            Fizzy = false,
+                            KCal = 120
+                        },
+                        new
+                        {
+                            Id = 36,
+                            Name = "Eau Minérale",
+                            Price = 1.50m,
+                            Fizzy = false,
+                            KCal = 0
+                        },
+                        new
+                        {
+                            Id = 37,
+                            Name = "Eau Pétillante",
+                            Price = 1.90m,
+                            Fizzy = true,
+                            KCal = 0
+                        },
+                        new
+                        {
+                            Id = 38,
+                            Name = "Jus d'Orange",
+                            Price = 3.50m,
+                            Fizzy = false,
+                            KCal = 110
+                        },
+                        new
+                        {
+                            Id = 39,
+                            Name = "Limonade",
+                            Price = 2.90m,
+                            Fizzy = true,
+                            KCal = 135
+                        },
+                        new
+                        {
+                            Id = 40,
+                            Name = "Thé Glacé Citron",
+                            Price = 2.90m,
+                            Fizzy = false,
+                            KCal = 115
+                        });
                 });
 
             modelBuilder.Entity("EatDomicile.Core.Models.Food", b =>
@@ -259,6 +1020,78 @@ namespace EatDomicile.Core.Migrations
                     b.HasBaseType("EatDomicile.Core.Models.Food");
 
                     b.ToTable("Burgers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 21,
+                            Name = "Burger Classic",
+                            Price = 8.90m,
+                            Vegetarien = false
+                        },
+                        new
+                        {
+                            Id = 22,
+                            Name = "Cheeseburger",
+                            Price = 9.50m,
+                            Vegetarien = false
+                        },
+                        new
+                        {
+                            Id = 23,
+                            Name = "Bacon Burger",
+                            Price = 10.90m,
+                            Vegetarien = false
+                        },
+                        new
+                        {
+                            Id = 24,
+                            Name = "Burger Végétarien",
+                            Price = 9.90m,
+                            Vegetarien = true
+                        },
+                        new
+                        {
+                            Id = 25,
+                            Name = "Double Cheese",
+                            Price = 12.50m,
+                            Vegetarien = false
+                        },
+                        new
+                        {
+                            Id = 26,
+                            Name = "BBQ Burger",
+                            Price = 11.50m,
+                            Vegetarien = false
+                        },
+                        new
+                        {
+                            Id = 27,
+                            Name = "Chicken Burger",
+                            Price = 9.90m,
+                            Vegetarien = false
+                        },
+                        new
+                        {
+                            Id = 28,
+                            Name = "Burger Savoyard",
+                            Price = 12.90m,
+                            Vegetarien = false
+                        },
+                        new
+                        {
+                            Id = 29,
+                            Name = "Burger Italien",
+                            Price = 11.90m,
+                            Vegetarien = false
+                        },
+                        new
+                        {
+                            Id = 30,
+                            Name = "Fish Burger",
+                            Price = 10.50m,
+                            Vegetarien = false
+                        });
                 });
 
             modelBuilder.Entity("EatDomicile.Core.Models.Pasta", b =>
@@ -274,6 +1107,98 @@ namespace EatDomicile.Core.Migrations
                         .HasColumnName("Type");
 
                     b.ToTable("Pastas");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 11,
+                            Name = "Spaghetti Carbonara",
+                            Price = 10.90m,
+                            Vegetarien = false,
+                            KCal = 450,
+                            Type = 0
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Name = "Penne Arrabiata",
+                            Price = 9.90m,
+                            Vegetarien = true,
+                            KCal = 380,
+                            Type = 1
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Name = "Fusilli au Pesto",
+                            Price = 11.50m,
+                            Vegetarien = true,
+                            KCal = 420,
+                            Type = 2
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Name = "Fettuccine Alfredo",
+                            Price = 12.90m,
+                            Vegetarien = true,
+                            KCal = 520,
+                            Type = 3
+                        },
+                        new
+                        {
+                            Id = 15,
+                            Name = "Linguine aux Fruits de Mer",
+                            Price = 14.90m,
+                            Vegetarien = false,
+                            KCal = 480,
+                            Type = 4
+                        },
+                        new
+                        {
+                            Id = 16,
+                            Name = "Rigatoni Bolognaise",
+                            Price = 11.90m,
+                            Vegetarien = false,
+                            KCal = 510,
+                            Type = 5
+                        },
+                        new
+                        {
+                            Id = 17,
+                            Name = "Farfalle au Saumon",
+                            Price = 13.50m,
+                            Vegetarien = false,
+                            KCal = 490,
+                            Type = 6
+                        },
+                        new
+                        {
+                            Id = 18,
+                            Name = "Lasagnes Maison",
+                            Price = 12.50m,
+                            Vegetarien = false,
+                            KCal = 550,
+                            Type = 9
+                        },
+                        new
+                        {
+                            Id = 19,
+                            Name = "Macaroni au Fromage",
+                            Price = 9.50m,
+                            Vegetarien = true,
+                            KCal = 470,
+                            Type = 8
+                        },
+                        new
+                        {
+                            Id = 20,
+                            Name = "Penne 4 Fromages",
+                            Price = 12.90m,
+                            Vegetarien = true,
+                            KCal = 530,
+                            Type = 1
+                        });
                 });
 
             modelBuilder.Entity("EatDomicile.Core.Models.Pizza", b =>
@@ -286,6 +1211,88 @@ namespace EatDomicile.Core.Migrations
                     b.HasIndex("DoughId");
 
                     b.ToTable("Pizzas");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Margherita",
+                            Price = 9.90m,
+                            Vegetarien = true,
+                            DoughId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Regina",
+                            Price = 11.50m,
+                            Vegetarien = false,
+                            DoughId = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Quatre Fromages",
+                            Price = 12.90m,
+                            Vegetarien = true,
+                            DoughId = 1
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Pepperoni",
+                            Price = 11.90m,
+                            Vegetarien = false,
+                            DoughId = 3
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Végétarienne",
+                            Price = 10.90m,
+                            Vegetarien = true,
+                            DoughId = 1
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "Calzone",
+                            Price = 13.50m,
+                            Vegetarien = false,
+                            DoughId = 4
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "Napolitaine",
+                            Price = 10.50m,
+                            Vegetarien = false,
+                            DoughId = 9
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "Sicilienne",
+                            Price = 12.50m,
+                            Vegetarien = false,
+                            DoughId = 1
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Name = "Paysanne",
+                            Price = 11.90m,
+                            Vegetarien = false,
+                            DoughId = 2
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Name = "Orientale",
+                            Price = 12.90m,
+                            Vegetarien = false,
+                            DoughId = 3
+                        });
                 });
 
             modelBuilder.Entity("EatDomicile.Core.Models.Ingredient", b =>
@@ -301,6 +1308,25 @@ namespace EatDomicile.Core.Migrations
                     b.Navigation("Burger");
 
                     b.Navigation("Pizza");
+                });
+
+            modelBuilder.Entity("EatDomicile.Core.Models.Order", b =>
+                {
+                    b.HasOne("EatDomicile.Core.Models.Address", "DeliveryAddress")
+                        .WithMany()
+                        .HasForeignKey("DeliveryAddressId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EatDomicile.Core.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DeliveryAddress");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("EatDomicile.Core.Models.User", b =>

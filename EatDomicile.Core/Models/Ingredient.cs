@@ -19,7 +19,7 @@ public class Ingredient
     [Required]
     [Column("Name")]
     [MaxLength(100)]
-    public required string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
 
     [Required]
     [Column("Kcal")]
@@ -30,7 +30,9 @@ public class Ingredient
     [DefaultValue(false)]
     public bool Allergene { get; set; } = false;
 
+    public int? BurgerId { get; set; }
     public Burger? Burger { get; set; } = null;
+    public int? PizzaId { get; set; }
     public Pizza? Pizza { get; set; } = null;
 
 }

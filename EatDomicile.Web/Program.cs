@@ -1,3 +1,4 @@
+using EatDomicile.Web.Services.Extentions;
 using EatDomicile.Web.Services.Services;
 
 var builder = WebApplication.CreateBuilder(args);
