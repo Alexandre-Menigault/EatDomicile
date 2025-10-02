@@ -7,12 +7,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient();
 
-builder.Services.AddTransient<UsersService>();
-builder.Services.AddScoped<IngredientsService>();
-builder.Services.AddTransient<DrinksService>();
-builder.Services.AddScoped<OrdersService>();
+// builder.Services.AddTransient<UsersService>();
+// builder.Services.AddScoped<IngredientsService>();
+// builder.Services.AddTransient<DrinksService>();
+// builder.Services.AddScoped<OrdersService>();
+
+builder.Services.AddAPIServices(builder.Configuration);
 
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
