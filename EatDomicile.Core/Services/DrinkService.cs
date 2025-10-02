@@ -69,12 +69,13 @@ public class DrinkService : IDrinkService
         {
             throw new EntityNotFoundException<Drink>(id);
         }
-        if (DrinkExistsByName(drinkDto))
+        
+        if (drinkDto.Name.IsNullOrEmpty() && drink.Name != drinkDto.Name && DrinkExistsByName(drinkDto))
         {
             throw new EntityAlreadyExistsException<Drink>(nameof(drinkDto.Name), drinkDto.Name);
         }
         
-        drink.Name = drinkDto.Name.IsNullOrEmpty() ? drink.Name : drinkDto.Name;
+        drink.Name = drinkDto.Name.IsNullOrEmpty() && drink.Name != drinkDto.Name ? drink.Name : drinkDto.Name;
         drink.Price = drinkDto.Price != drink.Price ? drinkDto.Price : drink.Price;
         drink.Fizzy = drinkDto.Fizzy != drink.Fizzy ? drinkDto.Fizzy : drink.Fizzy;
         drink.KCal = drinkDto.KCal != drink.KCal ? drinkDto.KCal : drink.KCal;

@@ -1,6 +1,8 @@
-﻿using EatDomicile.Web.Services.Dtos;
+﻿using System.Text.Json;
+using EatDomicile.Web.Services.Dtos;
 using EatDomicile.Web.Services.Services;
 using EatDomicile.Web.ViewModels;
+using EatDomicile.Web.ViewModels.Toast;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApplication1.Controllers;
@@ -59,6 +61,17 @@ public sealed class DrinksController : Controller
             var dto = new DrinkDTO
             (vm.Name, vm.Price, vm.Fizzy, vm.KCal);
             await _drinksService.CreateDrinkAsync(dto);
+            
+            var toast = new ToastViewModel()
+            {
+                Name = "Drink",
+                Message = $"Drink created with success",
+                Type = ToastType.Success
+            };
+
+            TempData["Toast"] = JsonSerializer.Serialize(toast);
+            Console.WriteLine(TempData["Toast"]);
+            
             return RedirectToAction(nameof(Index));
         }
         catch { return View(vm); }
@@ -89,12 +102,22 @@ public sealed class DrinksController : Controller
         {
             var dto = new DrinkDTO
             (
-                              vm.Name,
+                 vm.Name,
                  vm.Price,
                  vm.Fizzy,
                  vm.KCal
             );
-            await _drinksService.UpdateDrinkAsync(dto.Id, dto);
+            await _drinksService.UpdateDrinkAsync(id, dto);
+            
+            var toast = new ToastViewModel()
+            {
+                Name = "Drink",
+                Message = $"Drink id {id} updated with success",
+                Type = ToastType.Success
+            };
+
+            TempData["Toast"] = JsonSerializer.Serialize(toast);
+            Console.WriteLine(TempData["Toast"]);
             return RedirectToAction(nameof(Index));
         }
         catch { return View(vm); }
@@ -122,6 +145,17 @@ public sealed class DrinksController : Controller
         try
         {
             await _drinksService.DeleteDrinkAsync(id);
+            
+            var toast = new ToastViewModel()
+            {
+                Name = "Drink",
+                Message = $"Drink id {id} deleted with success",
+                Type = ToastType.Success
+            };
+
+            TempData["Toast"] = JsonSerializer.Serialize(toast);
+            Console.WriteLine(TempData["Toast"]);
+            
             return RedirectToAction(nameof(Index));
         }
         catch { return View(nameof(Delete), new { id }); }
