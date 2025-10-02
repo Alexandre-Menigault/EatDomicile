@@ -1,13 +1,17 @@
 ﻿using EatDomicile.Core.Abstractions;
 using EatDomicile.Core.Enums;
-using EatDomicile.Core.Models;
 
-namespace EatDomicile.Core.Dtos;
+namespace EatDomicile.Core.Dtos.Pasta;
 
 public class PastaDTO: FoodDTO, IKCal
 {
     public PastaType Type { get; set; }
     public int KCal { get; set; }
+
+    public PastaDTO()
+    {
+        
+    }
     
     public PastaDTO(string name, decimal price, bool vegetarien, PastaType type, int kcal): base(name, price, vegetarien)
     {
@@ -15,7 +19,7 @@ public class PastaDTO: FoodDTO, IKCal
         this.KCal = kcal;
     }
 
-    public static PastaDTO FromEntity(Pasta pasta)
+    public static PastaDTO FromEntity(Models.Pasta pasta)
     {
         return new PastaDTO(
             pasta.Name, 
@@ -26,9 +30,9 @@ public class PastaDTO: FoodDTO, IKCal
         );
     }
     
-    public static Pasta ToEntity(PastaDTO pastaDTO)
+    public static Models.Pasta ToEntity(PastaDTO pastaDTO)
     {
-        return new Pasta()
+        return new Models.Pasta()
         {
             Name = pastaDTO.Name,
             Price = pastaDTO.Price,

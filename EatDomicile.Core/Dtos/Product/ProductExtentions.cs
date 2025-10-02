@@ -6,7 +6,6 @@ public static class ProductExtentions
     {
         return new ProductDTO()
         {
-            Id = product.Id,
             Name = product.Name,
             Price = product.Price
         };

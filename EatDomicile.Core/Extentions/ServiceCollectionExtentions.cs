@@ -14,5 +14,6 @@ public static class ServiceCollectionExtentions
         services.AddTransient<IIngredientService, IngredientService>();
         services.AddTransient<IBurgerService, BurgerService>();
         services.AddTransient<IOrderService, OrderService>();
+        services.AddTransient<IPastaService, PastaService>();
     }
 }
