@@ -10,7 +10,7 @@ namespace EatDomicile.Core.Models
     {
         [Required]
         [Column("Type")]
-        public required PastaType Type{ get; set; }
+        public PastaType Type{ get; set; }
 
         [Required]
         [Column("Kcal")]

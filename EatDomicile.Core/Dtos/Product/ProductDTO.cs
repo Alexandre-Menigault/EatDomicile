@@ -3,7 +3,7 @@
 public class ProductDTO
 {
     public int Id { get; set; }
-    public String Name { get; set; }
+    public string Name { get; set; } = String.Empty;
     public decimal Price { get; set; }
 
     public ProductDTO()
