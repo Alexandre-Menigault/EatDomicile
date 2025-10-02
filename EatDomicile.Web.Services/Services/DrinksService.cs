@@ -1,85 +1,61 @@
 ﻿using System.Net.Http.Json;
 using EatDomicile.Web.Services.Dtos;
+using EatDomicile.Web.Services.Services.Abstracts;
 
 namespace EatDomicile.Web.Services.Services;
 
-public class DrinksService
+public class DrinksService : IApiDrinkService
 {
     private readonly HttpClient _httpClient;
 
-    private static List<DrinksDto> _mockDrinks = new()
-    {
-        new DrinksDto { Id = 1, Name = "Coca-Cola", Price = 2.5m, Fizzy = true, KCal = 140 },
-        new DrinksDto { Id = 2, Name = "Pepsi", Price = 2.3m, Fizzy = true, KCal = 138 }
-    };
 
+    // public IngredientsService(IHttpClientFactory httpClientFactory)
     public DrinksService(HttpClient httpClient)
     {
-        _httpClient = httpClient;
-        _httpClient.BaseAddress = new Uri("https://localhost:7151/api/drinks/");
+        this._httpClient = httpClient;
+        this._httpClient.BaseAddress = new Uri("https://localhost:7151/api/drinks");
+        //this._httpClient = httpClientFactory.CreateClient("Drinks");
     }
 
-    public async Task<List<DrinksDto>> GetDrinks()
+    public async Task<List<DrinkDTO>> GetDrinks()
     {
-        try
+        //var Drinks = await _httpClient.GetFromJsonAsync<IEnumerable<DrinksDto>>("");
+        var drinks = new List<DrinkDTO>()
         {
-            var drinks = await _httpClient.GetFromJsonAsync<List<DrinksDto>>("");
-            if (drinks != null && drinks.Count > 0) return drinks;
-        }
-        catch { }
-        return _mockDrinks;
-    }
-
-    public async Task<DrinksDto?> GetDrinkByIdAsync(int id)
-    {
-        try { return await _httpClient.GetFromJsonAsync<DrinksDto>($"{id}"); }
-        catch { return _mockDrinks.FirstOrDefault(d => d.Id == id); }
-    }
-
-    public async Task CreateDrinkAsync(DrinksDto drink)
-    {
-        try
-        {
-            var response = await _httpClient.PostAsJsonAsync("", drink);
-            response.EnsureSuccessStatusCode();
-        }
-        catch
-        {
-            drink.Id = _mockDrinks.Count > 0 ? _mockDrinks.Max(d => d.Id) + 1 : 1;
-            _mockDrinks.Add(drink);
-        }
-    }
-
-    public async Task UpdateDrinkAsync(DrinksDto drink)
-    {
-        try
-        {
-            var response = await _httpClient.PutAsJsonAsync($"{drink.Id}", drink);
-            response.EnsureSuccessStatusCode();
-        }
-        catch
-        {
-            var existing = _mockDrinks.FirstOrDefault(d => d.Id == drink.Id);
-            if (existing != null)
+            new DrinkDTO(name:"Name", price:10, fizzy:false, kcal:10)
             {
-                existing.Name = drink.Name;
-                existing.Price = drink.Price;
-                existing.Fizzy = drink.Fizzy;
-                existing.KCal = drink.KCal;
+
             }
-        }
+        };
+        return drinks ?? [];
     }
 
-    public async Task DeleteDrinkAsync(int id)
+    public async Task DeleteDrinkAsync(int Id)
     {
-        try
-        {
-            var response = await _httpClient.DeleteAsync($"{id}");
-            response.EnsureSuccessStatusCode();
-        }
-        catch
-        {
-            _mockDrinks.RemoveAll(d => d.Id == id);
-        }
+        var response = await this._httpClient.DeleteAsync($"{Id}");
+        _ = response.EnsureSuccessStatusCode();
+    }
+
+    public async Task<DrinkDTO> GetDrink(int Id)
+    {
+        var drink = await this._httpClient.GetFromJsonAsync<DrinkDTO>($"{Id}");
+        return drink ?? null;
+    }
+
+    public async Task<IEnumerable<DrinkDTO>> GetDrinksAsync()
+    {
+        var drinks = await this._httpClient.GetFromJsonAsync<IEnumerable<DrinkDTO>>(string.Empty);
+        return drinks ?? [];
+    }
+
+    public async Task UpdateDrinkAsync(int Id, DrinkDTO drinkDTO)
+    {
+        var response = await this._httpClient.PutAsJsonAsync($"{Id}", drinkDTO);
+        _ = response.EnsureSuccessStatusCode();
+    }
+    public async Task CreateDrinkAsync(DrinkDTO drinkDTO)
+    {
+        var response = await this._httpClient.PostAsJsonAsync(string.Empty, drinkDTO);
+        _ = response.EnsureSuccessStatusCode();
     }
 }

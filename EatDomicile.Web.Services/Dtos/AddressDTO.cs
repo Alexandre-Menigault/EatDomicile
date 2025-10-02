@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EatDomicile.Core.Models;
+﻿
+namespace EatDomicile.Web.Services.Dtos;
 
-namespace EatDomicile.Core.Dtos;
 
 public class AddressDTO
 {
@@ -31,40 +26,13 @@ public class AddressDTO
         this.ZipCode = zipCode;
         this.Country = country;
     }
-
-    public static AddressDTO FromEntity(Address address)
-    {
-        return new AddressDTO(
-            address.Id,
-            address.Street,
-             address.City,
-            address.State,
-            address.ZipCode,
-             address.Country
-            );
-        }
-
-    public static Address ToEntity(AddressDTO dto)
-        
-        {
-        return new Address
-        {
-            Id = dto.Id,
-            Street = dto.Street,
-            City = dto.City,
-            State = dto.State,
-            ZipCode = dto.ZipCode,
-            Country = dto.Country
-        };
-           
-        }
 }
 
 public static class AddressDTOExtensions
 {
     public static String AsString(this AddressDTO address)
     {
-        var sb = new StringBuilder();
+        var sb = new System.Text.StringBuilder();
         sb.Append($"<Address> {address.Street} {address.City} {address.State} {address.ZipCode} {address.Country}");
         
         return sb.ToString();

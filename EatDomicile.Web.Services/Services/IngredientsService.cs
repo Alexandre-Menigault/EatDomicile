@@ -1,84 +1,48 @@
-﻿using System.Net.Http.Json;
+﻿using System.Net.Http;
+using System.Net.Http.Json;
 using EatDomicile.Web.Services.Dtos;
+using EatDomicile.Web.Services.Services.Abstracts;
 
 namespace EatDomicile.Web.Services.Services;
 
-public class IngredientsService
+public class IngredientsService : IApiIngredientService
 {
     private readonly HttpClient _httpClient;
 
-    private static List<IngredientsDto> _mockIngredients = new()
-    {
-        new IngredientsDto { Id = 1, Name = "Tomate", Kcal = 18, Allergene = false },
-        new IngredientsDto { Id = 2, Name = "Fromage", Kcal = 300, Allergene = true }
-    };
-
+    // public IngredientsService(IHttpClientFactory httpClientFactory)
     public IngredientsService(HttpClient httpClient)
     {
-        _httpClient = httpClient;
-        _httpClient.BaseAddress = new Uri("https://localhost:7151/api/ingredients/");
+        this._httpClient = httpClient;
+        this._httpClient.BaseAddress = new Uri("https://localhost:7151/api/ingredients");
+        //this.httpClient = httpClientFactory.CreateClient("Ingredients");
     }
 
-    public async Task<List<IngredientsDto>> GetIngredients()
+    public async Task DeleteIngredientAsync(int Id)
     {
-        try
-        {
-            var ingredients = await _httpClient.GetFromJsonAsync<List<IngredientsDto>>("");
-            if (ingredients != null && ingredients.Count > 0) return ingredients;
-        }
-        catch { }
-        return _mockIngredients;
+        var response = await this._httpClient.DeleteAsync($"{Id}");
+        _ = response.EnsureSuccessStatusCode();
     }
 
-    public async Task<IngredientsDto?> GetIngredientByIdAsync(int id)
+    public async Task<IngredientDTO> GetIngredient(int Id)
     {
-        try { return await _httpClient.GetFromJsonAsync<IngredientsDto>($"{id}"); }
-        catch { return _mockIngredients.FirstOrDefault(i => i.Id == id); }
+        var ingredient = await this._httpClient.GetFromJsonAsync<IngredientDTO>($"{Id}");
+        return ingredient ?? null;
     }
 
-    public async Task CreateIngredientAsync(IngredientsDto ingredient)
+    public async Task<IEnumerable<IngredientDTO>> GetIngredientsAsync()
     {
-        try
-        {
-            var response = await _httpClient.PostAsJsonAsync("", ingredient);
-            response.EnsureSuccessStatusCode();
-        }
-        catch
-        {
-            ingredient.Id = _mockIngredients.Count > 0 ? _mockIngredients.Max(i => i.Id) + 1 : 1;
-            _mockIngredients.Add(ingredient);
-        }
+        var ingredients = await this._httpClient.GetFromJsonAsync<IEnumerable<IngredientDTO>>(string.Empty);
+        return ingredients ?? [];
     }
 
-    public async Task UpdateIngredientAsync(IngredientsDto ingredient)
+    public async Task UpdateIngredientAsync(int Id, IngredientDTO ingredientDTO)
     {
-        try
-        {
-            var response = await _httpClient.PutAsJsonAsync($"{ingredient.Id}", ingredient);
-            response.EnsureSuccessStatusCode();
-        }
-        catch
-        {
-            var existing = _mockIngredients.FirstOrDefault(i => i.Id == ingredient.Id);
-            if (existing != null)
-            {
-                existing.Name = ingredient.Name;
-                existing.Kcal = ingredient.Kcal;
-                existing.Allergene = ingredient.Allergene;
-            }
-        }
+        var response = await this._httpClient.PutAsJsonAsync($"{Id}", ingredientDTO);
+        _ = response.EnsureSuccessStatusCode();
     }
-
-    public async Task DeleteIngredientAsync(int id)
+    public async Task CreateIngredientAsync(IngredientDTO ingredientDTO)
     {
-        try
-        {
-            var response = await _httpClient.DeleteAsync($"{id}");
-            response.EnsureSuccessStatusCode();
-        }
-        catch
-        {
-            _mockIngredients.RemoveAll(i => i.Id == id);
-        }
+        var response = await this._httpClient.PostAsJsonAsync(string.Empty, ingredientDTO);
+        _ = response.EnsureSuccessStatusCode();
     }
 }

@@ -1,112 +1,50 @@
-﻿using System.Net.Http.Json;
+﻿using System.Net.Http;
+using System.Net.Http.Json;
 using EatDomicile.Web.Services.Dtos;
+using EatDomicile.Web.Services.Services.Abstracts;
 
 namespace EatDomicile.Web.Services.Services;
 
-public class OrdersService
+public class OrdersService : IApiOrderService
 {
+
     private readonly HttpClient _httpClient;
 
-
-    private static List<OrdersDto> _mockOrders = new()
-    {
-        new OrdersDto { Id = 1, UserId = 1, OrderDate = DateTime.Now.AddDays(-2), DeliveryDate = DateTime.Now.AddDays(-1), Status = "Livrée", DeliveryAddress = "12 rue de Paris", Products = new List<string> { "Ingredient:1", "Drink:1" } },
-        new OrdersDto { Id = 2, UserId = 2, OrderDate = DateTime.Now.AddDays(-1), DeliveryDate = null, Status = "En préparation", DeliveryAddress = "45 avenue Victor Hugo", Products = new List<string> { "Ingredient:2" } }
-    };
-
     public OrdersService(HttpClient httpClient)
+    //public OrdersService(IHttpClientFactory httpClientFactory)
     {
-        _httpClient = httpClient;
-        _httpClient.BaseAddress = new Uri("https://localhost:7151/api/orders/");
+        this._httpClient = httpClient;
+
+        this._httpClient.BaseAddress = new Uri("https://localhost:7151/api/orders");
+        //this._httpClient = httpClientFactory.CreateClient("Orders");
     }
 
-
-    public async Task<List<OrdersDto>> GetOrders()
+    public async Task DeleteOrderAsync(int Id)
     {
-        try
-        {
-            var orders = await _httpClient.GetFromJsonAsync<List<OrdersDto>>("");
-            if (orders != null && orders.Count > 0)
-                return orders;
-        }
-        catch
-        {
-
-        }
-
-        return _mockOrders;
+        var response = await this._httpClient.DeleteAsync($"{Id}");
+        _ = response.EnsureSuccessStatusCode();
     }
 
-
-    public async Task<OrdersDto?> GetOrderByIdAsync(int id)
+    public async Task<OrderDTO> GetOrder(int Id)
     {
-        try
-        {
-            return await _httpClient.GetFromJsonAsync<OrdersDto>($"{id}");
-        }
-        catch
-        {
-            return _mockOrders.FirstOrDefault(o => o.Id == id);
-        }
+        var order = await this._httpClient.GetFromJsonAsync<OrderDTO>($"{Id}");
+        return order ?? null;
     }
 
-
-    public async Task CreateOrderAsync(OrdersDto orderDto)
+    public async Task<IEnumerable<OrderDTO>> GetOrdersAsync()
     {
-        try
-        {
-            var response = await _httpClient.PostAsJsonAsync("", orderDto);
-            response.EnsureSuccessStatusCode();
-        }
-        catch
-        {
-
-            orderDto.Id = _mockOrders.Any() ? _mockOrders.Max(o => o.Id) + 1 : 1;
-            _mockOrders.Add(orderDto);
-            Console.WriteLine($"[MOCK] Commande ajoutée : Id={orderDto.Id}, UserId={orderDto.UserId}, Status={orderDto.Status}");
-        }
+        var orders = await this._httpClient.GetFromJsonAsync<IEnumerable<OrderDTO>>(string.Empty);
+        return orders ?? [];
     }
 
-
-    public async Task UpdateOrderAsync(OrdersDto orderDto)
+    public async Task UpdateOrderAsync(int Id, OrderDTO orderDTO)
     {
-        try
-        {
-            var response = await _httpClient.PutAsJsonAsync($"{orderDto.Id}", orderDto);
-            response.EnsureSuccessStatusCode();
-        }
-        catch
-        {
-            var existing = _mockOrders.FirstOrDefault(o => o.Id == orderDto.Id);
-            if (existing != null)
-            {
-                existing.UserId = orderDto.UserId;
-                existing.OrderDate = orderDto.OrderDate;
-                existing.DeliveryDate = orderDto.DeliveryDate;
-                existing.Status = orderDto.Status;
-                existing.DeliveryAddress = orderDto.DeliveryAddress;
-                existing.Products = orderDto.Products;
-                Console.WriteLine($"[MOCK] Commande modifiée : Id={orderDto.Id}");
-            }
-        }
+        var response = await this._httpClient.PutAsJsonAsync($"{Id}", orderDTO);
+        _ = response.EnsureSuccessStatusCode();
     }
-
-
-    public async Task DeleteOrderAsync(int id)
+    public async Task CreateOrderAsync(OrderDTO orderDTO)
     {
-        try
-        {
-            var response = await _httpClient.DeleteAsync($"{id}");
-            response.EnsureSuccessStatusCode();
-        }
-        catch
-        {
-            var order = _mockOrders.FirstOrDefault(o => o.Id == id);
-            if (order != null)
-            {
-                _mockOrders.Remove(order);
-                Console.WriteLine($"[MOCK] Commande supprimée : Id={id}");
-            }
-        }
+        var response = await this._httpClient.PostAsJsonAsync(string.Empty, orderDTO);
+        _ = response.EnsureSuccessStatusCode();
     }
 }

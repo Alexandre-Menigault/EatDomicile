@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EatDomicile.Core.Models;
+﻿using System.Text;
 
-namespace EatDomicile.Core.Dtos;
+namespace EatDomicile.Web.Services.Dtos;
 
 public class UserDTO
 {
@@ -30,31 +25,6 @@ public class UserDTO
         this.Email = email;
         this.Phone = phone;
         this.Address = address!;
-    }
-
-    public static UserDTO FromEntity(User user)
-    {
-        return new UserDTO(
-            user.Id,
-            user.FirstName,
-            user.LastName,
-            user.Email,
-            user.Phone,
-            user.Address is not null ? AddressDTO.FromEntity(user.Address) : new AddressDTO() 
-        );
-    }
-
-    public static User ToEntity(UserDTO dto)
-    {
-        return new User
-        {
-            Id = dto.Id,
-            FirstName = dto.FirstName,
-            LastName = dto.LastName,
-            Email = dto.Email,
-            Phone = dto.Phone,
-            Address = AddressDTO.ToEntity(dto.Address) 
-        };
     }
 }
 

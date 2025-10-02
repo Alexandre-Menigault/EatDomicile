@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿
 using System.Text;
-using System.Threading.Tasks;
-using EatDomicile.Core.Models;
 
-namespace EatDomicile.Core.Dtos;
+namespace EatDomicile.Web.Services.Dtos;
 
 public class UserLightDTO
 {
@@ -29,31 +25,6 @@ public class UserLightDTO
         this.Phone = phone;
         this.AddressId = address.Id;
     }
-
-    public static UserLightDTO FromEntity(User user)
-    {
-        return new UserLightDTO(
-            user.Id,
-            user.FirstName,
-            user.LastName,
-            user.Email,
-            user.Phone,
-            AddressDTO.FromEntity(user.Address) 
-        );
-    }
-
-    // public static User ToEntity(UserDTO dto)
-    // {
-    //     return new User
-    //     {
-    //         Id = dto.Id,
-    //         FirstName = dto.FirstName,
-    //         LastName = dto.LastName,
-    //         Email = dto.Email,
-    //         Phone = dto.Phone,
-    //         Address = AddressDTO.ToEntity(dto.Address) 
-    //     };
-    // }
 }
 
 public static class UserLightDTOExtensions

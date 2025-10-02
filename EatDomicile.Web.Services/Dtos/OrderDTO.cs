@@ -1,8 +1,6 @@
-﻿using System.Text;
-using EatDomicile.Core.Enums;
-using EatDomicile.Core.Models;
-
-namespace EatDomicile.Core.Dtos;
+﻿using EatDomicile.Web.Services.Enums;
+using System.Text;
+namespace EatDomicile.Web.Services.Dtos;
 
 public class OrderDTO
 {
@@ -20,7 +18,7 @@ public class OrderDTO
     public int UserId { get; set; }
     //public AddressDTO? DeliveryAddress { get; set; }
     public int DeliveryAddressId { get; set; }
-    
+
     public OrderDTO(int id, DateTime orderDate, DateTime? deliveryDate, OrderStatus status, List<ProductDTO>? products, int userId, int deliveryAddressId)
     {
         this.Id = id;
@@ -30,36 +28,6 @@ public class OrderDTO
         this.Products = products;
         this.UserId = userId;
         this.DeliveryAddressId = deliveryAddressId;
-    }
-
-    public static OrderDTO FromEntity(Order order)
-    {
-        return new OrderDTO(
-            order.Id,
-            order.OrderDate,
-            order.DeliveryDate,
-            order.Status,
-            order.Products == null ? null :ProductDTO.FromEntities(order.Products),
-            order.UserId, //== null ? null : UserDTO.FromEntity(order.User),
-            order.DeliveryAddressId
-        )
-        {
-            ProductIds = order.Products?.Select(p => p.Id).ToList() ?? new List<int>()
-        };
-    }
-
-    public static Order ToEntity(OrderDTO order)
-    {
-        return new Order()
-        {
-            Id = order.Id,
-            OrderDate = order.OrderDate,
-            DeliveryDate = order.DeliveryDate,
-            Status = order.Status,
-            Products = null, //= order.Products == null ? null :ProductDTO.ToEntities(order.Products),
-            UserId = order.UserId, // = order.User == null ? null : UserDTO.ToEntity(order.User),
-            DeliveryAddressId = order.DeliveryAddressId
-        };
     }
     
 }
