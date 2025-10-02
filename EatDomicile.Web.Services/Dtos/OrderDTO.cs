@@ -14,11 +14,16 @@ public class OrderDTO
     public List<ProductDTO>? Products { get; set; }
     public List<int> ProductIds { get; set; } = new();
 
-    // public UserDTO? User { get; set; }
+    public UserDTO User { get; set; }
     public int UserId { get; set; }
-    //public AddressDTO? DeliveryAddress { get; set; }
+    public AddressDTO DeliveryAddress { get; set; }
     public int DeliveryAddressId { get; set; }
 
+    public OrderDTO()
+    {
+        
+    }
+    
     public OrderDTO(int id, DateTime orderDate, DateTime? deliveryDate, OrderStatus status, List<ProductDTO>? products, int userId, int deliveryAddressId)
     {
         this.Id = id;

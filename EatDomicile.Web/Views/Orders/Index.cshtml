@@ -49,25 +49,10 @@
                 <td>@order.UserName</td>
                 <td>@order.DeliveryAddress</td>
                 <td>
-                    <div>
-                        <strong>Ingrédients :</strong>
-                        <ul class="mb-1">
-                            @foreach (var p in order.Products.Where(p => p.StartsWith("Ingredient:")))
-                            {
-                                <li>@p.Replace("Ingredient:", "")</li>
-                            }
-                        </ul>
-                        <strong>Boissons :</strong>
-                        <ul>
-                            @foreach (var p in order.Products.Where(p => p.StartsWith("Drink:")))
-                            {
-                                <li>@p.Replace("Drink:", "")</li>
-                            }
-                        </ul>
-                    </div>
+                    @(order.Products?.Count ?? 0)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@order.Id" class="btn btn-sm btn-warning">Modifier</a> |
+                    <a asp-action="Edit" asp-route-id="@order.Id" class="btn btn-sm btn-warning disabled" disabled="true">Modifier</a> |
                     <a asp-action="Details" asp-route-id="@order.Id" class="btn btn-sm btn-info">Détails</a> |
                     <a asp-action="Delete" asp-route-id="@order.Id" class="btn btn-sm btn-danger">Supprimer</a>
                 </td>
