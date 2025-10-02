@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using EatDomicile.Web.Services.Dtos;
 
 namespace EatDomicile.Web.ViewModels;
 
@@ -24,6 +25,6 @@ public class UserViewModel
     public string Phone { get; set; } = string.Empty;
 
     [Display(Name = "Adresse")]
-    public string Address { get; set; } = string.Empty;
+    public AddressDTO Address { get; set; }
 
 }

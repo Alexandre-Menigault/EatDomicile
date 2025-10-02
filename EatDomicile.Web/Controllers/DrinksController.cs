@@ -1,7 +1,6 @@
 ﻿using EatDomicile.Web.Services.Dtos;
 using EatDomicile.Web.Services.Services;
 using EatDomicile.Web.ViewModels;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApplication1.Controllers;
@@ -15,12 +14,10 @@ public sealed class DrinksController : Controller
         this._drinksService = drinksService;
     }
 
-
+    // GET: DrinksController
     public async Task<ActionResult> Index()
     {
-
-
-        var drinksDtos = await _drinksService.GetDrinks();
+        var drinksDtos = await _drinksService.GetDrinksAsync();
 
         var drinks = drinksDtos.Select(d => new DrinkViewModel
         {
@@ -34,132 +31,90 @@ public sealed class DrinksController : Controller
         return View(drinks);
     }
 
-    // GET: UserController/Details/5
     public async Task<ActionResult> Details(int id)
     {
-        var drink = await this._drinksService.GetDrinkByIdAsync(id);
+        var drink = await _drinksService.GetDrink(id);
+        if (drink is null) return NotFound();
 
-        if (drink is null)
-        {
-            return this.NotFound();
-        }
-
-        var drinkViewModel = new DrinkViewModel
+        return View(new DrinkViewModel
         {
             Id = drink.Id,
             Name = drink.Name,
             Price = drink.Price,
             Fizzy = drink.Fizzy,
             KCal = drink.KCal
-        };
-        return this.View(drinkViewModel);
+        });
     }
 
-    // GET: UserController/Create
-    public ActionResult Create()
-    {
-        var drinkCreateViewModel = new DrinkViewModel();
-        return View(drinkCreateViewModel);
-    }
+    public ActionResult Create() => View(new DrinkViewModel());
 
-    // POST: UserController/Create
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<ActionResult> Create([Bind("Name,Price,Fizzy,KCal")] DrinkViewModel drinkCreateViewModel)
+    public async Task<ActionResult> Create([Bind("Name,Price,Fizzy,KCal")] DrinkViewModel vm)
     {
-        if (!ModelState.IsValid)
-        {
-            return View(drinkCreateViewModel);
-        }
+        if (!ModelState.IsValid) return View(vm);
+
         try
         {
-            var newDrink = new DrinksDto
-            {
-                Name = drinkCreateViewModel.Name,
-                Price = drinkCreateViewModel.Price,
-                Fizzy = drinkCreateViewModel.Fizzy,
-                KCal = drinkCreateViewModel.KCal
-            };
-            await _drinksService.CreateDrinkAsync(newDrink);
+            var dto = new DrinkDTO
+            (vm.Name, vm.Price, vm.Fizzy, vm.KCal);
+            await _drinksService.CreateDrinkAsync(dto);
             return RedirectToAction(nameof(Index));
         }
-        catch
-        {
-            return View();
-        }
+        catch { return View(vm); }
     }
 
-    // GET: UserController/Edit/5
     public async Task<ActionResult> Edit(int id)
     {
-        var drink = await this._drinksService.GetDrinkByIdAsync(id);
-        if (drink is null)
-        {
-            return this.NotFound();
-        }
+        var drink = await _drinksService.GetDrink(id);
+        if (drink is null) return NotFound();
 
-        var drinkEditViewModel = new DrinkViewModel
+        return View(new DrinkViewModel
         {
             Id = drink.Id,
             Name = drink.Name,
             Price = drink.Price,
             Fizzy = drink.Fizzy,
             KCal = drink.KCal
-        };
-        return View(drinkEditViewModel);
+        });
     }
 
-    // POST: UserController/Edit/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<ActionResult> Edit(int id, [Bind("Id,Name,Price,Fizzy,KCal")] DrinkViewModel drinkEditViewModel)
+    public async Task<ActionResult> Edit(int id, [Bind("Id,Name,Price,Fizzy,KCal")] DrinkViewModel vm)
     {
-        if (!ModelState.IsValid)
-        {
-            return View(drinkEditViewModel);
-        }
+        if (!ModelState.IsValid) return View(vm);
 
         try
         {
-            var updatedDrink = new DrinksDto
-            {
-                Id = drinkEditViewModel.Id,
-                Name = drinkEditViewModel.Name,
-                Price = drinkEditViewModel.Price,
-                Fizzy = drinkEditViewModel.Fizzy,
-                KCal = drinkEditViewModel.KCal
-            };
-            await _drinksService.UpdateDrinkAsync(updatedDrink);
-
+            var dto = new DrinkDTO
+            (
+                              vm.Name,
+                 vm.Price,
+                 vm.Fizzy,
+                 vm.KCal
+            );
+            await _drinksService.UpdateDrinkAsync(dto.Id, dto);
             return RedirectToAction(nameof(Index));
         }
-        catch
-        {
-            return View();
-        }
+        catch { return View(vm); }
     }
 
-    // GET: UserController/Delete/5
     public async Task<ActionResult> Delete(int id)
     {
-        var drink = await this._drinksService.GetDrinkByIdAsync(id);
-        if (drink is null)
-        {
-            return this.NotFound();
-        }
+        var drink = await _drinksService.GetDrink(id);
+        if (drink is null) return NotFound();
 
-        var drinkDeleteViewModel = new DrinkViewModel
+        return View(new DrinkViewModel
         {
             Id = drink.Id,
             Name = drink.Name,
             Price = drink.Price,
             Fizzy = drink.Fizzy,
             KCal = drink.KCal
-        };
-        return View(drinkDeleteViewModel);
+        });
     }
 
-    // POST: UserController/Delete/5
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<ActionResult> DeleteConfirmed(int id)
@@ -169,9 +124,6 @@ public sealed class DrinksController : Controller
             await _drinksService.DeleteDrinkAsync(id);
             return RedirectToAction(nameof(Index));
         }
-        catch
-        {
-            return this.View(nameof(this.Details));
-        }
+        catch { return View(nameof(Delete), new { id }); }
     }
 }

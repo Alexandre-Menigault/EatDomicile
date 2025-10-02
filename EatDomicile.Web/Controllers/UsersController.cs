@@ -14,6 +14,7 @@ public sealed class UsersController : Controller
         _usersService = usersService;
     }
 
+    // LISTE
     public async Task<ActionResult> Index()
     {
         var usersDtos = await _usersService.GetUsers();
@@ -31,9 +32,10 @@ public sealed class UsersController : Controller
         return View(users);
     }
 
+    // DETAILS
     public async Task<ActionResult> Details(int id)
     {
-        var user = await _usersService.GetUserByIdAsync(id);
+        var user = await _usersService.GetUser(id);
         if (user is null) return NotFound();
 
         return View(new UserViewModel
@@ -47,6 +49,7 @@ public sealed class UsersController : Controller
         });
     }
 
+    // CREATION
     public ActionResult Create() => View(new UserViewModel());
 
     [HttpPost]
@@ -57,7 +60,7 @@ public sealed class UsersController : Controller
 
         try
         {
-            var dto = new UsersDto
+            var dto = new UserDTO
             {
                 FirstName = vm.FirstName,
                 LastName = vm.LastName,
@@ -72,9 +75,10 @@ public sealed class UsersController : Controller
         catch { return View(vm); }
     }
 
+    // EDITION
     public async Task<ActionResult> Edit(int id)
     {
-        var user = await _usersService.GetUserByIdAsync(id);
+        var user = await _usersService.GetUser(id);
         if (user is null) return NotFound();
 
         return View(new UserViewModel
@@ -90,13 +94,13 @@ public sealed class UsersController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<ActionResult> Edit(int id, [Bind("Id,FirstName,LastName,Email,Phone,AddressId")] UserViewModel vm)
+    public async Task<ActionResult> Edit(int id, [Bind("Id,FirstName,LastName,Email,Phone,Address")] UserViewModel vm)
     {
         if (!ModelState.IsValid) return View(vm);
 
         try
         {
-            var dto = new UsersDto
+            var dto = new UserDTO
             {
                 Id = vm.Id,
                 FirstName = vm.FirstName,
@@ -105,16 +109,17 @@ public sealed class UsersController : Controller
                 Phone = vm.Phone,
                 Address = vm.Address
             };
-            await _usersService.UpdateUserAsync(dto);
+            await _usersService.UpdateUserAsync(dto.Id, dto);
 
             return RedirectToAction(nameof(Index));
         }
         catch { return View(vm); }
     }
 
+    // SUPPRESSION
     public async Task<ActionResult> Delete(int id)
     {
-        var user = await _usersService.GetUserByIdAsync(id);
+        var user = await _usersService.GetUser(id);
         if (user is null) return NotFound();
 
         return View(new UserViewModel
