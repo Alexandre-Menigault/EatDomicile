@@ -13,7 +13,11 @@ public sealed class OrdersController : Controller
     private readonly IngredientsService _ingredientsService;
     private readonly DrinksService _drinksService;
 
-    public OrdersController(OrdersService ordersService, UsersService usersService, IngredientsService ingredientsService, DrinksService drinksService)
+    public OrdersController(
+        OrdersService ordersService,
+        UsersService usersService,
+        IngredientsService ingredientsService,
+        DrinksService drinksService)
     {
         _ordersService = ordersService;
         _usersService = usersService;
@@ -21,9 +25,10 @@ public sealed class OrdersController : Controller
         _drinksService = drinksService;
     }
 
+    // LISTE DES COMMANDES
     public async Task<ActionResult> Index()
     {
-        var ordersDtos = await _ordersService.GetOrders();
+        var ordersDtos = await _ordersService.GetOrdersAsync();  // ✅ corrige ici
         var usersDtos = await _usersService.GetUsers();
 
         var orders = ordersDtos.Select(o => new OrderViewModel
@@ -36,15 +41,16 @@ public sealed class OrdersController : Controller
             DeliveryAddress = o.DeliveryAddress,
             Products = o.Products,
             UserName = usersDtos.FirstOrDefault(u => u.Id == o.UserId)?.FirstName + " " +
-               usersDtos.FirstOrDefault(u => u.Id == o.UserId)?.LastName
+                       usersDtos.FirstOrDefault(u => u.Id == o.UserId)?.LastName
         });
 
         return View(orders);
     }
 
+    // DETAILS
     public async Task<ActionResult> Details(int id)
     {
-        var order = await _ordersService.GetOrderByIdAsync(id);
+        var order = await _ordersService.GetOrder(id);  // ✅ corrige ici
         if (order is null) return NotFound();
 
         return View(new OrderViewModel
@@ -53,11 +59,13 @@ public sealed class OrdersController : Controller
             UserId = order.UserId,
             OrderDate = order.OrderDate,
             DeliveryDate = order.DeliveryDate,
-            Status = order.Status
+            Status = order.Status,
+            DeliveryAddress = order.DeliveryAddress,
+            Products = order.Products
         });
     }
 
-
+    // CREATION
     public async Task<ActionResult> Create()
     {
         var usersDtos = await _usersService.GetUsers();
@@ -73,26 +81,25 @@ public sealed class OrdersController : Controller
             .ToList();
 
         ViewBag.Products = ingredientsDtos
-        .Select(i => new SelectListItem
-        {
-            Value = i.Id.ToString(),
-            Text = $"{i.Name} ({i.Kcal} kcal)"
-        })
-        .ToList();
+            .Select(i => new SelectListItem
+            {
+                Value = i.Id.ToString(),
+                Text = $"{i.Name} ({i.Kcal} kcal)"
+            })
+            .ToList();
 
         ViewBag.Drinks = drinksDtos
-        .Select(d => new SelectListItem
-        {
-            Value = d.Id.ToString(),
-            Text = $"{d.Name} ({d.KCal} kcal)"
-        })
-        .ToList();
+            .Select(d => new SelectListItem
+            {
+                Value = d.Id.ToString(),
+                Text = $"{d.Name} ({d.KCal} kcal)"
+            })
+            .ToList();
 
         var firstUser = usersDtos.FirstOrDefault();
 
         return View(new OrderViewModel
         {
-
             DeliveryAddress = firstUser?.Address ?? ""
         });
     }
@@ -146,10 +153,8 @@ public sealed class OrdersController : Controller
                 Products = new List<string>()
             };
 
-
             if (viewModel.SelectedProducts?.Any() == true)
                 dto.Products.AddRange(viewModel.SelectedProducts.Select(p => $"Ingredient:{p}"));
-
 
             if (viewModel.SelectedDrinks?.Any() == true)
                 dto.Products.AddRange(viewModel.SelectedDrinks.Select(d => $"Drink:{d}"));
@@ -166,11 +171,10 @@ public sealed class OrdersController : Controller
         }
     }
 
-
-
+    // EDIT
     public async Task<ActionResult> Edit(int id)
     {
-        var order = await _ordersService.GetOrderByIdAsync(id);
+        var order = await _ordersService.GetOrder(id); // ✅ corrige ici
         if (order is null) return NotFound();
 
         return View(new OrderViewModel
@@ -180,47 +184,16 @@ public sealed class OrdersController : Controller
             OrderDate = order.OrderDate,
             DeliveryDate = order.DeliveryDate,
             Status = order.Status,
-            DeliveryAddress = order.DeliveryAddress
+            DeliveryAddress = order.DeliveryAddress,
+            Products = order.Products
         });
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<ActionResult> Edit(int id, [Bind("Id,UserId,OrderDate,DeliveryDate,Status,DeliveryAddress,SelectedProducts")] OrderViewModel viewModel)
+    public async Task<ActionResult> Edit(int id, [Bind("Id,UserId,OrderDate,DeliveryDate,Status,DeliveryAddress,SelectedProducts,SelectedDrinks")] OrderViewModel viewModel)
     {
-        if (!ModelState.IsValid)
-        {
-
-            var usersDtos = await _usersService.GetUsers();
-            var ingredientsDtos = await _ingredientsService.GetIngredients();
-            var drinksDtos = await _drinksService.GetDrinks();
-
-            ViewBag.Users = usersDtos
-                .Select(u => new SelectListItem
-                {
-                    Value = u.Id.ToString(),
-                    Text = $"{u.FirstName} {u.LastName}"
-                })
-                .ToList();
-
-            ViewBag.Products = ingredientsDtos
-                .Select(i => new SelectListItem
-                {
-                    Value = $"Ingredient:{i.Id}",
-                    Text = $"{i.Name} ({i.Kcal} kcal)"
-                })
-                .ToList();
-
-            ViewBag.Drinks = drinksDtos
-                .Select(d => new SelectListItem
-                {
-                    Value = $"Drink:{d.Id}",
-                    Text = $"{d.Name} ({d.KCal} kcal)"
-                })
-                .ToList();
-
-            return View(viewModel);
-        }
+        if (!ModelState.IsValid) return View(viewModel);
 
         try
         {
@@ -232,10 +205,16 @@ public sealed class OrdersController : Controller
                 DeliveryDate = viewModel.DeliveryDate,
                 Status = viewModel.Status,
                 DeliveryAddress = viewModel.DeliveryAddress,
-                Products = viewModel.SelectedProducts?.Select(p => p.ToString()).ToList() ?? new List<string>()
+                Products = new List<string>()
             };
 
-            await _ordersService.UpdateOrderAsync(dto);
+            if (viewModel.SelectedProducts?.Any() == true)
+                dto.Products.AddRange(viewModel.SelectedProducts.Select(p => $"Ingredient:{p}"));
+
+            if (viewModel.SelectedDrinks?.Any() == true)
+                dto.Products.AddRange(viewModel.SelectedDrinks.Select(d => $"Drink:{d}"));
+
+            await _ordersService.UpdateOrderAsync(viewModel.Id, dto);
 
             TempData["Message"] = "Commande mise à jour avec succès ✅";
             return RedirectToAction(nameof(Index));
@@ -247,9 +226,10 @@ public sealed class OrdersController : Controller
         }
     }
 
+    // DELETE
     public async Task<ActionResult> Delete(int id)
     {
-        var order = await _ordersService.GetOrderByIdAsync(id);
+        var order = await _ordersService.GetOrder(id); // ✅ corrige ici
         if (order is null) return NotFound();
 
         return View(new OrderViewModel
@@ -271,6 +251,9 @@ public sealed class OrdersController : Controller
             await _ordersService.DeleteOrderAsync(id);
             return RedirectToAction(nameof(Index));
         }
-        catch { return View(nameof(Delete), new { id }); }
+        catch
+        {
+            return View(nameof(Delete), new { id });
+        }
     }
 }
