@@ -46,20 +46,10 @@
             <h5 class="mb-3">Produits associés</h5>
             <div class="row">
                 <div class="col-md-6">
-                    <strong>Ingrédients :</strong>
-                    <ul class="list-group mb-3">
-                        @foreach (var p in Model.Products.Where(p => p.StartsWith("Ingredient:")))
+                    <ul class="list-group">
+                        @foreach (var p in Model.Products)
                         {
-                            <li class="list-group-item">@p.Replace("Ingredient:", "")</li>
-                        }
-                    </ul>
-                </div>
-                <div class="col-md-6">
-                    <strong>Boissons :</strong>
-                    <ul class="list-group mb-3">
-                        @foreach (var p in Model.Products.Where(p => p.StartsWith("Drink:")))
-                        {
-                            <li class="list-group-item">@p.Replace("Drink:", "")</li>
+                            <li class="list-group-item"><strong>@p</strong></li>
                         }
                     </ul>
                 </div>
@@ -69,6 +59,6 @@
 }
 
 <div class="mt-4">
-    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Modifier</a>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning disabled" disabled="true">Modifier</a>
     <a asp-action="Index" class="btn btn-secondary">Retour</a>
 </div>

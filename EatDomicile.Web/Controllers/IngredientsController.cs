@@ -95,7 +95,7 @@ public sealed class IngredientsController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<ActionResult> Edit(int id, [Bind("Id,Name,KCal,Allergene")] IngredientViewModel vm)
+    public async Task<ActionResult> Edit(int id, [Bind("Id,Name,Kcal,Allergene")] IngredientViewModel vm)
     {
         if (!ModelState.IsValid) return View(vm);
 

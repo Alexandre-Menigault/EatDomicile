@@ -21,7 +21,7 @@
     <dd class="col-sm-9">@Html.DisplayFor(m => m.KCal)</dd>
 </dl>
 
-<form asp-action="Delete" method="post">
+<form asp-action="DeleteConfirmed" method="post">
     <input type="hidden" asp-for="Id" />
     <button type="submit" class="btn btn-danger">Supprimer</button>
     <a asp-action="Index" class="btn btn-secondary">Annuler</a>

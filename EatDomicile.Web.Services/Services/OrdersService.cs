@@ -10,13 +10,13 @@ public class OrdersService : IApiOrderService
 
     private readonly HttpClient _httpClient;
 
-    public OrdersService(HttpClient httpClient)
-    //public OrdersService(IHttpClientFactory httpClientFactory)
+    // public OrdersService(HttpClient httpClient)
+    public OrdersService(IHttpClientFactory httpClientFactory)
     {
-        this._httpClient = httpClient;
-
-        this._httpClient.BaseAddress = new Uri("https://localhost:7151/api/orders");
-        //this._httpClient = httpClientFactory.CreateClient("Orders");
+    //     this._httpClient = httpClient;
+    //
+    //     this._httpClient.BaseAddress = new Uri("https://localhost:7151/api/orders");
+        this._httpClient = httpClientFactory.CreateClient("orders");
     }
 
     public async Task DeleteOrderAsync(int Id)

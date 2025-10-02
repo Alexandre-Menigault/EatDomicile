@@ -54,6 +54,9 @@
     <main role="main" class="pb-3">
         @RenderBody()
     </main>
+    <div class="toast-container position-fixed bottom-0 align-self-center p-3">
+        <partial name="_Toast" />
+    </div>
 </div>
 
 <footer class="border-top footer text-muted">
@@ -65,5 +68,17 @@
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>
 @await RenderSectionAsync("Scripts", required: false)
+
+<!-- Toast -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+      let toastElList = [].slice.call(document.querySelectorAll('.toast'))
+      toastElList.map(function (toastEl) {
+          let toast = new bootstrap.Toast(toastEl)
+          toast.show()
+      })
+  });
+</script>
+
 </body>
 </html>

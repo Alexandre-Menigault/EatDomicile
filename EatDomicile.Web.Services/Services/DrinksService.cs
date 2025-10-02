@@ -9,12 +9,12 @@ public class DrinksService : IApiDrinkService
     private readonly HttpClient _httpClient;
 
 
-    // public IngredientsService(IHttpClientFactory httpClientFactory)
-    public DrinksService(HttpClient httpClient)
+    public DrinksService(IHttpClientFactory httpClientFactory)
+    // public DrinksService(HttpClient httpClient)
     {
-        this._httpClient = httpClient;
-        this._httpClient.BaseAddress = new Uri("https://localhost:7151/api/drinks");
-        //this._httpClient = httpClientFactory.CreateClient("Drinks");
+        // this._httpClient = httpClient;
+        // this._httpClient.BaseAddress = new Uri("https://localhost:7151/api/drinks");
+        this._httpClient = httpClientFactory.CreateClient("drinks");
     }
 
     public async Task<List<DrinkDTO>> GetDrinks()

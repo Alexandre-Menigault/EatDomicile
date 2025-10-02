@@ -8,30 +8,30 @@ public class UsersService : IApiUserService
 {
     private readonly HttpClient _httpClient;
 
-    // public UsersService(IHttpClientFactory httpClientFactory)
-    public UsersService(HttpClient httpClient)
+    public UsersService(IHttpClientFactory httpClientFactory)
+    // public UsersService(HttpClient httpClient)
     {
-        this._httpClient = httpClient;
-        this._httpClient.BaseAddress = new Uri("https://localhost:7151/api/users");
+        // this._httpClient = httpClient;
+        // this._httpClient.BaseAddress = new Uri("https://localhost:7151/api/users");
 
-        //this._httpClient = httpClientFactory.CreateClient("Users");
+        this._httpClient = httpClientFactory.CreateClient("users");
     }
 
-    public async Task<List<UserDTO>> GetUsers()
+    public async Task<IEnumerable<UserDTO>> GetUsers()
     {
-        //var users = await _httpClient.GetFromJsonAsync<IEnumerable<UsersDto>>("");
-        var users = new List<UserDTO>()
-        {
-            new UserDTO()
-            {
-                Id = 1,
-                FirstName = "Firstname",
-                LastName = "Lastname",
-                Email = "e@email.com",
-                Phone = "1234567890",
-               // AddressId = 1,
-            }
-        };
+        var users = await _httpClient.GetFromJsonAsync<IEnumerable<UserDTO>>("");
+        // var users = new List<UserDTO>()
+        // {
+        //     new UserDTO()
+        //     {
+        //         Id = 1,
+        //         FirstName = "Firstname",
+        //         LastName = "Lastname",
+        //         Email = "e@email.com",
+        //         Phone = "1234567890",
+        //        // AddressId = 1,
+        //     }
+        // };
         return users ?? [];
     }
 

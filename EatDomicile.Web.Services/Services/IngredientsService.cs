@@ -9,12 +9,12 @@ public class IngredientsService : IApiIngredientService
 {
     private readonly HttpClient _httpClient;
 
-    // public IngredientsService(IHttpClientFactory httpClientFactory)
-    public IngredientsService(HttpClient httpClient)
+    public IngredientsService(IHttpClientFactory httpClientFactory)
+    // public IngredientsService(HttpClient httpClient)
     {
-        this._httpClient = httpClient;
-        this._httpClient.BaseAddress = new Uri("https://localhost:7151/api/ingredients");
-        //this.httpClient = httpClientFactory.CreateClient("Ingredients");
+        // this._httpClient = httpClient;
+        // this._httpClient.BaseAddress = new Uri("https://localhost:7151/api/ingredients");
+        this._httpClient = httpClientFactory.CreateClient("ingredients");
     }
 
     public async Task DeleteIngredientAsync(int Id)

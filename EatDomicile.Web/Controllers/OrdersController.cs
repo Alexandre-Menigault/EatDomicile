@@ -30,7 +30,6 @@ public sealed class OrdersController : Controller
     public async Task<ActionResult> Index()
     {
         var ordersDtos = await _ordersService.GetOrdersAsync();
-        var usersDtos = await _usersService.GetUsers();
 
         var orders = ordersDtos.Select(o => new OrderViewModel
         {
@@ -39,10 +38,9 @@ public sealed class OrdersController : Controller
             OrderDate = o.OrderDate,
             DeliveryDate = o.DeliveryDate,
             Status = o.Status.ToString(),
-            DeliveryAddress = $"AdresseId: {o.DeliveryAddressId}",
+            DeliveryAddress = $"{o.DeliveryAddress.Street} - {o.DeliveryAddress.City}",
             Products = o.Products?.Select(p => $"{p.GetType().Name}:{p.Id}").ToList() ?? new List<string>(),
-            UserName = usersDtos.FirstOrDefault(u => u.Id == o.UserId)?.FirstName + " " +
-                       usersDtos.FirstOrDefault(u => u.Id == o.UserId)?.LastName
+            UserName = $"{o.User.FirstName} {o.User.LastName}"
         });
 
         return View(orders);
@@ -54,16 +52,19 @@ public sealed class OrdersController : Controller
         var order = await _ordersService.GetOrder(id);
         if (order is null) return NotFound();
 
-        return View(new OrderViewModel
+        var orderVm = new OrderViewModel
         {
             Id = order.Id,
             UserId = order.UserId,
+            UserName = $"{order.User.FirstName} {order.User.LastName}",
             OrderDate = order.OrderDate,
             DeliveryDate = order.DeliveryDate,
             Status = order.Status.ToString(),
-            DeliveryAddress = $"AdresseId: {order.DeliveryAddressId}",
-            Products = order.Products?.Select(p => $"{p.GetType().Name}:{p.Id}").ToList() ?? new List<string>()
-        });
+            DeliveryAddress = $"{order.DeliveryAddress.Street} {order.DeliveryAddress.City}",
+            Products = order.Products?.Select(p => p.Name).ToList() ?? new List<string>()
+        };
+        
+        return View(orderVm);
     }
 
     // CREATION
