@@ -130,7 +130,7 @@ dotnet ef database update -p EatDomicile.Core -s EatDomicile.API
 1. **From the command line:**
    ```bash
    cd EatDomicile.API
-   dotnet run
+   dotnet run -lp https
    ```
 
 2. **From Visual Studio/Rider:**
@@ -149,7 +149,7 @@ dotnet ef database update -p EatDomicile.Core -s EatDomicile.API
 1. **From the command line:**
    ```bash
    cd EatDomicile.Web
-   dotnet run
+   dotnet run -lp https
    ```
 
 2. **From Visual Studio/Rider:**
