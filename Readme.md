@@ -238,3 +238,16 @@ If migrations fail, check:
 - [Alain Roger SANGA](https://github.com/arogersanga)
 - [Alexandre MENIGAULT](https://github.com/Alexandre-Menigault)
 - [Pierre DELAROCQUE](https://github.com/PierreDelarocque)
+
+## Screenshots
+
+### Home Page
+![Home](images/home.png)
+
+
+### Orders
+![Commandes](images/commandes.png)
+
+
+### Order details
+![Commande](images/commande.png)
